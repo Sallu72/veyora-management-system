@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEYORA | Business Management</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --black:#11110f;
+  --panel:#1b1b18;
+  --gold:#c6a45b;
+  --cream:#f3eedf;
+  --green:#173d35;
+  --muted:#aaa69a;
+  --border:rgba(198,164,91,.22);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--black);color:var(--cream);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* LOGIN */
+#loginScreen{
+  min-height:100vh;display:flex;align-items:center;
+  justify-content:center;padding:20px;
+  background:radial-gradient(circle at top,#33301f,#11110f 65%);
+}
+.login-card{
+  width:100%;max-width:410px;padding:38px 28px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:20px;text-align:center;
+  box-shadow:0 20px 70px #0008;
+}
+.brand{
+  color:var(--gold);font-size:34px;font-weight:800;
+  letter-spacing:5px;margin-bottom:5px;
+}
+.brand-sub{color:var(--muted);font-size:11px;letter-spacing:4px}
+.login-card h2{margin:30px 0 8px}
+.login-card p{color:var(--muted);font-size:13px;margin-bottom:25px}
+
+/* GENERAL */
+input,select{
+  width:100%;padding:13px;margin:7px 0;
+  background:#11110f;color:var(--cream);
+  border:1px solid var(--border);border-radius:9px;
+  outline:none;
+}
+input:focus,select:focus{border-color:var(--gold)}
+.gold-btn{
+  background:var(--gold);color:#17140c;border:0;
+  border-radius:9px;padding:13px 20px;font-weight:700;
+}
+.gold-btn:hover{filter:brightness(1.1)}
+.message{font-size:13px;color:var(--gold);margin-top:12px}
+
+/* APP */
+#app{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;flex-shrink:0;background:#151512;
+  border-right:1px solid var(--border);
+  padding:25px 15px;display:flex;flex-direction:column;
+}
+.sidebar-brand{text-align:center;padding:8px 0 30px}
+.sidebar-brand .brand{font-size:25px}
+.nav-label{
+  color:#817b6b;font-size:10px;letter-spacing:2px;
+  padding:12px 12px 8px;
+}
+.nav-btn{
+  width:100%;text-align:left;padding:12px;
+  color:#d9d3c4;background:transparent;border:0;
+  border-radius:8px;margin:2px 0;font-size:13px;
+}
+.nav-btn:hover,.nav-btn.active{
+  background:#302a1c;color:var(--gold);
+}
+.sidebar-bottom{margin-top:auto;padding-top:25px}
+.main{flex:1;min-width:0;padding:28px}
+.topbar{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;margin-bottom:28px;
+}
+.topbar h1{font-size:25px;margin:0}
+.owner-label{color:var(--gold);font-size:12px}
+.section{display:none}
+.section.active{display:block}
+.section-intro{color:var(--muted);font-size:13px;margin:8px 0 24px}
+
+/* CARDS */
+.cards{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;margin:20px 0 28px;
+}
+.card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:20px;min-width:0;
+}
+.card-label{color:var(--muted);font-size:12px}
+.card-value{font-size:26px;font-weight:700;color:var(--gold);margin-top:12px}
+.card-note{font-size:11px;color:var(--muted);margin-top:8px}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:20px;margin-bottom:20px;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;margin-bottom:18px;
+}
+.panel h3{margin:0;font-size:16px}
+.filter{width:auto;min-width:150px;margin:0;padding:10px}
+.grid-two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.gold-text{color:var(--gold)}
+.muted{color:var(--muted)}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{text-align:left;padding:13px 12px;border-bottom:1px solid var(--border);font-size:12px}
+th{color:var(--gold);font-weight:600}
+.table-wrap{overflow-x:auto}
+.empty{padding:25px;text-align:center;color:var(--muted);font-size:13px}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:10px}
+.approved{background:#173d35;color:#a8e0c2}
+.pending{background:#49391d;color:#f1d18b}
+.notice{
+  color:var(--muted);font-size:13px;line-height:1.7;
+  padding:14px;background:#11110f;border-radius:9px;
+}
+.logout{width:100%;background:transparent;color:#d5b978;border:1px solid var(--border);padding:11px;border-radius:8px}
+.mobile-menu{display:none}
+
+@media(max-width:900px){
+  .sidebar{width:205px}
+  .main{padding:20px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  #app{display:block}
+  .sidebar{
+    width:100%;padding:12px;display:block;
+    border-right:0;border-bottom:1px solid var(--border);
+  }
+  .sidebar-brand{padding:5px 0 12px}
+  .sidebar-brand .brand{font-size:22px}
+  .sidebar-brand .brand-sub{font-size:9px}
+  .nav-label{display:none}
+  .nav-list{
+    display:flex;overflow-x:auto;gap:5px;
+    padding-bottom:5px;
+  }
+  .nav-btn{white-space:nowrap;width:auto;margin:0;padding:10px}
+  .sidebar-bottom{display:none}
+  .main{padding:17px}
+  .topbar h1{font-size:20px}
+  .cards{gap:9px}
+  .card{padding:14px}
+  .card-value{font-size:20px}
+  .grid-two{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<!-- OWNER LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="brand">VEYORA</div>
+    <div class="brand-sub">BUSINESS MANAGEMENT</div>
+    <h2>Owner Login</h2>
+    <p>Secure access to your private business dashboard.</p>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="Owner email" required>
+      <input id="password" type="password" placeholder="Password" required>
+      <button class="gold-btn" style="width:100%;margin-top:12px">
+        Login to Dashboard
+      </button>
+    </form>
+    <div id="loginMessage" class="message"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand">VEYORA</div>
+      <div class="brand-sub">BUSINESS MANAGEMENT</div>
+    </div>
+
+    <div class="nav-label">MAIN MENU</div>
+    <div class="nav-list">
+      <button class="nav-btn active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav-btn" data-page="owner">◆ Owner Profit</button>
+      <button class="nav-btn" data-page="resellers">♙ Resellers</button>
+      <button class="nav-btn" data-page="orders">▤ Orders</button>
+      <button class="nav-btn" data-page="payments">◈ Payments</button>
+      <button class="nav-btn" data-page="customers">♧ Customers</button>
+      <button class="nav-btn" data-page="reports">▥ Reports & Analytics</button>
+      <button class="nav-btn" data-page="history">◷ Monthly History</button>
+      <button class="nav-btn" data-page="control">⚙ Profit Control</button>
+      <button class="nav-btn" data-page="settings">⚙ Settings</button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="logout" id="logoutBtn">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="owner-label">PRIVATE OWNER PANEL</div>
+        <h1 id="pageTitle">Business Overview</h1>
+      </div>
+      <button class="gold-btn" id="mobileLogout">Logout</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="section active">
+      <p class="section-intro">Welcome to your VEYORA business management system.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Profit</div>
+          <div class="card-value" id="totalProfit">Rs. 0</div>
+          <div class="card-note">Owner + Resellers</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Owner Profit</div>
+          <div class="card-value" id="ownerProfit">Rs. 0</div>
+          <div class="card-note">Your earnings</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Resellers Profit</div>
+          <div class="card-value" id="resellerProfit">Rs. 0</div>
+          <div class="card-note">Combined reseller earnings</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Total Orders</div>
+          <div class="card-value" id="totalOrders">0</div>
+          <div class="card-note">Recorded orders</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Business Overview</h3>
+          <select id="periodFilter" class="filter">
+            <option value="1">Last Month</option>
+            <option value="2">Last 2 Months</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6">Last 6 Months</option>
+            <option value="12">Last 12 Months</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card-label">Orders in Period</div>
+            <div class="card-value" id="periodOrders">0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Owner Earnings</div>
+            <div class="card-value" id="periodOwner">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Reseller Earnings</div>
+            <div class="card-value" id="periodReseller">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Total Sales</div>
+            <div class="card-value" id="periodSales">Rs. 0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <div class="panel">
+          <div class="panel-head"><h3>Top 3 Resellers</h3></div>
+          <div id="topResellers" class="empty">No reseller records yet.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Recent Orders</h3></div>
+          <div id="recentOrders" class="empty">No orders recorded yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OWNER PROFIT -->
+    <section id="page-owner" class="section">
+      <p class="section-intro">Your personal profit records from all orders.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>Owner Profit Details</h3></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Customer</th><th>Product</th><th>Order</th><th>My Profit</th></tr></thead>
+          <tbody id="ownerTable"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- RESELLERS -->
+    <section id="page-resellers" class="section">
+      <p class="section-intro">Manage your reseller accounts and performance.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>Reseller List</h3></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>City</th><th>Phone</th><th>Joining Date</th><th>Status</th></tr></thead>
+          <tbody id="resellerTable"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="page-orders" class="section">
+      <p class="section-intro">All business orders will appear here.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>All Orders</h3></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Order No.</th><th>Date</th><th>Reseller</th><th>Customer</th><th>Product</th><th>Items</th><th>Price</th><th>Status</th></tr></thead>
+          <tbody id="ordersTable"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section id="page-payments" class="section">
+      <p class="section-intro">Monitor pending and approved payments.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>Payment Records</h3></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Approval Date</th></tr></thead>
+          <tbody id="paymentsTable"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section id="page-customers" class="section">
+      <p class="section-intro">Customer information and order history.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>Customer Records</h3></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead>
+          <tbody id="customersTable"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="page-reports" class="section">
+      <p class="section-intro">Business performance and analytical reports.</p>
+      <div class="panel">
+        <h3>Reports & Analytics</h3>
+        <p class="notice">Your sales, profits, reseller performance and payment analytics will be displayed here. We will add interactive graphs in the next development step.</p>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="page-history" class="section">
+      <p class="section-intro">Your historical business records are retained in the database.</p>
+      <div class="panel">
+        <h3>Monthly History</h3>
+        <p class="notice">Monthly reports and historical records will be added here.</p>
+      </div>
+    </section>
+
+    <!-- PROFIT CONTROL -->
+    <section id="page-control" class="section">
+      <p class="section-intro">Manage and review profit calculations.</p>
+      <div class="panel">
+        <h3>Profit Control</h3>
+        <p class="notice">Profit calculation controls will be configured in the next step.</p>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="page-settings" class="section">
+      <p class="section-intro">Your account and website settings.</p>
+      <div class="panel">
+        <h3>Settings</h3>
+        <p class="notice">Owner profile, logo, password and website settings will be added here.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// -----------------------------------------
+// 1. ADD YOUR SUPABASE PROJECT CREDENTIALS
+// -----------------------------------------
+const SUPABASE_URL = "https://toyuqugrwqmftepxofrh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_64g--TQc1SzsmyiuNC-GVg_fR_AozlJ";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+let currentOrders = [];
+let currentResellers = [];
+let currentCustomers = [];
+let currentPayments = [];
+
+const money = value =>
+  "Rs. " + Number(value || 0).toLocaleString("en-PK");
+
+const safe = value =>
+  String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  })[char]);
+
+function showMessage(message){
+  document.getElementById("loginMessage").textContent = message;
+}
+
+function showApp(){
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+}
+
+function showLogin(){
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
+
+// -----------------------------------------
+// 2. OWNER VERIFICATION
+// -----------------------------------------
+async function verifyOwner(user){
+  const {data,error} = await db
+    .from("owners")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(error || !data){
+    await db.auth.signOut();
+    showLogin();
+    showMessage("Access denied. This account is not registered as owner.");
+    return false;
+  }
+  return true;
+}
+
+// -----------------------------------------
+// 3. LOGIN
+// -----------------------------------------
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  showMessage("Checking your account...");
+
+  if(SUPABASE_URL.includes("PASTE_") ||
+     SUPABASE_ANON_KEY.includes("PASTE_")){
+    showMessage("Please add your Supabase URL and anon public key first.");
+    return;
+  }
+
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+
+  if(error){
+    showMessage(error.message);
+    return;
+  }
+
+  const allowed=await verifyOwner(data.user);
+  if(allowed){
+    showApp();
+    await loadBusinessData();
+  }
+});
+
+// -----------------------------------------
+// 4. LOGOUT
+// -----------------------------------------
+async function logout(){
+  await db.auth.signOut();
+  showLogin();
+  document.getElementById("loginForm").reset();
+  showMessage("You have logged out.");
+}
+document.getElementById("logoutBtn").addEventListener("click",logout);
+document.getElementById("mobileLogout").addEventListener("click",logout);
+
+// -----------------------------------------
+// 5. NAVIGATION
+// -----------------------------------------
+const pageNames={
+  dashboard:"Business Overview",
+  owner:"Owner Profit Details",
+  resellers:"Resellers",
+  orders:"Orders",
+  payments:"Payments",
+  customers:"Customer Records",
+  reports:"Reports & Analytics",
+  history:"Monthly History",
+  control:"Profit Control",
+  settings:"Settings"
+};
+
+document.querySelectorAll(".nav-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const page=button.dataset.page;
+
+    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+    button.classList.add("active");
+
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById("page-"+page).classList.add("active");
+    document.getElementById("pageTitle").textContent=pageNames[page];
+  });
+});
+
+// -----------------------------------------
+// 6. LOAD DATABASE RECORDS
+// -----------------------------------------
+async function loadBusinessData(){
+  const results=await Promise.all([
+    db.from("orders").select("*").order("created_at",{ascending:false}),
+    db.from("resellers").select("*").order("created_at",{ascending:false}),
+    db.from("customers").select("*").order("created_at",{ascending:false}),
+    db.from("payments").select("*").order("created_at",{ascending:false})
+  ]);
+
+  for(const result of results){
+    if(result.error){
+      alert("Database error: "+result.error.message);
+      return;
+    }
+  }
+
+  currentOrders=results[0].data || [];
+  currentResellers=results[1].data || [];
+  currentCustomers=results[2].data || [];
+  currentPayments=results[3].data || [];
+
+  renderAll();
+}
+
+// -----------------------------------------
+// 7. DASHBOARD FILTER
+// -----------------------------------------
+function getFilteredOrders(){
+  const period=document.getElementById("periodFilter").value;
+  if(period==="all") return currentOrders;
+
+  const months=Number(period);
+  const start=new Date();
+  start.setMonth(start.getMonth()-months);
+
+  return currentOrders.filter(order=>
+    new Date(order.order_date+"T00:00:00") >= start
+  );
+}
+
+document.getElementById("periodFilter").addEventListener("change",()=>{
+  renderOverview();
+});
+
+// -----------------------------------------
+// 8. RENDER DASHBOARD
+// -----------------------------------------
+function renderOverview(){
+  const orders=getFilteredOrders();
+
+  const owner=orders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
+  const reseller=orders.reduce((sum,o)=>sum+Number(o.reseller_profit||0),0);
+  const sales=orders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
+
+  document.getElementById("totalProfit").textContent=money(owner+reseller);
+  document.getElementById("ownerProfit").textContent=money(owner);
+  document.getElementById("resellerProfit").textContent=money(reseller);
+  document.getElementById("totalOrders").textContent=currentOrders.length;
+
+  document.getElementById("periodOrders").textContent=orders.length;
+  document.getElementById("periodOwner").textContent=money(owner);
+  document.getElementById("periodReseller").textContent=money(reseller);
+  document.getElementById("periodSales").textContent=money(sales);
+
+  const ranking=currentResellers.map(r=>{
+    const resellerOrders=orders.filter(o=>o.reseller_id===r.id);
+    const profit=resellerOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
+    return {...r,profit,orderCount:resellerOrders.length};
+  }).sort((a,b)=>b.profit-a.profit).slice(0,3);
+
+  document.getElementById("topResellers").innerHTML=ranking.length
+    ? ranking.map((r,i)=>`
+      <p>${i+1}. <b>${safe(r.name)}</b>
+      <span style="float:right;color:var(--gold)">${money(r.profit)}</span></p>
+    `).join("")
+    : '<div class="empty">No reseller records yet.</div>';
+
+  const recent=currentOrders.slice(0,5);
+  document.getElementById("recentOrders").innerHTML=recent.length
+    ? recent.map(o=>`
+      <p><b>${safe(o.product_name)}</b>
+      <span style="float:right;color:var(--gold)">${money(o.total_price)}</span><br>
+      <small class="muted">${safe(o.customer_name)} · ${safe(o.order_date)}</small></p>
+    `).join("")
+    : '<div class="empty">No orders recorded yet.</div>';
+}
+
+// -----------------------------------------
+// 9. RENDER TABLES
+// -----------------------------------------
+function renderTables(){
+  document.getElementById("ownerTable").innerHTML=currentOrders.length
+    ? currentOrders.map(o=>`
+      <tr>
+        <td>${safe(o.order_date)}</td>
+        <td>${safe(o.customer_name)}</td>
+        <td>${safe(o.product_name)}</td>
+        <td>${safe(o.order_number)}</td>
+        <td>${money(o.owner_profit)}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="5" class="empty">No owner profit records yet.</td></tr>';
+
+  document.getElementById("resellerTable").innerHTML=currentResellers.length
+    ? currentResellers.map(r=>`
+      <tr>
+        <td>${safe(r.name)}</td>
+        <td>${safe(r.city)}</td>
+        <td>${safe(r.phone)}</td>
+        <td>${safe(r.joining_date)}</td>
+        <td>${safe(r.status)}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="5" class="empty">No resellers added yet.</td></tr>';
+
+  document.getElementById("ordersTable").innerHTML=currentOrders.length
+    ? currentOrders.map(o=>`
+      <tr>
+        <td>${safe(o.order_number)}</td>
+        <td>${safe(o.order_date)}</td>
+        <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner")}</td>
+        <td>${safe(o.customer_name)}</td>
+        <td>${safe(o.product_name)}</td>
+        <td>${safe(o.quantity)}</td>
+        <td>${money(o.total_price)}</td>
+        <td><span class="status ${o.payment_status==="Approved"?"approved":"pending"}">${safe(o.payment_status)}</span></td>
+      </tr>`).join("")
+    : '<tr><td colspan="8" class="empty">No orders added yet.</td></tr>';
+
+  document.getElementById("paymentsTable").innerHTML=currentPayments.length
+    ? currentPayments.map(p=>`
+      <tr>
+        <td>${safe(p.order_id)}</td>
+        <td>${money(p.amount)}</td>
+        <td>${safe(p.status)}</td>
+        <td>${safe(p.approved_at || "—")}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="4" class="empty">No payments recorded yet.</td></tr>';
+
+  document.getElementById("customersTable").innerHTML=currentCustomers.length
+    ? currentCustomers.map(c=>`
+      <tr>
+        <td>${safe(c.name)}</td>
+        <td>${safe(c.phone)}</td>
+        <td>${safe(c.city)}</td>
+        <td>${safe(c.created_at)}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="4" class="empty">No customers added yet.</td></tr>';
+}
+
+function renderAll(){
+  renderOverview();
+  renderTables();
+}
+
+// -----------------------------------------
+// 10. RESTORE EXISTING SESSION
+// -----------------------------------------
+async function checkExistingSession(){
+  const {data}=await db.auth.getSession();
+  if(data.session){
+    const allowed=await verifyOwner(data.session.user);
+    if(allowed){
+      showApp();
+      await loadBusinessData();
+    }
+  }
+}
+
+if(!SUPABASE_URL.includes("PASTE_") &&
+   !SUPABASE_ANON_KEY.includes("PASTE_")){
+  checkExistingSession();
+}
+</script>
+</body>
+</html>
