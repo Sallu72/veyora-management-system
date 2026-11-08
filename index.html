@@ -1417,50 +1417,67 @@ function renderTables(){
     `).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
-  // DOWNLOAD RESELLER REPORT AS PNG
+  
+// DOWNLOAD RESELLER REPORT AS PNG
 
 const downloadResellerReport =
   document.getElementById("downloadResellerReport");
 
-if(downloadResellerReport){
+if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) {
 
-  downloadResellerReport.addEventListener("click",async()=>{
+  downloadResellerReport.addEventListener("click", async () => {
 
     const profile = document.getElementById("resellerProfile");
 
-    if(typeof html2canvas === "undefined"){
-      alert("PNG library is missing.");
+    if (!profile) {
+      alert("Reseller profile not found.");
+      return;
+    }
+
+    if (typeof window.html2canvas !== "function") {
+      alert("PNG library load nahi hui. Page refresh karke dobara try karo.");
       return;
     }
 
     downloadResellerReport.disabled = true;
     downloadResellerReport.textContent = "Preparing...";
 
-    try{
+    try {
 
-      const canvas = await html2canvas(profile,{
-        backgroundColor:"#0b0b09",
-        scale:2,
-        useCORS:true
+      const canvas = await window.html2canvas(profile, {
+        backgroundColor: "#0b0b09",
+        scale: 2,
+        useCORS: true,
+        logging: true
       });
+
+      const imageData = canvas.toDataURL("image/png");
 
       const link = document.createElement("a");
       link.download = "VEYORA-Reseller-Report.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = imageData;
+
+      document.body.appendChild(link);
       link.click();
+      link.remove();
 
-    }catch(error){
+    } catch (error) {
 
-      alert("Download failed: " + error.message);
+      console.error("PNG Download Error:", error);
+      alert("Download error: " + (error?.message || String(error)));
+
+    } finally {
+
+      downloadResellerReport.disabled = false;
+      downloadResellerReport.textContent = "↓ Download PNG Report";
 
     }
 
-    downloadResellerReport.disabled = false;
-    downloadResellerReport.textContent = "↓ Download PNG Report";
-
   });
 
+  downloadResellerReport.dataset.listenerAttached = "true";
 }
+
 // OPEN RESELLER PROFILE
 let selectedResellerId = null;
 
