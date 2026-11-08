@@ -1873,6 +1873,133 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
   snapshotSelect.dataset.listenerAttached = "true";
 }
 
+// ADD NEW ORDER: OPEN AND CLOSE FORM
+
+const addOrderBtn = document.getElementById("addOrderBtn");
+const addOrderForm = document.getElementById("addOrderForm");
+const cancelOrderBtn = document.getElementById("cancelOrderBtn");
+const saveOrderBtn = document.getElementById("saveOrderBtn");
+
+function populateOrderResellers(){
+
+  const select = document.getElementById("orderReseller");
+  if(!select) return;
+
+  select.innerHTML =
+    '<option value="">Select Reseller</option>' +
+    currentResellers.map(r=>
+      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
+    ).join("");
+}
+
+if(addOrderBtn && addOrderForm){
+  addOrderBtn.addEventListener("click",()=>{
+    populateOrderResellers();
+    addOrderForm.style.display = "block";
+    addOrderForm.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+}
+
+if(cancelOrderBtn && addOrderForm){
+  cancelOrderBtn.addEventListener("click",()=>{
+    addOrderForm.style.display = "none";
+  });
+}
+
+// SAVE NEW ORDER TO DATABASE
+
+if(saveOrderBtn){
+
+  saveOrderBtn.addEventListener("click",async()=>{
+
+    const resellerId = document.getElementById("orderReseller").value;
+    const orderNumber = document.getElementById("newOrderNumber").value.trim();
+    const customerName = document.getElementById("newOrderCustomer").value.trim();
+    const customerPhone = document.getElementById("newOrderPhone").value.trim();
+    const productName = document.getElementById("newOrderProduct").value.trim();
+    const quantity = Number(document.getElementById("newOrderQuantity").value);
+    const totalPrice = Number(document.getElementById("newOrderPrice").value);
+    const ownerProfit = Number(document.getElementById("newOrderOwnerProfit").value);
+    const resellerProfit = Number(document.getElementById("newOrderResellerProfit").value);
+    const orderDate = document.getElementById("newOrderDate").value;
+    const paymentStatus = document.getElementById("newOrderStatus").value;
+
+    if(!resellerId || !orderNumber || !customerName || !customerPhone ||
+       !productName || !orderDate){
+      alert("Please fill in all order details.");
+      return;
+    }
+
+    if(!Number.isFinite(quantity) || quantity < 1 ||
+       !Number.isFinite(totalPrice) || totalPrice < 0 ||
+       !Number.isFinite(ownerProfit) || ownerProfit < 0 ||
+       !Number.isFinite(resellerProfit) || resellerProfit < 0){
+      alert("Please enter valid quantity and profit amounts.");
+      return;
+    }
+
+    saveOrderBtn.disabled = true;
+    saveOrderBtn.textContent = "Saving...";
+
+    try{
+
+      const {error} = await db.from("orders").insert([{
+        reseller_id: resellerId,
+        order_number: orderNumber,
+        customer_name: customerName,
+        product_name: productName,
+        quantity: quantity,
+        total_price: totalPrice,
+        owner_profit: ownerProfit,
+        reseller_profit: resellerProfit,
+        order_date: orderDate,
+        payment_status: paymentStatus
+      }]);
+
+      if(error) throw error;
+
+      const {error: customerError} = await db.from("customers").insert([{
+        name: customerName,
+        phone: customerPhone
+      }]);
+
+      if(customerError){
+        console.error("Customer record warning:",customerError);
+      }
+
+      alert("Order saved successfully!");
+
+      document.getElementById("newOrderNumber").value = "";
+      document.getElementById("newOrderCustomer").value = "";
+      document.getElementById("newOrderPhone").value = "";
+      document.getElementById("newOrderProduct").value = "";
+      document.getElementById("newOrderQuantity").value = "1";
+      document.getElementById("newOrderPrice").value = "";
+      document.getElementById("newOrderOwnerProfit").value = "";
+      document.getElementById("newOrderResellerProfit").value = "";
+      document.getElementById("newOrderDate").value = "";
+      document.getElementById("newOrderStatus").value = "Pending";
+      document.getElementById("orderReseller").value = "";
+
+      addOrderForm.style.display = "none";
+
+      await loadBusinessData();
+
+    }catch(error){
+
+      alert("Could not save order: " + (error.message || String(error)));
+
+    }finally{
+
+      saveOrderBtn.disabled = false;
+      saveOrderBtn.textContent = "Save Order";
+
+    }
+
+  });
+
+}
+
 // ADD RESELLER: OPEN AND CLOSE FORM
 const addResellerBtn = document.getElementById("addResellerBtn");
 const addResellerForm = document.getElementById("addResellerForm");
