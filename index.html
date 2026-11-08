@@ -1537,62 +1537,27 @@ if (paymentsTable) {
 
 
 
-// CUSTOMERS TABLE - COMPLETE CUSTOMER DETAILS
+// CUSTOMERS TABLE - ONLY ACTUAL CUSTOMER RECORDS
 
-const customerRecords = {};
-
-currentCustomers.forEach(c => {
-  const name = c.name || "—";
-  const phone = c.phone || "—";
-  const city = c.city || "—";
-  const joined = c.created_at || c.joined || c.joining_date || "—";
-
-  const key = phone !== "—"
-    ? String(phone).trim()
-    : String(name).trim().toLowerCase();
-
-  customerRecords[key] = {
-    name,
-    phone,
-    city,
-    joined
-  };
-});
-
-// Also include customer details saved with orders
-currentOrders.forEach(o => {
-  const name = o.customer_name || "—";
-  const phone = o.customer_phone || o.phone || "—";
-  const city = o.city || "—";
-
-  const key = phone !== "—"
-    ? String(phone).trim()
-    : String(name).trim().toLowerCase();
-
-  if (!customerRecords[key]) {
-    customerRecords[key] = {
-      name,
-      phone,
-      city,
-      joined: o.order_date || o.created_at || "—"
-    };
-  }
-});
-
-const customerList = Object.values(customerRecords);
+const customerList = currentCustomers || [];
 
 document.getElementById("customersTable").innerHTML =
   customerList.length
-    ? customerList.map(c => `
-        <tr>
-          <td><b>${safe(c.name)}</b></td>
-          <td>${safe(c.phone)}</td>
-          <td>${safe(c.city)}</td>
-          <td>${safe(c.joined)}</td>
-        </tr>
-      `).join("")
+    ? customerList.map(c => {
+        const joined = c.created_at
+          ? new Date(c.created_at).toLocaleDateString("en-GB")
+          : c.joined || c.joining_date || "—";
+
+        return `
+          <tr>
+            <td><b>${safe(c.name || "—")}</b></td>
+            <td>${safe(c.phone || "—")}</td>
+            <td>${safe(c.city || "—")}</td>
+            <td>${safe(joined)}</td>
+          </tr>
+        `;
+      }).join("")
     : '<tr><td colspan="4" class="empty">No customers found.</td></tr>';
-}
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
   if(!selectedResellerId) return;
