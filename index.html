@@ -202,6 +202,23 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
   .main{padding:15px}
   .cards{grid-template-columns:1fr}
 }
+  .view-all {
+  background: #0b0b0b;
+  color: #f5f0e6;
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.view-all:hover {
+  background: #17130a;
+  border-color: #d4af37;
+  color: #d4af37;
+}
 </style>
 </head>
 
@@ -344,9 +361,9 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       <div class="grid-two" style="margin-bottom:20px;">
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
-            <h3>Reseller Performance</h3>
-            <span style="font-size:11px; color:var(--gold); cursor:pointer;">View All →</span>
-          </div>
+<h3>Reseller Performance</h3>
+<button class="view-all" data-page="resellers">View All →</button>
+</div>
           <div class="table-wrap">
             <table>
               <thead>
