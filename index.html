@@ -1267,53 +1267,7 @@ function renderTables(){
         <td>${safe(c.created_at)}</td>
       </tr>
     `).join("")
-    // RESELLER TABLE
-const totalResellersEl = document.getElementById("totalResellers");
-const activeResellersEl = document.getElementById("activeResellers");
 
-if(totalResellersEl){
-  totalResellersEl.textContent = currentResellers.length;
-}
-
-if(activeResellersEl){
-  activeResellersEl.textContent = currentResellers.filter(
-    r => (r.status || "Active").toLowerCase() === "active"
-  ).length;
-}
-
-function renderResellerList(){
-
-  const searchInput = document.getElementById("resellerSearch");
-  const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
-
-  const filteredResellers = currentResellers.filter(r =>
-    (r.name || "").toLowerCase().includes(searchText) ||
-    (r.city || "").toLowerCase().includes(searchText) ||
-    (r.phone || "").toLowerCase().includes(searchText)
-  );
-
-  document.getElementById("resellerTable").innerHTML =
-    filteredResellers.length
-      ? filteredResellers.map((r,index)=>`
-        <tr>
-          <td>${index+1}</td>
-          <td>
-            <span style="color:var(--gold);font-weight:700;cursor:pointer;"
-              data-reseller-id="${safe(r.id)}">
-              ${safe(r.name)}
-            </span>
-          </td>
-          <td>${safe(r.city)}</td>
-          <td>${safe(r.phone)}</td>
-          <td>${safe(r.joining_date)}</td>
-          <td>
-            <span class="status ${((r.status||"Active").toLowerCase()==="active")?"approved":"pending"}">
-              ${safe(r.status||"Active")}
-            </span>
-          </td>
-        </tr>
-      `).join("")
-      : '<tr><td colspan="6" class="empty">No resellers found.</td></tr>';
 }
 
 renderResellerList();
