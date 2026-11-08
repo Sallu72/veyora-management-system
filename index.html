@@ -1536,39 +1536,61 @@ if (paymentsTable) {
 
 
 
+// CUSTOMERS TABLE - COMPLETE CUSTOMER DETAILS
 
-// CUSTOMERS TABLE - FROM ORDERS
 const customerRecords = {};
 
+currentCustomers.forEach(c => {
+  const name = c.name || "—";
+  const phone = c.phone || "—";
+  const city = c.city || "—";
+  const joined = c.created_at || c.joined || c.joining_date || "—";
+
+  const key = phone !== "—"
+    ? String(phone).trim()
+    : String(name).trim().toLowerCase();
+
+  customerRecords[key] = {
+    name,
+    phone,
+    city,
+    joined
+  };
+});
+
+// Also include customer details saved with orders
 currentOrders.forEach(o => {
   const name = o.customer_name || "—";
   const phone = o.customer_phone || o.phone || "—";
+  const city = o.city || "—";
 
   const key = phone !== "—"
-    ? phone.trim()
-    : name.trim().toLowerCase();
+    ? String(phone).trim()
+    : String(name).trim().toLowerCase();
 
   if (!customerRecords[key]) {
     customerRecords[key] = {
-      name: name,
-      phone: phone,
-      city: o.city || "—",
+      name,
+      phone,
+      city,
       joined: o.order_date || o.created_at || "—"
     };
   }
 });
 
+const customerList = Object.values(customerRecords);
+
 document.getElementById("customersTable").innerHTML =
-  Object.values(customerRecords).length
-    ? Object.values(customerRecords).map(c => `
+  customerList.length
+    ? customerList.map(c => `
         <tr>
-          <td>${safe(c.name)}</td>
+          <td><b>${safe(c.name)}</b></td>
           <td>${safe(c.phone)}</td>
           <td>${safe(c.city)}</td>
           <td>${safe(c.joined)}</td>
         </tr>
       `).join("")
-    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
+    : '<tr><td colspan="4" class="empty">No customers found.</td></tr>';
 }
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
@@ -1970,7 +1992,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
       if (error) throw error;
 
       if (!editingOrderId) {
-        await db.from("customers").insert([{ name: customerName, phone: customerPhone }]);
+        await db.from("customers").insert([{ name: customerName, phone: customerPhone,city: document.getElementById("newCustomerCity").value.trim() }]);
       }
 
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
