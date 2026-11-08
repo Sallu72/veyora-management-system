@@ -567,82 +567,119 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         </div>
       </div>
 
-      <!-- RESELLER PROFILE -->
-      <div id="resellerProfile" style="display:none;margin-top:20px;">
-        <div class="panel">
-          <div class="panel-head">
-            <h3>Reseller Profile</h3>
-            <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
-          </div>
+      
+<!-- RESELLER PROFILE -->
+<div id="resellerProfile" style="display:none;margin-top:20px;">
 
-          <div style="padding:20px;">
-            <div style="text-align:center;margin-bottom:25px;">
-              <div class="reseller-badge" id="profileInitial" style="width:60px;height:60px;font-size:24px;margin:auto;">R</div>
-              <h2 id="profileName" style="color:var(--gold);margin-top:12px;">Reseller Name</h2>
-              <span id="profileStatus" class="status approved">Active</span>
-            </div>
+  <div class="panel" style="padding:20px;">
 
-            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:25px;">
-              <div class="panel" style="padding:15px;">
-                <div class="card-label">Phone Number</div>
-                <div id="profilePhone">—</div>
-                <div class="card-label" style="margin-top:12px;">City</div>
-                <div id="profileCity">—</div>
-              </div>
-              <div class="panel" style="padding:15px;">
-                <div class="card-label">Joining Date</div>
-                <div id="profileJoiningDate">—</div>
-                <div class="card-label" style="margin-top:12px;">Total Orders</div>
-                <div id="profileTotalOrders">0</div>
-              </div>
-            </div>
+    <!-- Header -->
+    <div class="panel-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h3 style="color:var(--gold);font-size:20px;">Reseller Dashboard</h3>
+        <p style="color:var(--muted);font-size:12px;margin-top:5px;">Complete reseller performance and order details</p>
+      </div>
+      <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
+    </div>
 
-            <div class="panel-head">
-              <h3>Monthly Order History</h3>
-              <select id="resellerProfileFilter" class="filter">
-                <option value="this">This Month</option>
-                <option value="previous">Previous Month</option>
-                <option value="3">Last 3 Months</option>
-                <option value="6" selected>Last 6 Months</option>
-                <option value="9">Last 9 Months</option>
-                <option value="all">Overall</option>
-              </select>
-              <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
-            </div>
+    <!-- Profile Header -->
+    <div class="panel" style="margin-top:20px;padding:25px;background:linear-gradient(135deg,#171717,#252017);border:1px solid rgba(212,175,55,.35);">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div class="reseller-badge" id="profileInitial"
+          style="width:75px;height:75px;font-size:30px;flex-shrink:0;">R</div>
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Customer</th>
-                    <th>Product</th>
-                    <th>Order Date</th>
-                    <th>Reseller Profit</th>
-                    <th>Payment Status</th>
-                  </tr>
-                </thead>
-                <tbody id="resellerProfileOrders"></tbody>
-              </table>
-            </div>
-
-            <div class="cards" style="margin-top:20px;">
-              <div class="card">
-                <div class="card-label">Total Reseller Profit</div>
-                <div class="card-value" id="profileTotalProfit">Rs. 0</div>
-              </div>
-              <div class="card">
-                <div class="card-label">Approved Payment</div>
-                <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
-              </div>
-              <div class="card">
-                <div class="card-label">Pending Payment</div>
-                <div class="card-value" id="profilePendingPayment">Rs. 0</div>
-              </div>
-            </div>
-          </div>
+        <div style="flex:1;min-width:180px;">
+          <h2 id="profileName" style="color:var(--gold);font-size:23px;margin-bottom:8px;">Reseller Name</h2>
+          <span id="profileStatus" class="status approved">Active</span>
+          <p style="color:#aaa;font-size:12px;margin-top:10px;">VEYORA Reseller Account</p>
         </div>
       </div>
-    </section>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:25px;">
+        <div>
+          <div class="card-label">Phone Number</div>
+          <div id="profilePhone" style="font-weight:600;margin-top:6px;">—</div>
+        </div>
+        <div>
+          <div class="card-label">City</div>
+          <div id="profileCity" style="font-weight:600;margin-top:6px;">—</div>
+        </div>
+        <div>
+          <div class="card-label">Joining Date</div>
+          <div id="profileJoiningDate" style="font-weight:600;margin-top:6px;">—</div>
+        </div>
+        <div>
+          <div class="card-label">Total Orders</div>
+          <div id="profileTotalOrders" style="font-weight:700;color:var(--gold);font-size:20px;margin-top:6px;">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Overview -->
+    <div style="margin-top:25px;">
+      <div class="panel-head">
+        <h3>Performance Overview</h3>
+      </div>
+
+      <div class="cards" style="margin-top:15px;">
+        <div class="card">
+          <div class="card-label">Total Reseller Profit</div>
+          <div class="card-value" id="profileTotalProfit">Rs. 0</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Approved Payment</div>
+          <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Pending Payment</div>
+          <div class="card-value" id="profilePendingPayment">Rs. 0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order History -->
+    <div style="margin-top:30px;">
+      <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h3>Order History</h3>
+          <p style="color:var(--muted);font-size:12px;margin-top:5px;">All orders of this reseller</p>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <select id="resellerProfileFilter" class="filter">
+            <option value="this">This Month</option>
+            <option value="previous">Previous Month</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6" selected>Last 6 Months</option>
+            <option value="9">Last 9 Months</option>
+            <option value="all">Overall</option>
+          </select>
+
+          <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:15px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Order Date</th>
+              <th>Reseller Profit</th>
+              <th>Payment Status</th>
+            </tr>
+          </thead>
+          <tbody id="resellerProfileOrders"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
 
     <!-- ORDERS SECTION -->
     <section id="page-orders" class="section">
