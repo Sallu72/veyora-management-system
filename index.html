@@ -1725,33 +1725,70 @@ function renderResellerProfileOrders(){
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
 
   if(selected !== "all"){
-    start.setMonth(start.getMonth() - (Math.max(1,Number(selected)||6) - 1));
+    start.setMonth(
+      start.getMonth() - (Math.max(1, Number(selected) || 6) - 1)
+    );
+  }
+
+  // DATE FORMAT FIX
+  function parseOrderDate(value){
+
+    if(!value) return null;
+
+    // YYYY-MM-DD format
+    const isoMatch = String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if(isoMatch){
+      return new Date(
+        Number(isoMatch[1]),
+        Number(isoMatch[2]) - 1,
+        Number(isoMatch[3])
+      );
+    }
+
+    // DD/MM/YYYY format
+    const otherMatch = String(value).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+    if(otherMatch){
+      return new Date(
+        Number(otherMatch[3]),
+        Number(otherMatch[2]) - 1,
+        Number(otherMatch[1])
+      );
+    }
+
+    const date = new Date(value);
+
+    return isNaN(date.getTime()) ? null : date;
   }
 
   const orders = currentOrders.filter(o=>{
-    if(String(o.reseller_id) !== String(selectedResellerId)) return false;
 
-    const value = o.order_date || o.created_at;
-    if(!value) return false;
+    if(String(o.reseller_id) !== String(selectedResellerId)){
+      return false;
+    }
 
-    const date = new Date(value);
-    return !isNaN(date.getTime()) &&
-      (selected === "all" || date >= start) &&
-      date <= now;
+    const date = parseOrderDate(o.order_date || o.created_at);
+
+    if(selected === "all") return true;
+
+    if(!date) return false;
+
+    return date >= start;
   });
 
   const totalProfit = orders.reduce(
-    (sum,o)=>sum+Number(o.reseller_profit||0),0
+    (sum,o)=>sum + Number(o.reseller_profit || 0),0
   );
 
   const approvedPayment = orders.reduce((sum,o)=>{
-    return String(o.payment_status||"").toLowerCase() === "approved"
-      ? sum+Number(o.reseller_profit||0) : sum;
+    return String(o.payment_status || "").toLowerCase() === "approved"
+      ? sum + Number(o.reseller_profit || 0) : sum;
   },0);
 
   const pendingPayment = orders.reduce((sum,o)=>{
-    return String(o.payment_status||"").toLowerCase() === "pending"
-      ? sum+Number(o.reseller_profit||0) : sum;
+    return String(o.payment_status || "").toLowerCase() === "pending"
+      ? sum + Number(o.reseller_profit || 0) : sum;
   },0);
 
   document.getElementById("profileTotalOrders").textContent = orders.length;
@@ -1760,25 +1797,33 @@ function renderResellerProfileOrders(){
   document.getElementById("profilePendingPayment").textContent = money(pendingPayment);
 
   document.getElementById("resellerProfileOrders").innerHTML = orders.length
-    ? orders.map(o=>`
-      <tr>
-        <td>${safe(o.customer_name)}</td>
-        <td>${safe(o.product_name)}</td>
-        <td>${safe(o.order_date || o.created_at)}</td>
-        <td style="color:var(--gold);font-weight:bold;">
-          ${money(o.reseller_profit)}
-        </td>
-        <td>
-          <span class="status ${
-            String(o.payment_status||"Pending").toLowerCase() === "approved"
-              ? "approved" : "pending"
-          }">${safe(o.payment_status || "Pending")}</span>
-        </td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="5" class="empty">No orders found for this period.</td></tr>';
-}
+    ? orders.map(o=>{
 
+        const date = parseOrderDate(o.order_date || o.created_at);
+
+        const displayDate = date
+          ? date.toLocaleDateString("en-GB")
+          : "—";
+
+        return `
+          <tr>
+            <td>${safe(o.customer_name)}</td>
+            <td>${safe(o.product_name)}</td>
+            <td>${displayDate}</td>
+            <td style="color:var(--gold);font-weight:bold;">
+              ${money(o.reseller_profit)}
+            </td>
+            <td>
+              <span class="status ${
+                String(o.payment_status || "Pending").toLowerCase() === "approved"
+                  ? "approved" : "pending"
+              }">${safe(o.payment_status || "Pending")}</span>
+            </td>
+          </tr>
+        `;
+      }).join("")
+    : '<tr><td colspan="5" class="empty">No orders found for this reseller.</td></tr>';
+}
 
 // PROFILE FILTER
 const resellerProfileFilter = document.getElementById("resellerProfileFilter");
