@@ -1719,8 +1719,7 @@ function renderResellerProfileOrders(){
   if(!selectedResellerId) return;
 
   const filter = document.getElementById("resellerProfileFilter");
-  const selected = filter ? filter.value : "6";
-
+  const selected = filter ? filter.value : "this";
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
 
