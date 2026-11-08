@@ -1039,6 +1039,8 @@ function renderOverview(){
         <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name||"Direct")}</td>
         <td>${safe(o.product_name)}</td>
         <td>${money(o.total_price)}</td>
+
+    
         <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status||"Paid")}</span></td>
       </tr>
     `).join("")
@@ -1557,6 +1559,10 @@ function renderTables(){
               String(o.payment_status||"Pending").toLowerCase()==="approved"
                 ? "approved" : "pending"
             }">${safe(o.payment_status||"Pending")}</span>
+          </td>
+          <td style="white-space:nowrap;">
+            <button class="view-all" onclick="editOrder('${o.id}')">Edit</button>
+            <button class="view-all" onclick="deleteOrder('${o.id}')" style="color:#ff6b6b;">Delete</button>
           </td>
         </tr>
       `).join("")
