@@ -735,6 +735,47 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
   <button class="view-all" id="addOrderBtn">+ Add New Order</button>
 </div>
 
+<!-- ADD NEW ORDER FORM -->
+<div id="addOrderForm" class="panel" style="display:none;margin-bottom:20px;">
+
+  <div class="panel-head">
+    <h3>Add New Order</h3>
+    <button class="view-all" id="cancelOrderBtn">Cancel</button>
+  </div>
+
+  <div style="padding:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+
+    <select id="orderReseller" required>
+      <option value="">Select Reseller</option>
+    </select>
+
+    <input id="newOrderNumber" placeholder="Order Number">
+
+    <input id="newOrderCustomer" placeholder="Customer Name">
+    <input id="newOrderPhone" placeholder="Customer Phone">
+
+    <input id="newOrderProduct" placeholder="Product Name">
+    <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
+
+    <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
+    <input id="newOrderOwnerProfit" type="number" min="0" placeholder="Owner Profit (Rs.)">
+
+    <input id="newOrderResellerProfit" type="number" min="0" placeholder="Reseller Profit (Rs.)">
+    <input id="newOrderDate" type="date">
+
+    <select id="newOrderStatus">
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+    </select>
+
+  </div>
+
+  <div style="padding:0 15px 15px;">
+    <button class="view-all" id="saveOrderBtn">Save Order</button>
+  </div>
+
+</div>
+
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
 
