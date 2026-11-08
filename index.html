@@ -1338,21 +1338,25 @@ document.getElementById("snapshotResellerSelect").addEventListener("change", e =
   `;
 });
 // ADD RESELLER FORM
-const addResellerBtn = document.getElementById("addResellerBtn");
-const addResellerForm = document.getElementById("addResellerForm");
-const cancelResellerBtn = document.getElementById("cancelResellerBtn");
+document.addEventListener("DOMContentLoaded", function(){
 
-if(addResellerBtn){
-  addResellerBtn.addEventListener("click",()=>{
-    addResellerForm.style.display = "block";
-  });
-}
+  const addResellerBtn = document.getElementById("addResellerBtn");
+  const addResellerForm = document.getElementById("addResellerForm");
+  const cancelResellerBtn = document.getElementById("cancelResellerBtn");
 
-if(cancelResellerBtn){
-  cancelResellerBtn.addEventListener("click",()=>{
-    addResellerForm.style.display = "none";
-  });
-}
+  if(addResellerBtn && addResellerForm){
+    addResellerBtn.onclick = function(){
+      addResellerForm.style.display = "block";
+    };
+  }
+
+  if(cancelResellerBtn && addResellerForm){
+    cancelResellerBtn.onclick = function(){
+      addResellerForm.style.display = "none";
+    };
+  }
+
+});
 // RESTORE SESSION
 async function checkExistingSession(){
   const {data} = await db.auth.getSession();
