@@ -855,10 +855,18 @@ function renderChart(){
           grid: { display: false }
         },
         y: {
-          beginAtZero: true,
-          ticks: { color: '#9e9785' },
-          grid: { color: 'rgba(212,175,55,0.08)' }
-        }
+  beginAtZero: true,
+  ticks: {
+    color: '#9e9785',
+    precision: 0,
+    callback: function(value) {
+      return 'Rs. ' + value.toLocaleString();
+    }
+  },
+  grid: {
+    color: 'rgba(212,175,55,0.08)'
+  }
+}
       }
     }
   });
