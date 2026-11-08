@@ -541,16 +541,63 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 </section>
 
 
-    <section id="page-resellers" class="section">
-      <p class="section-intro">Manage your reseller accounts and performance.</p>
-      <div class="panel">
-        <div class="panel-head"><h3>Reseller List</h3></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Name</th><th>City</th><th>Phone</th><th>Joining Date</th><th>Status</th></tr></thead>
-          <tbody id="resellerTable"></tbody>
-        </table></div>
-      </div>
-    </section>
+   
+<section id="page-resellers" class="section">
+
+  <p class="section-intro">Manage your reseller accounts and performance.</p>
+
+  <!-- RESELLER SUMMARY -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Total Resellers</div>
+      <div class="card-value" id="totalResellers">0</div>
+      <div class="card-note">Registered resellers</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Active Resellers</div>
+      <div class="card-value" id="activeResellers">0</div>
+      <div class="card-note">Currently active</div>
+    </div>
+  </div>
+
+  <!-- RESELLER LIST -->
+  <div class="panel" style="margin-top:20px;">
+
+    <div class="panel-head">
+      <h3>Reseller List</h3>
+      <button class="view-all" id="addResellerBtn">+ Add Reseller</button>
+    </div>
+
+    <div style="padding:12px 0;">
+      <input
+        type="text"
+        id="resellerSearch"
+        placeholder="Search by name, city or phone..."
+        style="width:100%;max-width:350px;"
+      >
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Reseller Name</th>
+            <th>City</th>
+            <th>Phone</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="resellerTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+</section>
+
 
     <section id="page-orders" class="section">
       <p class="section-intro">All business orders will appear here.</p>
