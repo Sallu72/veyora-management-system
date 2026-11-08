@@ -1494,33 +1494,29 @@ function renderTables(){
 
 // PAYMENTS & CUSTOMERS
 
-// PAYMENT HISTORY
+
+// PAYMENT HISTORY - SHOW ALL ORDERS
 const paymentsTable = document.getElementById("paymentsTable");
 
-if(paymentsTable){
-  paymentsTable.innerHTML = currentPayments.length
-    ? currentPayments.map(p => {
+if (paymentsTable) {
+  paymentsTable.innerHTML = currentOrders.length
+    ? currentOrders.map(order => {
 
-        const order = currentOrders.find(o =>
-          String(o.id) === String(p.order_id)
+        const reseller = currentResellers.find(r =>
+          String(r.id) === String(order.reseller_id)
         );
-
-        const reseller = order
-          ? currentResellers.find(r =>
-              String(r.id) === String(order.reseller_id)
-            )
-          : null;
 
         return `
           <tr>
-            <td>${safe(order?.order_number || p.order_id || "—")}</td>
-            <td>${safe(order?.customer_name || "—")}</td>
+            <td>${safe(order.order_number || order.id || "—")}</td>
+            <td>${safe(order.customer_name || "—")}</td>
             <td>${safe(reseller?.name || "Owner")}</td>
-            <td>${money(p.amount)}</td>
-            <td>${safe(p.status || "Pending")}</td>
-            <td>${safe(p.approved_at || "—")}</td>
+            <td>${money(order.total_price || 0)}</td>
+            <td>${safe(order.payment_status || "Pending")}</td>
+            <td>${safe(order.order_date || order.created_at || "—")}</td>
           </tr>
         `;
+
       }).join("")
     : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
 }
