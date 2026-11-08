@@ -163,6 +163,74 @@ th{color:var(--gold);font-weight:600}
   .card-value{font-size:20px}
   .grid-two{grid-template-columns:1fr}
 }
+  /* VEYORA PREMIUM DASHBOARD CARDS */
+.card {
+  background: linear-gradient(145deg, #f7f1e3, #e8dec7);
+  border: 1px solid #c6a45b;
+  border-radius: 16px;
+  padding: 22px;
+  color: #211b10;
+  box-shadow: 0 8px 24px rgba(0,0,0,.22);
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(198,164,91,.18);
+}
+
+.card-label {
+  color: #716044;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.card-value {
+  color: #805b20;
+  font-size: 27px;
+  font-weight: 800;
+  margin-top: 14px;
+}
+
+.card-note {
+  color: #756c5b;
+  font-size: 11px;
+  margin-top: 9px;
+}
+
+.panel {
+  background: linear-gradient(145deg, #1e1d18, #151512);
+  border: 1px solid rgba(198,164,91,.35);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.18);
+}
+
+.panel-head h3 {
+  color: #e3c783;
+  letter-spacing: .4px;
+}
+
+.filter {
+  border: 1px solid #c6a45b;
+  background: #11110f;
+  color: #f3eedf;
+  border-radius: 9px;
+}
+
+@media(max-width:650px) {
+  .card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .card-value {
+    font-size: 19px;
+  }
+}
 </style>
 </head>
 
