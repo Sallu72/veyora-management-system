@@ -612,6 +612,82 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
   </div>
 
+  <!-- RESELLER PROFILE -->
+  <div id="resellerProfile" style="display:none;margin-top:20px;">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Reseller Profile</h3>
+        <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
+      </div>
+
+      <div style="padding:20px;">
+        <div style="text-align:center;margin-bottom:25px;">
+          <div class="reseller-badge" id="profileInitial" style="width:60px;height:60px;font-size:24px;margin:auto;">R</div>
+          <h2 id="profileName" style="color:var(--gold);margin-top:12px;">Reseller Name</h2>
+          <span id="profileStatus" class="status approved">Active</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:25px;">
+          <div class="panel" style="padding:15px;">
+            <div class="card-label">Phone Number</div>
+            <div id="profilePhone">—</div>
+            <div class="card-label" style="margin-top:12px;">City</div>
+            <div id="profileCity">—</div>
+          </div>
+          <div class="panel" style="padding:15px;">
+            <div class="card-label">Joining Date</div>
+            <div id="profileJoiningDate">—</div>
+            <div class="card-label" style="margin-top:12px;">Total Orders</div>
+            <div id="profileTotalOrders">0</div>
+          </div>
+        </div>
+
+        <div class="panel-head">
+          <h3>Monthly Order History</h3>
+          <select id="resellerProfileFilter" class="filter">
+            <option value="1">Last 1 Month</option>
+            <option value="2">Last 2 Months</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6" selected>Last 6 Months</option>
+            <option value="9">Last 9 Months</option>
+            <option value="12">Last 12 Months</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Order Date</th>
+                <th>Reseller Profit</th>
+                <th>Payment Status</th>
+              </tr>
+            </thead>
+            <tbody id="resellerProfileOrders"></tbody>
+          </table>
+        </div>
+
+        <div class="cards" style="margin-top:20px;">
+          <div class="card">
+            <div class="card-label">Total Reseller Profit</div>
+            <div class="card-value" id="profileTotalProfit">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Approved Payment</div>
+            <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Pending Payment</div>
+            <div class="card-value" id="profilePendingPayment">Rs. 0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 
