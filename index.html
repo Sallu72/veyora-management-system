@@ -156,7 +156,7 @@ input:focus,select:focus{border-color:var(--gold)}
   gap:12px;flex-wrap:wrap;margin-bottom:15px;
 }
 .panel h3{margin:0;font-size:15px; color: var(--gold-light); font-weight: 600;}
-.filter{width:auto;min-width:130px;margin:0;padding:8px 12px; font-size:12px;}
+.filter{width:auto;min-width:140px;margin:0;padding:8px 12px; font-size:12px;}
 
 .grid-two{display:grid;grid-template-columns: 1.3fr 0.9fr;gap:18px}
 .grid-two-even{display:grid;grid-template-columns: 1fr 1fr;gap:18px}
@@ -202,7 +202,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
   .main{padding:15px}
   .cards{grid-template-columns:1fr}
 }
-  .view-all {
+.view-all {
   background: #0b0b0b;
   color: #f5f0e6;
   border: 1px solid rgba(212, 175, 55, 0.55);
@@ -213,7 +213,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
   cursor: pointer;
   transition: 0.3s ease;
 }
-
 .view-all:hover {
   background: #17130a;
   border-color: #d4af37;
@@ -293,60 +292,57 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       
       <!-- MAIN KPI CARDS -->
       <div class="cards">
-  <div class="card">
-    <div class="card-label">Total Profit</div>
-    <div class="card-value" id="totalProfit">Rs. 0</div>
-    <div class="card-note">
-      <span>Owner + Resellers</span>
-      <span id="totalProfitGrowth">—</span>
-    </div>
-  </div>
+        <div class="card">
+          <div class="card-label">Total Profit</div>
+          <div class="card-value" id="totalProfit">Rs. 0</div>
+          <div class="card-note">
+            <span>Owner + Resellers</span>
+            <span id="totalProfitGrowth">—</span>
+          </div>
+        </div>
 
-  <div class="card">
-    <div class="card-label">Owner Profit</div>
-    <div class="card-value" id="ownerProfit">Rs. 0</div>
-    <div class="card-note">
-      <span>Your earnings</span>
-      <span id="ownerProfitGrowth">—</span>
-    </div>
-  </div>
+        <div class="card">
+          <div class="card-label">Owner Profit</div>
+          <div class="card-value" id="ownerProfit">Rs. 0</div>
+          <div class="card-note">
+            <span>Your earnings</span>
+            <span id="ownerProfitGrowth">—</span>
+          </div>
+        </div>
 
-  <div class="card">
-    <div class="card-label">Resellers Profit</div>
-    <div class="card-value" id="resellerProfit">Rs. 0</div>
-    <div class="card-note">
-      <span>Combined earnings</span>
-      <span id="resellerProfitGrowth">—</span>
-    </div>
-  </div>
+        <div class="card">
+          <div class="card-label">Resellers Profit</div>
+          <div class="card-value" id="resellerProfit">Rs. 0</div>
+          <div class="card-note">
+            <span>Combined earnings</span>
+            <span id="resellerProfitGrowth">—</span>
+          </div>
+        </div>
 
-  <div class="card">
-    <div class="card-label">Total Sales</div>
-    <div class="card-value" id="totalSalesMain">Rs. 0</div>
-    <div class="card-note">
-      <span>Total revenue</span>
-      <span id="totalSalesGrowth">—</span>
-    </div>
-  </div>
-</div>
+        <div class="card">
+          <div class="card-label">Total Sales</div>
+          <div class="card-value" id="totalSalesMain">Rs. 0</div>
+          <div class="card-note">
+            <span>Total revenue</span>
+            <span id="totalSalesGrowth">—</span>
+          </div>
+        </div>
+      </div>
 
       <!-- CHART & TOP RESELLERS ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
         <!-- Profit Overview Chart -->
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
-            <h3>Profit Overview (Last 6 Months)</h3>
-           <select id="chartPeriodFilter" class="filter">
-  <option value="1">Last 1 Month</option>
-  <option value="2">Last 2 Months</option>
-  <option value="3">Last 3 Months</option>
-  <option value="4">Last 4 Months</option>
-  <option value="5">Last 5 Months</option>
-  <option value="6" selected>Last 6 Months</option>
-  <option value="9">Last 9 Months</option>
-  <option value="12">Last 12 Months</option>
-  <option value="all">All Time</option>
-</select>
+            <h3>Profit Overview</h3>
+            <select id="chartPeriodFilter" class="filter">
+              <option value="this">This Month</option>
+              <option value="previous">Previous Month</option>
+              <option value="3">Last 3 Months</option>
+              <option value="6" selected>Last 6 Months</option>
+              <option value="9">Last 9 Months</option>
+              <option value="all">Overall</option>
+            </select>
           </div>
           <div style="position: relative; height:210px; width:100%;">
             <canvas id="profitChart"></canvas>
@@ -367,9 +363,9 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       <div class="grid-two" style="margin-bottom:20px;">
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
-<h3>Reseller Performance</h3>
-<button class="view-all" data-page="resellers">View All →</button>
-</div>
+            <h3>Reseller Performance</h3>
+            <button class="view-all" data-page="resellers">View All →</button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -389,22 +385,20 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         </div>
 
         <div class="panel" style="margin-bottom:0;">
-         <div class="panel-head">
-  <h3>Monthly Summary</h3>
-
-  <div style="display:flex;align-items:center;gap:8px;">
-    <select id="monthlySummaryPeriodFilter" class="filter">
-      <option value="this">This Month</option>
-<option value="previous">Previous Month</option>
-<option value="3">Last 3 Months</option>
-<option value="6">Last 6 Months</option>
-<option value="9">Last 9 Months</option>
-<option value="all">Overall</option>
-    </select>
-
-    <button class="view-all" data-page="history">View All →</button>
-  </div>
-</div>
+          <div class="panel-head">
+            <h3>Monthly Summary</h3>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <select id="monthlySummaryPeriodFilter" class="filter">
+                <option value="this">This Month</option>
+                <option value="previous">Previous Month</option>
+                <option value="3">Last 3 Months</option>
+                <option value="6" selected>Last 6 Months</option>
+                <option value="9">Last 9 Months</option>
+                <option value="all">Overall</option>
+              </select>
+              <button class="view-all" data-page="history">View All →</button>
+            </div>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -416,10 +410,10 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                 </tr>
               </thead>
               <tbody id="monthlySummaryTable">
-  <tr>
-    <td colspan="4" class="empty">Loading actual business records...</td>
-  </tr>
-</tbody>
+                <tr>
+                  <td colspan="4" class="empty">Loading actual business records...</td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -430,8 +424,8 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Recent Orders</h3>
-<button class="view-all" data-page="orders">View All →</button>
-</div>
+            <button class="view-all" data-page="orders">View All →</button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -464,377 +458,308 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
     </section>
 
-    <!-- OTHER SECTIONS (Owner, Resellers, Orders, Payments, Customers, Reports, History, Control, Settings) -->
-   
-<section id="page-owner" class="section">
-
-  <p class="section-intro">Your personal profit records from all business orders.</p>
-
-  <!-- OWNER PROFIT SUMMARY -->
-  <div class="cards">
-
-    <div class="card">
-      <div class="card-label">Total Owner Profit</div>
-      <div class="card-value" id="ownerTotalProfit">Rs. 0</div>
-      <div class="card-note">All-time earnings</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">This Month Profit</div>
-      <div class="card-value" id="ownerThisMonthProfit">Rs. 0</div>
-      <div class="card-note">Current month earnings</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">Last Month Profit</div>
-      <div class="card-value" id="ownerLastMonthProfit">Rs. 0</div>
-      <div class="card-note">Previous month earnings</div>
-    </div>
-
-  </div>
-
-  <!-- OWNER PROFIT HISTORY -->
-  <div class="panel" style="margin-top:20px;">
-
-    <div class="panel-head">
-      <h3>Owner Profit History</h3>
-
-      <select id="ownerProfitPeriodFilter" class="filter">
-        <option value="1">Last 1 Month</option>
-        <option value="2">Last 2 Months</option>
-        <option value="3">Last 3 Months</option>
-        <option value="4">Last 4 Months</option>
-        <option value="5">Last 5 Months</option>
-        <option value="6" selected>Last 6 Months</option>
-        <option value="9">Last 9 Months</option>
-        <option value="12">Last 12 Months</option>
-        <option value="all">All Time</option>
-      </select>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Order No</th>
-            <th>Reseller</th>
-            <th>My Profit</th>
-          </tr>
-        </thead>
-
-        <tbody id="ownerTable">
-          <tr>
-            <td colspan="6" class="empty">Loading profit records...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-
-</section>
-
-
-   
-<section id="page-resellers" class="section">
-
-  <p class="section-intro">Manage your reseller accounts and performance.</p>
-
-  <!-- RESELLER SUMMARY -->
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Total Resellers</div>
-      <div class="card-value" id="totalResellers">0</div>
-      <div class="card-note">Registered resellers</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">Active Resellers</div>
-      <div class="card-value" id="activeResellers">0</div>
-      <div class="card-note">Currently active</div>
-    </div>
-  </div>
-
-  <!-- RESELLER LIST -->
-  <div class="panel" style="margin-top:20px;">
-
-    <div class="panel-head">
-      <h3>Reseller List</h3>
-      <button class="view-all" id="addResellerBtn">+ Add Reseller</button>
-    </div>
-
-    <div style="padding:12px 0;">
-      <input
-        type="text"
-        id="resellerSearch"
-        placeholder="Search by name, city or phone..."
-        style="width:100%;max-width:350px;"
-      >
-    </div>
-<div id="addResellerForm" class="panel" style="display:none;margin-bottom:20px;">
-  <div class="panel-head">
-    <h3>Add New Reseller</h3>
-  </div>
-
-  <div style="padding:15px;">
-    <input id="newResellerName" placeholder="Reseller Name">
-    <input id="newResellerCity" placeholder="City">
-    <input id="newResellerPhone" placeholder="Phone Number">
-    <input id="newResellerJoiningDate" type="date">
-
-    <div style="margin-top:15px;display:flex;gap:10px;">
-      <button class="view-all" id="saveResellerBtn">Save Reseller</button>
-      <button class="view-all" id="cancelResellerBtn">Cancel</button>
-    </div>
-  </div>
-</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Reseller Name</th>
-            <th>City</th>
-            <th>Phone</th>
-            <th>Joining Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="resellerTable"></tbody>
-      </table>
-    </div>
-
-  </div>
-
-  <!-- RESELLER PROFILE -->
-  <div id="resellerProfile" style="display:none;margin-top:20px;">
-    <div class="panel">
-      <div class="panel-head">
-        <h3>Reseller Profile</h3>
-        <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
+    <!-- OWNER PROFIT SECTION -->
+    <section id="page-owner" class="section">
+      <p class="section-intro">Your personal profit records from all business orders.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Owner Profit</div>
+          <div class="card-value" id="ownerTotalProfit">Rs. 0</div>
+          <div class="card-note">All-time earnings</div>
+        </div>
+        <div class="card">
+          <div class="card-label">This Month Profit</div>
+          <div class="card-value" id="ownerThisMonthProfit">Rs. 0</div>
+          <div class="card-note">Current month earnings</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Last Month Profit</div>
+          <div class="card-value" id="ownerLastMonthProfit">Rs. 0</div>
+          <div class="card-note">Previous month earnings</div>
+        </div>
       </div>
 
-      <div style="padding:20px;">
-        <div style="text-align:center;margin-bottom:25px;">
-          <div class="reseller-badge" id="profileInitial" style="width:60px;height:60px;font-size:24px;margin:auto;">R</div>
-          <h2 id="profileName" style="color:var(--gold);margin-top:12px;">Reseller Name</h2>
-          <span id="profileStatus" class="status approved">Active</span>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:25px;">
-          <div class="panel" style="padding:15px;">
-            <div class="card-label">Phone Number</div>
-            <div id="profilePhone">—</div>
-            <div class="card-label" style="margin-top:12px;">City</div>
-            <div id="profileCity">—</div>
-          </div>
-          <div class="panel" style="padding:15px;">
-            <div class="card-label">Joining Date</div>
-            <div id="profileJoiningDate">—</div>
-            <div class="card-label" style="margin-top:12px;">Total Orders</div>
-            <div id="profileTotalOrders">0</div>
-          </div>
-        </div>
-
+      <div class="panel" style="margin-top:20px;">
         <div class="panel-head">
-          <h3>Monthly Order History</h3>
-          <select id="resellerProfileFilter" class="filter">
-            <option value="1">Last 1 Month</option>
-            <option value="2">Last 2 Months</option>
+          <h3>Owner Profit History</h3>
+          <select id="ownerProfitPeriodFilter" class="filter">
+            <option value="this">This Month</option>
+            <option value="previous">Previous Month</option>
             <option value="3">Last 3 Months</option>
             <option value="6" selected>Last 6 Months</option>
             <option value="9">Last 9 Months</option>
-            <option value="12">Last 12 Months</option>
-            <option value="all">All Time</option>
+            <option value="all">Overall</option>
           </select>
-          <button class="view-all" id="downloadResellerReport">
-  ↓ Download PNG Report
-</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Order No</th>
+                <th>Reseller</th>
+                <th>My Profit</th>
+              </tr>
+            </thead>
+            <tbody id="ownerTable">
+              <tr>
+                <td colspan="6" class="empty">Loading profit records...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESELLERS SECTION -->
+    <section id="page-resellers" class="section">
+      <p class="section-intro">Manage your reseller accounts and performance.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Resellers</div>
+          <div class="card-value" id="totalResellers">0</div>
+          <div class="card-note">Registered resellers</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Active Resellers</div>
+          <div class="card-value" id="activeResellers">0</div>
+          <div class="card-note">Currently active</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px;">
+        <div class="panel-head">
+          <h3>Reseller List</h3>
+          <button class="view-all" id="addResellerBtn">+ Add Reseller</button>
+        </div>
+        <div style="padding:12px 0;">
+          <input type="text" id="resellerSearch" placeholder="Search by name, city or phone..." style="width:100%;max-width:350px;">
+        </div>
+        <div id="addResellerForm" class="panel" style="display:none;margin-bottom:20px;">
+          <div class="panel-head"><h3>Add New Reseller</h3></div>
+          <div style="padding:15px;">
+            <input id="newResellerName" placeholder="Reseller Name">
+            <input id="newResellerCity" placeholder="City">
+            <input id="newResellerPhone" placeholder="Phone Number">
+            <input id="newResellerJoiningDate" type="date">
+            <div style="margin-top:15px;display:flex;gap:10px;">
+              <button class="view-all" id="saveResellerBtn">Save Reseller</button>
+              <button class="view-all" id="cancelResellerBtn">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Reseller Name</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Joining Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="resellerTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RESELLER PROFILE -->
+      <div id="resellerProfile" style="display:none;margin-top:20px;">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Reseller Profile</h3>
+            <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
+          </div>
+
+          <div style="padding:20px;">
+            <div style="text-align:center;margin-bottom:25px;">
+              <div class="reseller-badge" id="profileInitial" style="width:60px;height:60px;font-size:24px;margin:auto;">R</div>
+              <h2 id="profileName" style="color:var(--gold);margin-top:12px;">Reseller Name</h2>
+              <span id="profileStatus" class="status approved">Active</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:25px;">
+              <div class="panel" style="padding:15px;">
+                <div class="card-label">Phone Number</div>
+                <div id="profilePhone">—</div>
+                <div class="card-label" style="margin-top:12px;">City</div>
+                <div id="profileCity">—</div>
+              </div>
+              <div class="panel" style="padding:15px;">
+                <div class="card-label">Joining Date</div>
+                <div id="profileJoiningDate">—</div>
+                <div class="card-label" style="margin-top:12px;">Total Orders</div>
+                <div id="profileTotalOrders">0</div>
+              </div>
+            </div>
+
+            <div class="panel-head">
+              <h3>Monthly Order History</h3>
+              <select id="resellerProfileFilter" class="filter">
+                <option value="this">This Month</option>
+                <option value="previous">Previous Month</option>
+                <option value="3">Last 3 Months</option>
+                <option value="6" selected>Last 6 Months</option>
+                <option value="9">Last 9 Months</option>
+                <option value="all">Overall</option>
+              </select>
+              <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Order Date</th>
+                    <th>Reseller Profit</th>
+                    <th>Payment Status</th>
+                  </tr>
+                </thead>
+                <tbody id="resellerProfileOrders"></tbody>
+              </table>
+            </div>
+
+            <div class="cards" style="margin-top:20px;">
+              <div class="card">
+                <div class="card-label">Total Reseller Profit</div>
+                <div class="card-value" id="profileTotalProfit">Rs. 0</div>
+              </div>
+              <div class="card">
+                <div class="card-label">Approved Payment</div>
+                <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
+              </div>
+              <div class="card">
+                <div class="card-label">Pending Payment</div>
+                <div class="card-value" id="profilePendingPayment">Rs. 0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDERS SECTION -->
+    <section id="page-orders" class="section">
+      <p class="section-intro">Manage all VEYORA business orders and records.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Orders</div>
+          <div class="card-value" id="ordersTotalCount">0</div>
+          <div class="card-note">All registered orders</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Total Sales</div>
+          <div class="card-value" id="ordersTotalSales">Rs. 0</div>
+          <div class="card-note">Combined order value</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Pending Orders</div>
+          <div class="card-value" id="ordersPendingCount">0</div>
+          <div class="card-note">Awaiting approval</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Approved Orders</div>
+          <div class="card-value" id="ordersApprovedCount">0</div>
+          <div class="card-note">Approved records</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px;">
+        <div class="panel-head">
+          <h3>All Orders</h3>
+          <button class="view-all" id="addOrderBtn">+ Add New Order</button>
+        </div>
+
+        <!-- ADD / EDIT ORDER FORM -->
+        <div id="addOrderForm" class="panel" style="display:none;margin-bottom:20px;">
+          <div class="panel-head">
+            <h3>Add New Order</h3>
+            <button class="view-all" id="cancelOrderBtn">Cancel</button>
+          </div>
+          <div style="padding:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+            <select id="orderReseller" required>
+              <option value="">Select Reseller</option>
+            </select>
+            <input id="newOrderNumber" placeholder="Order Number">
+            <input id="newOrderCustomer" placeholder="Customer Name">
+            <input id="newOrderPhone" placeholder="Customer Phone">
+            <input id="newOrderProduct" placeholder="Product Name">
+            <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
+            <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
+            <input id="newOrderOwnerProfit" type="number" min="0" placeholder="Owner Profit (Rs.)">
+            <input id="newOrderResellerProfit" type="number" min="0" placeholder="Reseller Profit (Rs.)">
+            <input id="newOrderDate" type="date">
+            <select id="newOrderStatus">
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+            </select>
+          </div>
+          <div style="padding:0 15px 15px;">
+            <button class="view-all" id="saveOrderBtn">Save Order</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
+          <input type="text" id="orderSearch" placeholder="Search order, customer, product or reseller..." style="flex:1;min-width:220px;">
+          <select id="orderStatusFilter" class="filter">
+            <option value="all">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+          </select>
         </div>
 
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
+                <th>Order No.</th>
+                <th>Date</th>
+                <th>Reseller</th>
                 <th>Customer</th>
                 <th>Product</th>
-                <th>Order Date</th>
-                <th>Reseller Profit</th>
-                <th>Payment Status</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="resellerProfileOrders"></tbody>
+            <tbody id="ordersTable"></tbody>
           </table>
         </div>
-
-        <div class="cards" style="margin-top:20px;">
-          <div class="card">
-            <div class="card-label">Total Reseller Profit</div>
-            <div class="card-value" id="profileTotalProfit">Rs. 0</div>
-          </div>
-          <div class="card">
-            <div class="card-label">Approved Payment</div>
-            <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
-          </div>
-          <div class="card">
-            <div class="card-label">Pending Payment</div>
-            <div class="card-value" id="profilePendingPayment">Rs. 0</div>
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-</section>
-
-
-  
-<section id="page-orders" class="section">
-
-  <p class="section-intro">Manage all VEYORA business orders and records.</p>
-
-  <!-- ORDER SUMMARY -->
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Total Orders</div>
-      <div class="card-value" id="ordersTotalCount">0</div>
-      <div class="card-note">All registered orders</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">Total Sales</div>
-      <div class="card-value" id="ordersTotalSales">Rs. 0</div>
-      <div class="card-note">Combined order value</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">Pending Orders</div>
-      <div class="card-value" id="ordersPendingCount">0</div>
-      <div class="card-note">Awaiting approval</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label">Approved Orders</div>
-      <div class="card-value" id="ordersApprovedCount">0</div>
-      <div class="card-note">Approved records</div>
-    </div>
-  </div>
-
-  <!-- ALL ORDERS -->
-  <div class="panel" style="margin-top:20px;">
-
-   
-<div class="panel-head">
-  <h3>All Orders</h3>
-  <button class="view-all" id="addOrderBtn">+ Add New Order</button>
-</div>
-
-<!-- ADD NEW ORDER FORM -->
-<div id="addOrderForm" class="panel" style="display:none;margin-bottom:20px;">
-
-  <div class="panel-head">
-    <h3>Add New Order</h3>
-    <button class="view-all" id="cancelOrderBtn">Cancel</button>
-  </div>
-
-  <div style="padding:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
-
-    <select id="orderReseller" required>
-      <option value="">Select Reseller</option>
-    </select>
-
-    <input id="newOrderNumber" placeholder="Order Number">
-
-    <input id="newOrderCustomer" placeholder="Customer Name">
-    <input id="newOrderPhone" placeholder="Customer Phone">
-
-    <input id="newOrderProduct" placeholder="Product Name">
-    <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
-
-    <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
-    <input id="newOrderOwnerProfit" type="number" min="0" placeholder="Owner Profit (Rs.)">
-
-    <input id="newOrderResellerProfit" type="number" min="0" placeholder="Reseller Profit (Rs.)">
-    <input id="newOrderDate" type="date">
-
-    <select id="newOrderStatus">
-      <option value="Pending">Pending</option>
-      <option value="Approved">Approved</option>
-    </select>
-
-  </div>
-
-  <div style="padding:0 15px 15px;">
-    <button class="view-all" id="saveOrderBtn">Save Order</button>
-  </div>
-
-</div>
-
-
-    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
-
-      <input
-        type="text"
-        id="orderSearch"
-        placeholder="Search order, customer, product or reseller..."
-        style="flex:1;min-width:220px;"
-      >
-
-      <select id="orderStatusFilter" class="filter">
-        <option value="all">All Status</option>
-        <option value="Pending">Pending</option>
-        <option value="Approved">Approved</option>
-      </select>
-
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Order No.</th>
-            <th>Date</th>
-            <th>Reseller</th>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody id="ordersTable"></tbody>
-      </table>
-    </div>
-
-  </div>
-
-</section>
-
-
+    <!-- PAYMENTS SECTION -->
     <section id="page-payments" class="section">
       <p class="section-intro">Monitor pending and approved payments.</p>
       <div class="panel">
         <div class="panel-head"><h3>Payment Records</h3></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Approval Date</th></tr></thead>
-          <tbody id="paymentsTable"></tbody>
-        </table></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Approval Date</th></tr></thead>
+            <tbody id="paymentsTable"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
+    <!-- CUSTOMERS SECTION -->
     <section id="page-customers" class="section">
       <p class="section-intro">Customer information and order history.</p>
       <div class="panel">
         <div class="panel-head"><h3>Customer Records</h3></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead>
-          <tbody id="customersTable"></tbody>
-        </table></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead>
+            <tbody id="customersTable"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -885,6 +810,8 @@ let currentResellers = [];
 let currentCustomers = [];
 let currentPayments = [];
 let profitChartInstance = null;
+let selectedResellerId = null;
+let editingOrderId = null;
 
 const money = value => "Rs. " + Number(value || 0).toLocaleString("en-PK");
 const safe = value => String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -939,6 +866,14 @@ document.querySelectorAll(".nav-btn").forEach(button => {
   });
 });
 
+document.querySelectorAll(".view-all[data-page]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const targetPage = btn.dataset.page;
+    const navBtn = document.querySelector(`.nav-btn[data-page="${targetPage}"]`);
+    if(navBtn) navBtn.click();
+  });
+});
+
 // LOAD DATA
 async function loadBusinessData(){
   const results = await Promise.all([
@@ -963,10 +898,55 @@ function renderAll(){
   renderTables();
   renderChart();
   populateResellerSnapshotDropdown();
+  if(selectedResellerId) renderResellerProfileOrders();
+}
+
+// ROBUST DATE PARSER (order_date fallback to created_at & timezone fix)
+function getOrderDate(order){
+  const value = order.order_date || order.created_at;
+  if(!value) return null;
+
+  if(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value)){
+    const parts = value.substring(0, 10).split("-").map(Number);
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+// UNIFIED PERIOD FILTER MATCHER (6 Options)
+function isDateInPeriod(orderDate, filterValue) {
+  if (!orderDate) return false;
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+
+  const orderYear = orderDate.getFullYear();
+  const orderMonth = orderDate.getMonth();
+
+  if (filterValue === "this") {
+    return orderYear === currentYear && orderMonth === currentMonth;
+  }
+  if (filterValue === "previous") {
+    const prevDate = new Date(currentYear, currentMonth - 1, 1);
+    return orderYear === prevDate.getFullYear() && orderMonth === prevDate.getMonth();
+  }
+  if (filterValue === "3" || filterValue === "6" || filterValue === "9") {
+    const monthsCount = Number(filterValue);
+    const startDate = new Date(currentYear, currentMonth - (monthsCount - 1), 1);
+    const orderYM = orderYear * 12 + orderMonth;
+    const startYM = startDate.getFullYear() * 12 + startDate.getMonth();
+    const currentYM = currentYear * 12 + currentMonth;
+    return orderYM >= startYM && orderYM <= currentYM;
+  }
+  if (filterValue === "all") {
+    return true;
+  }
+  return true;
 }
 
 // RENDER DASHBOARD & METRICS
-
 function renderOverview(){
   const owner = currentOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
   const reseller = currentOrders.reduce((sum,o)=>sum+Number(o.reseller_profit||0),0);
@@ -1027,7 +1007,6 @@ function renderOverview(){
 
   // Recent Orders Table
   const recent = currentOrders.slice(0,4);
-
   document.getElementById("recentOrdersTable").innerHTML = recent.length
     ? recent.map((o,i)=>`
       <tr>
@@ -1036,8 +1015,6 @@ function renderOverview(){
         <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name||"Direct")}</td>
         <td>${safe(o.product_name)}</td>
         <td>${money(o.total_price)}</td>
-
-    
         <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status||"Paid")}</span></td>
       </tr>
     `).join("")
@@ -1048,20 +1025,6 @@ function renderOverview(){
   const monthlyTable = document.getElementById("monthlySummaryTable");
 
   if(monthlyTable){
-
-    function getOrderDate(order){
-      const value = order.order_date || order.created_at;
-      if(!value) return null;
-
-      if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
-        const parts = value.split("-").map(Number);
-        return new Date(parts[0],parts[1]-1,parts[2]);
-      }
-
-      const date = new Date(value);
-      return isNaN(date.getTime()) ? null : date;
-    }
-
     function renderMonthlyRows(){
       const selected = monthlyFilter ? monthlyFilter.value : "6";
       const now = new Date();
@@ -1073,55 +1036,42 @@ function renderOverview(){
       }).filter(Boolean);
 
       let startMonth;
-
       if(selected === "all"){
         if(datedOrders.length){
-          const earliest = datedOrders.reduce((min,o)=>
-            o._monthlyDate < min ? o._monthlyDate : min,
-            datedOrders[0]._monthlyDate
-          );
+          const earliest = datedOrders.reduce((min,o)=> o._monthlyDate < min ? o._monthlyDate : min, datedOrders[0]._monthlyDate);
           startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
-        }else{
+        } else {
           startMonth = currentMonth;
         }
-      }else{
-        const months = Math.max(1,Number(selected)||6);
-        startMonth = new Date(
-          currentMonth.getFullYear(),
-          currentMonth.getMonth()-months+1,
-          1
-        );
+      } else if(selected === "this") {
+        startMonth = currentMonth;
+      } else if(selected === "previous") {
+        startMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+      } else {
+        const months = Math.max(1, Number(selected) || 6);
+        startMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - months + 1, 1);
       }
 
       const rows = [];
+      let loopEndMonth = currentMonth;
+      if (selected === "previous") {
+        loopEndMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+      }
 
-      for(
-        let date = new Date(currentMonth);
-        date >= startMonth;
-        date.setMonth(date.getMonth()-1)
-      ){
+      for(let date = new Date(loopEndMonth); date >= startMonth; date.setMonth(date.getMonth()-1)){
         const year = date.getFullYear();
         const month = date.getMonth();
 
         const monthOrders = datedOrders.filter(o=>
-          o._monthlyDate.getFullYear()===year &&
-          o._monthlyDate.getMonth()===month
+          o._monthlyDate.getFullYear()===year && o._monthlyDate.getMonth()===month
         );
 
-        if(monthOrders.length){
-          const monthSales = monthOrders.reduce(
-            (sum,o)=>sum+Number(o.total_price||0),0
-          );
-
-          const monthOwnerProfit = monthOrders.reduce(
-            (sum,o)=>sum+Number(o.owner_profit||0),0
-          );
+        if(monthOrders.length || (selected !== "this" && selected !== "previous")){
+          const monthSales = monthOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
+          const monthOwnerProfit = monthOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
 
           rows.push({
-            label:date.toLocaleDateString("en-US",{
-              month:"short",
-              year:"numeric"
-            }),
+            label:date.toLocaleDateString("en-US",{month:"short", year:"numeric"}),
             orders:monthOrders.length,
             sales:monthSales,
             profit:monthOwnerProfit
@@ -1138,18 +1088,16 @@ function renderOverview(){
             <td style="color:var(--gold);">${money(row.profit)}</td>
           </tr>
         `).join("")
-        : '<tr><td colspan="4" class="empty">No monthly records yet.</td></tr>';
+        : '<tr><td colspan="4" class="empty">No records found for this period.</td></tr>';
     }
 
     if(monthlyFilter && !monthlyFilter.dataset.listenerAttached){
       monthlyFilter.addEventListener("change",renderMonthlyRows);
       monthlyFilter.dataset.listenerAttached = "true";
     }
-
     renderMonthlyRows();
   }
 }
-
 
 // RENDER CHART.JS PROFIT OVERVIEW
 function renderChart(){
@@ -1157,66 +1105,36 @@ function renderChart(){
   if(!canvas) return;
 
   const ctx = canvas.getContext('2d');
-
-  if(profitChartInstance) {
-    profitChartInstance.destroy();
-  }
+  if(profitChartInstance) { profitChartInstance.destroy(); }
 
   const filter = document.getElementById('chartPeriodFilter');
   const selectedPeriod = filter ? filter.value : '6';
-
   const orders = currentOrders || [];
-
-  // Convert order date into a valid local date
-  function getDate(order){
-    const value = order.order_date || order.created_at;
-    if(!value) return null;
-
-    if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
-      const parts = value.split('-').map(Number);
-      return new Date(parts[0], parts[1] - 1, parts[2]);
-    }
-
-    const date = new Date(value);
-    return isNaN(date.getTime()) ? null : date;
-  }
-
-  // Convert database amounts into numbers
-  function getAmount(value){
-    return Number(value) || 0;
-  }
 
   const now = new Date();
   const months = [];
 
   if(selectedPeriod === 'all'){
     let earliestDate = new Date(now.getFullYear(), now.getMonth(), 1);
-
     orders.forEach(order => {
-      const date = getDate(order);
+      const date = getOrderDate(order);
       if(date && date < earliestDate){
         earliestDate = new Date(date.getFullYear(), date.getMonth(), 1);
       }
     });
-
-    let date = new Date(
-      earliestDate.getFullYear(),
-      earliestDate.getMonth(),
-      1
-    );
-
+    let date = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), 1);
     while(date <= now){
       months.push(new Date(date));
       date.setMonth(date.getMonth() + 1);
     }
-
+  } else if(selectedPeriod === 'this') {
+    months.push(new Date(now.getFullYear(), now.getMonth(), 1));
+  } else if(selectedPeriod === 'previous') {
+    months.push(new Date(now.getFullYear(), now.getMonth() - 1, 1));
   } else {
     const count = Number(selectedPeriod) || 6;
-
     for(let i = count - 1; i >= 0; i--){
-      months.push(
-        new Date(now.getFullYear(), now.getMonth() - i, 1)
-      );
+      months.push(new Date(now.getFullYear(), now.getMonth() - i, 1));
     }
   }
 
@@ -1229,23 +1147,16 @@ function renderChart(){
     const year = month.getFullYear();
     const monthNumber = month.getMonth();
 
-    labels.push(
-      month.toLocaleString('en-US', {month: 'short'}) + ' ' + year
-    );
+    labels.push(month.toLocaleString('en-US', {month: 'short'}) + ' ' + year);
 
     let ownerTotal = 0;
     let resellerTotal = 0;
 
     orders.forEach(order => {
-      const orderDate = getDate(order);
-
-      if(
-        orderDate &&
-        orderDate.getFullYear() === year &&
-        orderDate.getMonth() === monthNumber
-      ){
-        ownerTotal += getAmount(order.owner_profit);
-        resellerTotal += getAmount(order.reseller_profit);
+      const orderDate = getOrderDate(order);
+      if(orderDate && orderDate.getFullYear() === year && orderDate.getMonth() === monthNumber){
+        ownerTotal += Number(order.owner_profit || 0);
+        resellerTotal += Number(order.reseller_profit || 0);
       }
     });
 
@@ -1259,104 +1170,52 @@ function renderChart(){
     data: {
       labels: labels,
       datasets: [
-        {
-          label: 'Total Profit',
-          data: totalProfitData,
-          backgroundColor: '#d4af37',
-          borderRadius: 4
-        },
-        {
-          label: 'Owner',
-          data: ownerProfitData,
-          backgroundColor: '#0ea5e9',
-          borderRadius: 4
-        },
-        {
-          label: 'Resellers',
-          data: resellerProfitData,
-          backgroundColor: '#a855f7',
-          borderRadius: 4
-        }
+        { label: 'Total Profit', data: totalProfitData, backgroundColor: '#d4af37', borderRadius: 4 },
+        { label: 'Owner', data: ownerProfitData, backgroundColor: '#0ea5e9', borderRadius: 4 },
+        { label: 'Resellers', data: resellerProfitData, backgroundColor: '#a855f7', borderRadius: 4 }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: {
-          labels: {
-            color: '#9e9785',
-            font: { size: 10 }
-          }
-        }
+        legend: { labels: { color: '#9e9785', font: { size: 10 } } }
       },
       scales: {
-        x: {
-          ticks: { color: '#9e9785' },
-          grid: { display: false }
-        },
+        x: { ticks: { color: '#9e9785' }, grid: { display: false } },
         y: {
-  beginAtZero: true,
-  suggestedMax: 100,
-  ticks: {
-    color: '#9e9785',
-    stepSize: 20,
-    callback: function(value) {
-      return 'Rs. ' + value.toLocaleString();
-    }
-  },
-  grid: {
-    color: 'rgba(212,175,55,0.08)'
-  }
-}
+          beginAtZero: true,
+          ticks: {
+            color: '#9e9785',
+            callback: function(value) { return 'Rs. ' + value.toLocaleString(); }
+          },
+          grid: { color: 'rgba(212,175,55,0.08)' }
+        }
       }
     }
   });
 
-  // Update graph whenever the dropdown changes
   if(filter && !filter.dataset.listenerAttached){
     filter.addEventListener('change', renderChart);
     filter.dataset.listenerAttached = 'true';
   }
 }
 
-// POPULATE TABLES & SNAPSHOT
-
+// RENDER TABLES & SNAPSHOTS
 function renderTables(){
-
-  // OWNER PROFIT DATE HELPER
-  function getOwnerOrderDate(order){
-    const value = order.order_date || order.created_at;
-    if(!value) return null;
-
-    if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
-      const parts = value.split("-").map(Number);
-      return new Date(parts[0],parts[1]-1,parts[2]);
-    }
-
-    const date = new Date(value);
-    return isNaN(date.getTime()) ? null : date;
-  }
-
-  // OWNER PROFIT SUMMARY
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(),now.getMonth(),1);
   const lastMonthStart = new Date(now.getFullYear(),now.getMonth()-1,1);
 
-  const ownerTotal = currentOrders.reduce(
-    (sum,o)=>sum+Number(o.owner_profit||0),0
-  );
-
+  const ownerTotal = currentOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
   const ownerThisMonth = currentOrders.reduce((sum,o)=>{
-    const date = getOwnerOrderDate(o);
-    return date && date >= thisMonthStart && date <= now
-      ? sum+Number(o.owner_profit||0) : sum;
+    const date = getOrderDate(o);
+    return date && date >= thisMonthStart && date <= now ? sum+Number(o.owner_profit||0) : sum;
   },0);
 
   const ownerLastMonth = currentOrders.reduce((sum,o)=>{
-    const date = getOwnerOrderDate(o);
-    return date && date >= lastMonthStart && date < thisMonthStart
-      ? sum+Number(o.owner_profit||0) : sum;
+    const date = getOrderDate(o);
+    return date && date >= lastMonthStart && date < thisMonthStart ? sum+Number(o.owner_profit||0) : sum;
   },0);
 
   document.getElementById("ownerTotalProfit").textContent = money(ownerTotal);
@@ -1368,39 +1227,14 @@ function renderTables(){
 
   function renderOwnerProfitHistory(){
     const selected = ownerFilter ? ownerFilter.value : "6";
-    const today = new Date();
-    const currentMonth = new Date(today.getFullYear(),today.getMonth(),1);
-
-    let startMonth;
-
-    if(selected === "all"){
-      const dates = currentOrders.map(getOwnerOrderDate).filter(Boolean);
-
-      if(dates.length){
-        const earliest = dates.reduce((a,b)=>a<b?a:b);
-        startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
-      }else{
-        startMonth = currentMonth;
-      }
-    }else{
-      const months = Math.max(1,Number(selected)||6);
-      startMonth = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth()-months+1,
-        1
-      );
-    }
-
-    const filteredOrders = currentOrders.filter(o=>{
-      const date = getOwnerOrderDate(o);
-      return date && date >= startMonth && date <= today;
+    const filteredOrders = currentOrders.filter(o => {
+      const date = getOrderDate(o);
+      return isDateInPeriod(date, selected);
     });
 
     document.getElementById("ownerTable").innerHTML = filteredOrders.length
       ? filteredOrders.map(o=>{
-          const resellerName =
-            currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner";
-
+          const resellerName = currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner";
           return `
             <tr>
               <td>${safe(o.order_date || o.created_at)}</td>
@@ -1408,9 +1242,7 @@ function renderTables(){
               <td>${safe(o.product_name)}</td>
               <td>${safe(o.order_number)}</td>
               <td>${safe(resellerName)}</td>
-              <td style="color:var(--gold);font-weight:bold;">
-                ${money(o.owner_profit)}
-              </td>
+              <td style="color:var(--gold);font-weight:bold;">${money(o.owner_profit)}</td>
             </tr>
           `;
         }).join("")
@@ -1421,30 +1253,20 @@ function renderTables(){
     ownerFilter.addEventListener("change",renderOwnerProfitHistory);
     ownerFilter.dataset.listenerAttached = "true";
   }
-
   renderOwnerProfitHistory();
 
   // RESELLER SUMMARY
   const totalResellersEl = document.getElementById("totalResellers");
   const activeResellersEl = document.getElementById("activeResellers");
 
-  if(totalResellersEl){
-    totalResellersEl.textContent = currentResellers.length;
+  if(totalResellersEl) totalResellersEl.textContent = currentResellers.length;
+  if(activeResellersEl) {
+    activeResellersEl.textContent = currentResellers.filter(r => (r.status || "Active").toLowerCase() === "active").length;
   }
 
-  if(activeResellersEl){
-    activeResellersEl.textContent = currentResellers.filter(
-      r => (r.status || "Active").toLowerCase() === "active"
-    ).length;
-  }
-
-  // RESELLER LIST AND SEARCH
   function renderResellerList(){
     const searchInput = document.getElementById("resellerSearch");
-    const searchText = searchInput
-      ? searchInput.value.toLowerCase().trim()
-      : "";
-
+    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
     const filtered = currentResellers.filter(r =>
       (r.name || "").toLowerCase().includes(searchText) ||
       (r.city || "").toLowerCase().includes(searchText) ||
@@ -1455,63 +1277,33 @@ function renderTables(){
       ? filtered.map((r,index)=>`
         <tr>
           <td>${index+1}</td>
-          <td>
-  <span
-    onclick="openResellerProfile('${r.id}')"
-    style="color:var(--gold);font-weight:bold;cursor:pointer;"
-  >
-    ${safe(r.name)}
-  </span>
-</td>
+          <td><span onclick="openResellerProfile('${r.id}')" style="color:var(--gold);font-weight:bold;cursor:pointer;">${safe(r.name)}</span></td>
           <td>${safe(r.city)}</td>
           <td>${safe(r.phone)}</td>
           <td>${safe(r.joining_date)}</td>
-          <td>
-            <span class="status ${
-              (r.status||"Active").toLowerCase()==="active"
-                ? "approved" : "pending"
-            }">${safe(r.status||"Active")}</span>
-          </td>
+          <td><span class="status ${(r.status||"Active").toLowerCase()==="active"?"approved":"pending"}">${safe(r.status||"Active")}</span></td>
         </tr>
       `).join("")
       : '<tr><td colspan="6" class="empty">No resellers found.</td></tr>';
   }
-
   renderResellerList();
 
   const resellerSearch = document.getElementById("resellerSearch");
-
   if(resellerSearch && !resellerSearch.dataset.listenerAttached){
     resellerSearch.addEventListener("input",renderResellerList);
     resellerSearch.dataset.listenerAttached = "true";
   }
 
-
-  // ORDERS TABLE + SUMMARY + SEARCH
-
+  // ORDERS TABLE
   function renderOrdersTable(){
-
     const searchInput = document.getElementById("orderSearch");
     const statusFilter = document.getElementById("orderStatusFilter");
-
-    const searchText = searchInput
-      ? searchInput.value.toLowerCase().trim()
-      : "";
-
-    const selectedStatus = statusFilter
-      ? statusFilter.value.toLowerCase()
-      : "all";
+    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
+    const selectedStatus = statusFilter ? statusFilter.value.toLowerCase() : "all";
 
     const totalOrders = currentOrders.length;
-
-    const totalSales = currentOrders.reduce(
-      (sum,o)=>sum+Number(o.total_price||0),0
-    );
-
-    const approvedOrders = currentOrders.filter(
-      o=>String(o.payment_status||"Pending").toLowerCase()==="approved"
-    ).length;
-
+    const totalSales = currentOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
+    const approvedOrders = currentOrders.filter(o=>String(o.payment_status||"Pending").toLowerCase()==="approved").length;
     const pendingOrders = totalOrders - approvedOrders;
 
     document.getElementById("ordersTotalCount").textContent = totalOrders;
@@ -1520,24 +1312,11 @@ function renderTables(){
     document.getElementById("ordersApprovedCount").textContent = approvedOrders;
 
     const filteredOrders = currentOrders.filter(o=>{
-
-      const resellerName =
-        currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner";
-
-      const searchableText = [
-        o.order_number,
-        o.customer_name,
-        o.product_name,
-        resellerName
-      ].join(" ").toLowerCase();
-
+      const resellerName = currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner";
+      const searchableText = [o.order_number, o.customer_name, o.product_name, resellerName].join(" ").toLowerCase();
       const matchesSearch = searchableText.includes(searchText);
-
       const orderStatus = String(o.payment_status||"Pending").toLowerCase();
-
-      const matchesStatus =
-        selectedStatus === "all" || orderStatus === selectedStatus;
-
+      const matchesStatus = selectedStatus === "all" || orderStatus === selectedStatus;
       return matchesSearch && matchesStatus;
     });
 
@@ -1551,12 +1330,7 @@ function renderTables(){
           <td>${safe(o.product_name)}</td>
           <td>${safe(o.quantity||1)}</td>
           <td>${money(o.total_price)}</td>
-          <td>
-            <span class="status ${
-              String(o.payment_status||"Pending").toLowerCase()==="approved"
-                ? "approved" : "pending"
-            }">${safe(o.payment_status||"Pending")}</span>
-          </td>
+          <td><span class="status ${String(o.payment_status||"Pending").toLowerCase()==="approved"?"approved":"pending"}">${safe(o.payment_status||"Pending")}</span></td>
           <td style="white-space:nowrap;">
             <button class="view-all" onclick="editOrder('${o.id}')">Edit</button>
             <button class="view-all" onclick="deleteOrder('${o.id}')" style="color:#ff6b6b;">Delete</button>
@@ -1565,227 +1339,50 @@ function renderTables(){
       `).join("")
       : '<tr><td colspan="8" class="empty">No matching orders found.</td></tr>';
   }
-
   renderOrdersTable();
 
   const orderSearch = document.getElementById("orderSearch");
   const orderStatusFilter = document.getElementById("orderStatusFilter");
-
   if(orderSearch && !orderSearch.dataset.listenerAttached){
     orderSearch.addEventListener("input",renderOrdersTable);
     orderSearch.dataset.listenerAttached = "true";
   }
-
   if(orderStatusFilter && !orderStatusFilter.dataset.listenerAttached){
     orderStatusFilter.addEventListener("change",renderOrdersTable);
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-
-  // PAYMENTS TABLE
+  // PAYMENTS & CUSTOMERS
   document.getElementById("paymentsTable").innerHTML = currentPayments.length
-    ? currentPayments.map(p=>`
-      <tr>
-        <td>${safe(p.order_id)}</td>
-        <td>${money(p.amount)}</td>
-        <td>${safe(p.status)}</td>
-        <td>${safe(p.approved_at || "—")}</td>
-      </tr>
-    `).join("")
+    ? currentPayments.map(p=>`<tr><td>${safe(p.order_id)}</td><td>${money(p.amount)}</td><td>${safe(p.status)}</td><td>${safe(p.approved_at || "—")}</td></tr>`).join("")
     : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
 
-  // CUSTOMERS TABLE
   document.getElementById("customersTable").innerHTML = currentCustomers.length
-    ? currentCustomers.map(c=>`
-      <tr>
-        <td>${safe(c.name)}</td>
-        <td>${safe(c.phone)}</td>
-        <td>${safe(c.city)}</td>
-        <td>${safe(c.created_at)}</td>
-      </tr>
-    `).join("")
+    ? currentCustomers.map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${safe(c.city)}</td><td>${safe(c.created_at)}</td></tr>`).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
-  
-// DOWNLOAD RESELLER REPORT AS PNG
-
-const downloadResellerReport =
-  document.getElementById("downloadResellerReport");
-
-if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) {
-
-  downloadResellerReport.addEventListener("click", async () => {
-
-    const profile = document.getElementById("resellerProfile");
-
-    if (!profile) {
-      alert("Reseller profile not found.");
-      return;
-    }
-
-    if (typeof window.html2canvas !== "function") {
-      alert("PNG library load nahi hui. Page refresh karke dobara try karo.");
-      return;
-    }
-
-    downloadResellerReport.disabled = true;
-    downloadResellerReport.textContent = "Preparing...";
-
-    try {
-
-      const canvas = await window.html2canvas(profile, {
-        backgroundColor: "#0b0b09",
-        scale: 2,
-        useCORS: true,
-        logging: true
-      });
-
-      const imageData = canvas.toDataURL("image/png");
-
-      const link = document.createElement("a");
-      link.download = "VEYORA-Reseller-Report.png";
-      link.href = imageData;
-
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-    } catch (error) {
-
-      console.error("PNG Download Error:", error);
-      alert("Download error: " + (error?.message || String(error)));
-
-    } finally {
-
-      downloadResellerReport.disabled = false;
-      downloadResellerReport.textContent = "↓ Download PNG Report";
-
-    }
-
-  });
-
-  downloadResellerReport.dataset.listenerAttached = "true";
-}
-
-// OPEN RESELLER PROFILE
-let selectedResellerId = null;
-
-function openResellerProfile(id){
-
-  selectedResellerId = id;
-
-  const reseller = currentResellers.find(
-    r => String(r.id) === String(id)
-  );
-
-  if(!reseller) return;
-
-  const orders = currentOrders.filter(
-    o => String(o.reseller_id) === String(id)
-  );
-
-  document.getElementById("profileInitial").textContent =
-    (reseller.name || "R").charAt(0).toUpperCase();
-
-  document.getElementById("profileName").textContent = reseller.name || "—";
-  document.getElementById("profilePhone").textContent = reseller.phone || "—";
-  document.getElementById("profileCity").textContent = reseller.city || "—";
-  document.getElementById("profileJoiningDate").textContent = reseller.joining_date || "—";
-  document.getElementById("profileTotalOrders").textContent = orders.length;
-
-  const status = reseller.status || "Active";
-  const statusEl = document.getElementById("profileStatus");
-  statusEl.textContent = status;
-  statusEl.className = "status " +
-    (status.toLowerCase() === "active" ? "approved" : "pending");
-
-  document.getElementById("resellerProfile").style.display = "block";
-
-  renderResellerProfileOrders();
-
-  document.getElementById("resellerProfile").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-
 
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
-
   if(!selectedResellerId) return;
 
   const filter = document.getElementById("resellerProfileFilter");
   const selected = filter ? filter.value : "this";
-  const now = new Date();
-  const start = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  if(selected !== "all"){
-    start.setMonth(
-      start.getMonth() - (Math.max(1, Number(selected) || 6) - 1)
-    );
-  }
-
-  // DATE FORMAT FIX
-  function parseOrderDate(value){
-
-    if(!value) return null;
-
-    // YYYY-MM-DD format
-    const isoMatch = String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
-
-    if(isoMatch){
-      return new Date(
-        Number(isoMatch[1]),
-        Number(isoMatch[2]) - 1,
-        Number(isoMatch[3])
-      );
-    }
-
-    // DD/MM/YYYY format
-    const otherMatch = String(value).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-
-    if(otherMatch){
-      return new Date(
-        Number(otherMatch[3]),
-        Number(otherMatch[2]) - 1,
-        Number(otherMatch[1])
-      );
-    }
-
-    const date = new Date(value);
-
-    return isNaN(date.getTime()) ? null : date;
-  }
-
-  const orders = currentOrders.filter(o=>{
-
+  const orders = currentOrders.filter(o => {
     if(String(o.reseller_id) !== String(selectedResellerId)){
       return false;
     }
-
-    const date = parseOrderDate(o.order_date || o.created_at);
-
-    if(selected === "all") return true;
-
-    if(!date) return false;
-
-    return date >= start;
+    const date = getOrderDate(o);
+    return isDateInPeriod(date, selected);
   });
 
-  const totalProfit = orders.reduce(
-    (sum,o)=>sum + Number(o.reseller_profit || 0),0
-  );
-
-  const approvedPayment = orders.reduce((sum,o)=>{
-    return String(o.payment_status || "").toLowerCase() === "approved"
-      ? sum + Number(o.reseller_profit || 0) : sum;
-  },0);
-
-  const pendingPayment = orders.reduce((sum,o)=>{
-    return String(o.payment_status || "").toLowerCase() === "pending"
-      ? sum + Number(o.reseller_profit || 0) : sum;
-  },0);
+  const totalProfit = orders.reduce((sum, o) => sum + Number(o.reseller_profit || 0), 0);
+  const approvedPayment = orders.reduce((sum, o) => {
+    const status = String(o.payment_status || "").toLowerCase();
+    return (status === "approved" || status === "paid") ? sum + Number(o.reseller_profit || 0) : sum;
+  }, 0);
+  const pendingPayment = totalProfit - approvedPayment;
 
   document.getElementById("profileTotalOrders").textContent = orders.length;
   document.getElementById("profileTotalProfit").textContent = money(totalProfit);
@@ -1793,51 +1390,63 @@ function renderResellerProfileOrders(){
   document.getElementById("profilePendingPayment").textContent = money(pendingPayment);
 
   document.getElementById("resellerProfileOrders").innerHTML = orders.length
-    ? orders.map(o=>{
-
-        const date = parseOrderDate(o.order_date || o.created_at);
-
-        const displayDate = date
-          ? date.toLocaleDateString("en-GB")
-          : "—";
+    ? orders.map(o => {
+        const date = getOrderDate(o);
+        const displayDate = date ? date.toLocaleDateString("en-GB") : "—";
+        const statusVal = String(o.payment_status || "Pending");
+        const isPaid = statusVal.toLowerCase() === "approved" || statusVal.toLowerCase() === "paid";
 
         return `
           <tr>
             <td>${safe(o.customer_name)}</td>
             <td>${safe(o.product_name)}</td>
             <td>${displayDate}</td>
-            <td style="color:var(--gold);font-weight:bold;">
-              ${money(o.reseller_profit)}
-            </td>
-            <td>
-              <span class="status ${
-                String(o.payment_status || "Pending").toLowerCase() === "approved"
-                  ? "approved" : "pending"
-              }">${safe(o.payment_status || "Pending")}</span>
-            </td>
+            <td style="color:var(--gold);font-weight:bold;">${money(o.reseller_profit)}</td>
+            <td><span class="status ${isPaid ? "paid" : "pending"}">${safe(statusVal)}</span></td>
           </tr>
         `;
       }).join("")
-    : '<tr><td colspan="5" class="empty">No orders found for this reseller.</td></tr>';
+    : '<tr><td colspan="5" class="empty">No orders found for this reseller in this period.</td></tr>';
 }
 
-// PROFILE FILTER
 const resellerProfileFilter = document.getElementById("resellerProfileFilter");
-
 if(resellerProfileFilter && !resellerProfileFilter.dataset.listenerAttached){
-  resellerProfileFilter.addEventListener("change",renderResellerProfileOrders);
+  resellerProfileFilter.addEventListener("change", renderResellerProfileOrders);
   resellerProfileFilter.dataset.listenerAttached = "true";
 }
 
-
-// BACK TO RESELLER LIST
-document.getElementById("backToResellersBtn").addEventListener("click",()=>{
-  document.getElementById("resellerProfile").style.display = "none";
-  document.getElementById("resellerProfile").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+const backBtn = document.getElementById("backToResellersBtn");
+if(backBtn && !backBtn.dataset.listenerAttached){
+  backBtn.addEventListener("click", () => {
+    document.getElementById("resellerProfile").style.display = "none";
+    document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
   });
-});
+  backBtn.dataset.listenerAttached = "true";
+}
+
+// OPEN RESELLER PROFILE
+function openResellerProfile(id){
+  selectedResellerId = id;
+  const reseller = currentResellers.find(r => String(r.id) === String(id));
+  if(!reseller) return;
+
+  document.getElementById("profileInitial").textContent = (reseller.name || "R").charAt(0).toUpperCase();
+  document.getElementById("profileName").textContent = reseller.name || "—";
+  document.getElementById("profilePhone").textContent = reseller.phone || "—";
+  document.getElementById("profileCity").textContent = reseller.city || "—";
+  document.getElementById("profileJoiningDate").textContent = reseller.joining_date || "—";
+
+  const status = reseller.status || "Active";
+  const statusEl = document.getElementById("profileStatus");
+  statusEl.textContent = status;
+  statusEl.className = "status " + (status.toLowerCase() === "active" ? "approved" : "pending");
+
+  document.getElementById("resellerProfile").style.display = "block";
+  renderResellerProfileOrders();
+
+  document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 // SNAPSHOT DROPDOWN
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
@@ -1845,99 +1454,60 @@ function populateResellerSnapshotDropdown(){
 
   select.innerHTML =
     '<option value="">Select Reseller</option>' +
-    currentResellers.map(r=>
-      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
-    ).join("");
+    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
-
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
-  snapshotSelect.addEventListener("change",e=>{
+  snapshotSelect.addEventListener("change", e => {
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
 
     if(!id){
-      container.innerHTML =
-        '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
+      container.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
       return;
     }
 
-    const r = currentResellers.find(x=>String(x.id)===String(id));
+    const r = currentResellers.find(x => String(x.id) === String(id));
     if(!r) return;
 
-    const rOrders = currentOrders.filter(
-      o=>String(o.reseller_id)===String(id)
-    );
-
-    const profit = rOrders.reduce(
-      (s,o)=>s+Number(o.reseller_profit||0),0
-    );
-
-    const sales = rOrders.reduce(
-      (s,o)=>s+Number(o.total_price||0),0
-    );
+    const rOrders = currentOrders.filter(o => String(o.reseller_id) === String(id));
+    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
+    const sales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
 
     container.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
-        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">
-          ${safe((r.name||"R").charAt(0))}
-        </div>
+        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">${safe((r.name || "R").charAt(0))}</div>
         <div style="text-align:left;">
-          <div style="font-weight:bold;color:var(--gold);font-size:14px;">
-            ${safe(r.name)}
-          </div>
-          <div style="font-size:11px;color:var(--muted);">
-            ${safe(r.city)} &bull; ${safe(r.status||"Active")}
-          </div>
+          <div style="font-weight:bold;color:var(--gold);font-size:14px;">${safe(r.name)}</div>
+          <div style="font-size:11px;color:var(--muted);">${safe(r.city)} &bull; ${safe(r.status || "Active")}</div>
         </div>
       </div>
-
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Orders</div>
-          <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">
-            ${rOrders.length}
-          </div>
+          <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">${rOrders.length}</div>
         </div>
-
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Sales</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">
-            ${money(sales)}
-          </div>
+          <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">${money(sales)}</div>
         </div>
-
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Profit</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold);">
-            ${money(profit)}
-          </div>
+          <div style="font-weight:bold;font-size:13px;color:var(--gold);">${money(profit)}</div>
         </div>
       </div>
     `;
   });
-
   snapshotSelect.dataset.listenerAttached = "true";
 }
-// EDIT AND DELETE ORDER FUNCTIONS
 
-let editingOrderId = null;
-
-// EDIT ORDER
+// EDIT AND DELETE ORDERS
 window.editOrder = async function(orderId) {
-
-  const order = currentOrders.find(
-    o => String(o.id) === String(orderId)
-  );
-
-  if (!order) {
-    alert("Order not found.");
-    return;
-  }
+  const order = currentOrders.find(o => String(o.id) === String(orderId));
+  if (!order) { alert("Order not found."); return; }
 
   populateOrderResellers();
-
   editingOrderId = order.id;
 
   document.getElementById("orderReseller").value = order.reseller_id || "";
@@ -1948,53 +1518,25 @@ window.editOrder = async function(orderId) {
   document.getElementById("newOrderPrice").value = order.total_price || 0;
   document.getElementById("newOrderOwnerProfit").value = order.owner_profit || 0;
   document.getElementById("newOrderResellerProfit").value = order.reseller_profit || 0;
-  document.getElementById("newOrderDate").value =
-    order.order_date || "";
-
-  document.getElementById("newOrderStatus").value =
-    order.payment_status || "Pending";
+  document.getElementById("newOrderDate").value = order.order_date || "";
+  document.getElementById("newOrderStatus").value = order.payment_status || "Pending";
 
   document.getElementById("addOrderForm").style.display = "block";
-
   document.getElementById("saveOrderBtn").textContent = "Update Order";
-
-  document.getElementById("addOrderForm").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  document.getElementById("addOrderForm").scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-
-// DELETE ORDER
 window.deleteOrder = async function(orderId) {
-
-  const confirmDelete = confirm(
-    "Are you sure you want to permanently delete this order?"
-  );
-
-  if (!confirmDelete) return;
-
+  if (!confirm("Are you sure you want to permanently delete this order?")) return;
   try {
-
-    const { error } = await db
-      .from("orders")
-      .delete()
-      .eq("id", orderId);
-
+    const { error } = await db.from("orders").delete().eq("id", orderId);
     if (error) throw error;
-
     alert("Order deleted successfully!");
-
     await loadBusinessData();
-
   } catch (error) {
-
     alert("Could not delete order: " + error.message);
-
   }
-
 };
-// ADD NEW ORDER: OPEN AND CLOSE FORM
 
 const addOrderBtn = document.getElementById("addOrderBtn");
 const addOrderForm = document.getElementById("addOrderForm");
@@ -2002,37 +1544,45 @@ const cancelOrderBtn = document.getElementById("cancelOrderBtn");
 const saveOrderBtn = document.getElementById("saveOrderBtn");
 
 function populateOrderResellers(){
-
   const select = document.getElementById("orderReseller");
   if(!select) return;
-
-  select.innerHTML =
-    '<option value="">Select Reseller</option>' +
-    currentResellers.map(r=>
-      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
-    ).join("");
+  select.innerHTML = '<option value="">Select Reseller</option>' +
+    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
-if(addOrderBtn && addOrderForm){
-  addOrderBtn.addEventListener("click",()=>{
+if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
+  addOrderBtn.addEventListener("click", () => {
+    editingOrderId = null;
+    document.getElementById("saveOrderBtn").textContent = "Save Order";
+    document.getElementById("newOrderNumber").value = "";
+    document.getElementById("newOrderCustomer").value = "";
+    document.getElementById("newOrderPhone").value = "";
+    document.getElementById("newOrderProduct").value = "";
+    document.getElementById("newOrderQuantity").value = "1";
+    document.getElementById("newOrderPrice").value = "";
+    document.getElementById("newOrderOwnerProfit").value = "";
+    document.getElementById("newOrderResellerProfit").value = "";
+    document.getElementById("newOrderDate").value = "";
+    document.getElementById("newOrderStatus").value = "Pending";
+    document.getElementById("orderReseller").value = "";
+
     populateOrderResellers();
     addOrderForm.style.display = "block";
-    addOrderForm.scrollIntoView({behavior:"smooth",block:"start"});
+    addOrderForm.scrollIntoView({behavior:"smooth", block:"start"});
   });
+  addOrderBtn.dataset.listenerAttached = "true";
 }
 
-if(cancelOrderBtn && addOrderForm){
-  cancelOrderBtn.addEventListener("click",()=>{
+if(cancelOrderBtn && addOrderForm && !cancelOrderBtn.dataset.listenerAttached){
+  cancelOrderBtn.addEventListener("click", () => {
     addOrderForm.style.display = "none";
+    editingOrderId = null;
   });
+  cancelOrderBtn.dataset.listenerAttached = "true";
 }
 
-// SAVE NEW ORDER TO DATABASE
-
-if(saveOrderBtn){
-
-  saveOrderBtn.addEventListener("click",async()=>{
-
+if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
+  saveOrderBtn.addEventListener("click", async () => {
     const resellerId = document.getElementById("orderReseller").value;
     const orderNumber = document.getElementById("newOrderNumber").value.trim();
     const customerName = document.getElementById("newOrderCustomer").value.trim();
@@ -2045,143 +1595,80 @@ if(saveOrderBtn){
     const orderDate = document.getElementById("newOrderDate").value;
     const paymentStatus = document.getElementById("newOrderStatus").value;
 
-    if(!resellerId || !orderNumber || !customerName || !customerPhone ||
-       !productName || !orderDate){
+    if(!resellerId || !orderNumber || !customerName || !customerPhone || !productName || !orderDate){
       alert("Please fill in all order details.");
-      return;
-    }
-
-    if(!Number.isFinite(quantity) || quantity < 1 ||
-       !Number.isFinite(totalPrice) || totalPrice < 0 ||
-       !Number.isFinite(ownerProfit) || ownerProfit < 0 ||
-       !Number.isFinite(resellerProfit) || resellerProfit < 0){
-      alert("Please enter valid quantity and profit amounts.");
       return;
     }
 
     saveOrderBtn.disabled = true;
     saveOrderBtn.textContent = "Saving...";
 
-    try{
-
+    try {
       const orderData = {
-  reseller_id: resellerId,
-  order_number: orderNumber,
-  customer_name: customerName,
-  product_name: productName,
-  quantity: quantity,
-  total_price: totalPrice,
-  owner_profit: ownerProfit,
-  reseller_profit: resellerProfit,
-  order_date: orderDate,
-  payment_status: paymentStatus
-};
+        reseller_id: resellerId,
+        order_number: orderNumber,
+        customer_name: customerName,
+        product_name: productName,
+        quantity: quantity,
+        total_price: totalPrice,
+        owner_profit: ownerProfit,
+        reseller_profit: resellerProfit,
+        order_date: orderDate,
+        payment_status: paymentStatus
+      };
 
-let error;
-
-if (editingOrderId) {
-
-  const result = await db
-    .from("orders")
-    .update(orderData)
-    .eq("id", editingOrderId);
-
-  error = result.error;
-
-} else {
-
-  const result = await db
-    .from("orders")
-    .insert([orderData]);
-
-  error = result.error;
-}
-
-if (error) throw error;
-
-           // Save customer only when creating a NEW order
-      if (!editingOrderId) {
-
-        const {error: customerError} = await db.from("customers").insert([{
-          name: customerName,
-          phone: customerPhone
-        }]);
-
-        if(customerError){
-          console.error("Customer record warning:", customerError);
-        }
-      }
-
+      let error;
       if (editingOrderId) {
-        alert("Order updated successfully!");
+        const res = await db.from("orders").update(orderData).eq("id", editingOrderId);
+        error = res.error;
       } else {
-        alert("Order saved successfully!");
+        const res = await db.from("orders").insert([orderData]);
+        error = res.error;
       }
 
-      editingOrderId = null;
-
-      document.getElementById("newOrderNumber").value = "";
-      document.getElementById("newOrderCustomer").value = "";
-      document.getElementById("newOrderPhone").value = "";
-      document.getElementById("newOrderProduct").value = "";
-      document.getElementById("newOrderQuantity").value = "1";
-      document.getElementById("newOrderPrice").value = "";
-      document.getElementById("newOrderOwnerProfit").value = "";
-      document.getElementById("newOrderResellerProfit").value = "";
-      document.getElementById("newOrderDate").value = "";
-      document.getElementById("newOrderStatus").value = "Pending";
-      document.getElementById("orderReseller").value = "";
-
-      addOrderForm.style.display = "none";
-
-      saveOrderBtn.textContent = "Save Order";
-
-      await loadBusinessData();
-
-    }catch(error){
-
-      alert("Could not save order: " + (error.message || String(error)));
-
-    }finally{
-
-      saveOrderBtn.disabled = false;
+      if (error) throw error;
 
       if (!editingOrderId) {
-        saveOrderBtn.textContent = "Save Order";
+        await db.from("customers").insert([{ name: customerName, phone: customerPhone }]);
       }
 
+      alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
+      editingOrderId = null;
+      addOrderForm.style.display = "none";
+      await loadBusinessData();
+    } catch(error) {
+      alert("Could not save order: " + (error.message || String(error)));
+    } finally {
+      saveOrderBtn.disabled = false;
+      saveOrderBtn.textContent = "Save Order";
     }
-
   });
-
+  saveOrderBtn.dataset.listenerAttached = "true";
 }
-// ADD RESELLER: OPEN AND CLOSE FORM
+
+// RESELLERS MANAGEMENT
 const addResellerBtn = document.getElementById("addResellerBtn");
 const addResellerForm = document.getElementById("addResellerForm");
 const cancelResellerBtn = document.getElementById("cancelResellerBtn");
 const saveResellerBtn = document.getElementById("saveResellerBtn");
 
-if(addResellerBtn && addResellerForm){
-  addResellerBtn.addEventListener("click",()=>{
+if(addResellerBtn && addResellerForm && !addResellerBtn.dataset.listenerAttached){
+  addResellerBtn.addEventListener("click", () => {
     addResellerForm.style.display = "block";
     document.getElementById("newResellerName").focus();
   });
+  addResellerBtn.dataset.listenerAttached = "true";
 }
 
-if(cancelResellerBtn && addResellerForm){
-  cancelResellerBtn.addEventListener("click",()=>{
+if(cancelResellerBtn && addResellerForm && !cancelResellerBtn.dataset.listenerAttached){
+  cancelResellerBtn.addEventListener("click", () => {
     addResellerForm.style.display = "none";
-    document.getElementById("newResellerName").value = "";
-    document.getElementById("newResellerCity").value = "";
-    document.getElementById("newResellerPhone").value = "";
-    document.getElementById("newResellerJoiningDate").value = "";
   });
+  cancelResellerBtn.dataset.listenerAttached = "true";
 }
 
-// SAVE RESELLER TO SUPABASE
-if(saveResellerBtn){
-  saveResellerBtn.addEventListener("click",async()=>{
-
+if(saveResellerBtn && !saveResellerBtn.dataset.listenerAttached){
+  saveResellerBtn.addEventListener("click", async () => {
     const name = document.getElementById("newResellerName").value.trim();
     const city = document.getElementById("newResellerCity").value.trim();
     const phone = document.getElementById("newResellerPhone").value.trim();
@@ -2196,11 +1683,7 @@ if(saveResellerBtn){
     saveResellerBtn.textContent = "Saving...";
 
     const {error} = await db.from("resellers").insert([{
-      name: name,
-      city: city,
-      phone: phone,
-      joining_date: joiningDate,
-      status: "Active"
+      name: name, city: city, phone: phone, joining_date: joiningDate, status: "Active"
     }]);
 
     saveResellerBtn.disabled = false;
@@ -2212,9 +1695,7 @@ if(saveResellerBtn){
     }
 
     alert("Reseller added successfully!");
-
     addResellerForm.style.display = "none";
-
     document.getElementById("newResellerName").value = "";
     document.getElementById("newResellerCity").value = "";
     document.getElementById("newResellerPhone").value = "";
@@ -2222,6 +1703,33 @@ if(saveResellerBtn){
 
     await loadBusinessData();
   });
+  saveResellerBtn.dataset.listenerAttached = "true";
+}
+
+// DOWNLOAD PNG REPORT
+const downloadResellerReport = document.getElementById("downloadResellerReport");
+if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) {
+  downloadResellerReport.addEventListener("click", async () => {
+    const profile = document.getElementById("resellerProfile");
+    if (!profile) return;
+    downloadResellerReport.disabled = true;
+    downloadResellerReport.textContent = "Preparing...";
+    try {
+      const canvas = await window.html2canvas(profile, { backgroundColor: "#0b0b09", scale: 2, useCORS: true });
+      const link = document.createElement("a");
+      link.download = "VEYORA-Reseller-Report.png";
+      link.href = canvas.toDataURL("image/png");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      alert("Download error: " + error.message);
+    } finally {
+      downloadResellerReport.disabled = false;
+      downloadResellerReport.textContent = "↓ Download PNG Report";
+    }
+  });
+  downloadResellerReport.dataset.listenerAttached = "true";
 }
 </script>
 </body>
