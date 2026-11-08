@@ -336,11 +336,17 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Profit Overview (Last 6 Months)</h3>
-            <select id="chartPeriodFilter" class="filter">
-              <option value="6">Last 6 Months</option>
-              <option value="3">Last 3 Months</option>
-              <option value="12">Last 12 Months</option>
-            </select>
+           <select id="chartPeriodFilter" class="filter">
+  <option value="1">Last 1 Month</option>
+  <option value="2">Last 2 Months</option>
+  <option value="3">Last 3 Months</option>
+  <option value="4">Last 4 Months</option>
+  <option value="5">Last 5 Months</option>
+  <option value="6" selected>Last 6 Months</option>
+  <option value="9">Last 9 Months</option>
+  <option value="12">Last 12 Months</option>
+  <option value="all">All Time</option>
+</select>
           </div>
           <div style="position: relative; height:210px; width:100%;">
             <canvas id="profitChart"></canvas>
