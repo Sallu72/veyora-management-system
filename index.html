@@ -694,16 +694,85 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 </section>
 
 
-    <section id="page-orders" class="section">
-      <p class="section-intro">All business orders will appear here.</p>
-      <div class="panel">
-        <div class="panel-head"><h3>All Orders</h3></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Order No.</th><th>Date</th><th>Reseller</th><th>Customer</th><th>Product</th><th>Qty</th><th>Price</th><th>Status</th></tr></thead>
-          <tbody id="ordersTable"></tbody>
-        </table></div>
-      </div>
-    </section>
+  
+<section id="page-orders" class="section">
+
+  <p class="section-intro">Manage all VEYORA business orders and records.</p>
+
+  <!-- ORDER SUMMARY -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Total Orders</div>
+      <div class="card-value" id="ordersTotalCount">0</div>
+      <div class="card-note">All registered orders</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Total Sales</div>
+      <div class="card-value" id="ordersTotalSales">Rs. 0</div>
+      <div class="card-note">Combined order value</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Pending Orders</div>
+      <div class="card-value" id="ordersPendingCount">0</div>
+      <div class="card-note">Awaiting approval</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Approved Orders</div>
+      <div class="card-value" id="ordersApprovedCount">0</div>
+      <div class="card-note">Approved records</div>
+    </div>
+  </div>
+
+  <!-- ALL ORDERS -->
+  <div class="panel" style="margin-top:20px;">
+
+    <div class="panel-head">
+      <h3>All Orders</h3>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
+
+      <input
+        type="text"
+        id="orderSearch"
+        placeholder="Search order, customer, product or reseller..."
+        style="flex:1;min-width:220px;"
+      >
+
+      <select id="orderStatusFilter" class="filter">
+        <option value="all">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+      </select>
+
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order No.</th>
+            <th>Date</th>
+            <th>Reseller</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="ordersTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+</section>
+
 
     <section id="page-payments" class="section">
       <p class="section-intro">Monitor pending and approved payments.</p>
