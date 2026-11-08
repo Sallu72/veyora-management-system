@@ -436,19 +436,28 @@ function showLogin(){
 // -----------------------------------------
 // 2. OWNER VERIFICATION
 // -----------------------------------------
-async function verifyOwner(user){
-  const {data,error} = await db
+async function verifyOwner(user) {
+  console.log("Logged-in User ID:", user.id);
+
+  const { data, error } = await db
     .from("owners")
     .select("user_id")
-    .eq("user_id",user.id)
+    .eq("user_id", user.id)
     .maybeSingle();
 
-  if(error || !data){
-    await db.auth.signOut();
-    showLogin();
-    showMessage("Access denied. This account is not registered as owner.");
+  console.log("Owner Data:", data);
+  console.log("Owner Error:", error);
+
+  if (error) {
+    alert("Owner Database Error: " + error.message);
     return false;
   }
+
+  if (!data) {
+    alert("Owner record not found. Logged-in ID: " + user.id);
+    return false;
+  }
+
   return true;
 }
 
