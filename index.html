@@ -1442,25 +1442,97 @@ function renderTables(){
     resellerSearch.dataset.listenerAttached = "true";
   }
 
-  // ORDERS TABLE
-  document.getElementById("ordersTable").innerHTML = currentOrders.length
-    ? currentOrders.map(o=>`
-      <tr>
-        <td>${safe(o.order_number)}</td>
-        <td>${safe(o.order_date || o.created_at)}</td>
-        <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner")}</td>
-        <td>${safe(o.customer_name)}</td>
-        <td>${safe(o.product_name)}</td>
-        <td>${safe(o.quantity||1)}</td>
-        <td>${money(o.total_price)}</td>
-        <td>
-          <span class="status ${
-            o.payment_status==="Approved" ? "approved" : "pending"
-          }">${safe(o.payment_status||"Approved")}</span>
-        </td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="8" class="empty">No orders.</td></tr>';
+
+  // ORDERS TABLE + SUMMARY + SEARCH
+
+  function renderOrdersTable(){
+
+    const searchInput = document.getElementById("orderSearch");
+    const statusFilter = document.getElementById("orderStatusFilter");
+
+    const searchText = searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
+
+    const selectedStatus = statusFilter
+      ? statusFilter.value.toLowerCase()
+      : "all";
+
+    const totalOrders = currentOrders.length;
+
+    const totalSales = currentOrders.reduce(
+      (sum,o)=>sum+Number(o.total_price||0),0
+    );
+
+    const approvedOrders = currentOrders.filter(
+      o=>String(o.payment_status||"Pending").toLowerCase()==="approved"
+    ).length;
+
+    const pendingOrders = totalOrders - approvedOrders;
+
+    document.getElementById("ordersTotalCount").textContent = totalOrders;
+    document.getElementById("ordersTotalSales").textContent = money(totalSales);
+    document.getElementById("ordersPendingCount").textContent = pendingOrders;
+    document.getElementById("ordersApprovedCount").textContent = approvedOrders;
+
+    const filteredOrders = currentOrders.filter(o=>{
+
+      const resellerName =
+        currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner";
+
+      const searchableText = [
+        o.order_number,
+        o.customer_name,
+        o.product_name,
+        resellerName
+      ].join(" ").toLowerCase();
+
+      const matchesSearch = searchableText.includes(searchText);
+
+      const orderStatus = String(o.payment_status||"Pending").toLowerCase();
+
+      const matchesStatus =
+        selectedStatus === "all" || orderStatus === selectedStatus;
+
+      return matchesSearch && matchesStatus;
+    });
+
+    document.getElementById("ordersTable").innerHTML = filteredOrders.length
+      ? filteredOrders.map(o=>`
+        <tr>
+          <td>${safe(o.order_number)}</td>
+          <td>${safe(o.order_date || o.created_at)}</td>
+          <td>${safe(currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner")}</td>
+          <td>${safe(o.customer_name)}</td>
+          <td>${safe(o.product_name)}</td>
+          <td>${safe(o.quantity||1)}</td>
+          <td>${money(o.total_price)}</td>
+          <td>
+            <span class="status ${
+              String(o.payment_status||"Pending").toLowerCase()==="approved"
+                ? "approved" : "pending"
+            }">${safe(o.payment_status||"Pending")}</span>
+          </td>
+        </tr>
+      `).join("")
+      : '<tr><td colspan="8" class="empty">No matching orders found.</td></tr>';
+  }
+
+  renderOrdersTable();
+
+  const orderSearch = document.getElementById("orderSearch");
+  const orderStatusFilter = document.getElementById("orderStatusFilter");
+
+  if(orderSearch && !orderSearch.dataset.listenerAttached){
+    orderSearch.addEventListener("input",renderOrdersTable);
+    orderSearch.dataset.listenerAttached = "true";
+  }
+
+  if(orderStatusFilter && !orderStatusFilter.dataset.listenerAttached){
+    orderStatusFilter.addEventListener("change",renderOrdersTable);
+    orderStatusFilter.dataset.listenerAttached = "true";
+  }
+
 
   // PAYMENTS TABLE
   document.getElementById("paymentsTable").innerHTML = currentPayments.length
