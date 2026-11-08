@@ -1339,9 +1339,14 @@ function renderTables(){
       ? filtered.map((r,index)=>`
         <tr>
           <td>${index+1}</td>
-          <td style="color:var(--gold);font-weight:bold;">
-            ${safe(r.name)}
-          </td>
+          <td>
+  <span
+    onclick="openResellerProfile('${r.id}')"
+    style="color:var(--gold);font-weight:bold;cursor:pointer;"
+  >
+    ${safe(r.name)}
+  </span>
+</td>
           <td>${safe(r.city)}</td>
           <td>${safe(r.phone)}</td>
           <td>${safe(r.joining_date)}</td>
