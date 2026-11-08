@@ -782,54 +782,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     </section>
 
     
-<!-- PAYMENTS SECTION -->
-<section id="page-payments" class="section">
-
-  <div style="margin-bottom:20px;">
-    <h2 style="color:var(--gold);font-size:22px;">Payments Management</h2>
-    <p class="section-intro">Monitor pending and approved payments.</p>
-  </div>
-
-  <div class="panel" style="padding:20px;">
-
-    <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <h3 style="color:var(--gold);font-size:18px;">Payment Records</h3>
-        <p style="font-size:11px;color:var(--muted);margin-top:5px;">
-          Track and monitor all payment transactions
-        </p>
-      </div>
-
-      <div style="
-        padding:8px 14px;
-        border:1px solid rgba(212,175,55,.4);
-        border-radius:8px;
-        color:var(--gold);
-        font-size:12px;
-        background:#151109;
-      ">
-        <span>₨</span> Payment History
-      </div>
-    </div>
-
-    <div class="table-wrap" style="margin-top:20px;border:1px solid rgba(212,175,55,.2);border-radius:10px;overflow:auto;">
-      <table style="width:100%;">
-        <thead>
-          <tr>
-            <th>Order</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Approval Date</th>
-          </tr>
-        </thead>
-
-        <tbody id="paymentsTable"></tbody>
-      </table>
-    </div>
-
-  </div>
-</section>
-
 
 <!-- PAYMENTS SECTION -->
 <section id="page-payments" class="section">
@@ -865,10 +817,12 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       <table style="width:100%;">
         <thead>
           <tr>
-            <th>Order</th>
+            <th>Order Number</th>
+            <th>Customer Name</th>
+            <th>Reseller Name</th>
             <th>Amount</th>
             <th>Status</th>
-            <th>Approval Date</th>
+            <th>Payment Date</th>
           </tr>
         </thead>
 
