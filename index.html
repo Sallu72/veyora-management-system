@@ -994,31 +994,83 @@ function renderOverview(){
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
 
-  // Top 3 Resellers Ranking
-  const ranking = currentResellers.map(r=>{
-    const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
-    const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
-    const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
-    return {...r, profit, orderCount:rOrders.length, sales:rSales};
-  }).sort((a,b)=>b.profit-a.profit).slice(0,3);
+  
+// Top 3 Resellers Ranking
+const ranking = currentResellers.map(r => {
+  const rOrders = currentOrders.filter(o => o.reseller_id === r.id);
+  const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
+  const rSales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
 
-  document.getElementById("topResellers").innerHTML = ranking.length
-    ? ranking.map((r,i)=>`
-      <div class="top-reseller-row">
-        <div style="display:flex;align-items:center;">
-          <div class="reseller-badge">${i+1}</div>
-          <div>
-            <div style="font-weight:bold;color:var(--gold-light);font-size:13px;">${safe(r.name)}</div>
-            <div style="font-size:11px;color:var(--muted);">${safe(r.city||'Pakistan')}</div>
+  return {
+    ...r,
+    profit,
+    orderCount: rOrders.length,
+    sales: rSales
+  };
+}).sort((a, b) => b.profit - a.profit).slice(0, 3);
+
+const medals = ["🏆", "🥈", "🥉"];
+
+document.getElementById("topResellers").innerHTML = ranking.length
+  ? ranking.map((r, i) => {
+      const initial = (r.name || "R").trim().charAt(0).toUpperCase();
+
+      return `
+        <div style="
+          display:grid;
+          grid-template-columns:65px 55px minmax(0,1fr) auto;
+          align-items:center;
+          gap:12px;
+          padding:12px 10px;
+          margin:7px 0;
+          background:linear-gradient(100deg,#17130a,#090909);
+          border:1px solid rgba(212,175,55,.25);
+          border-radius:12px;
+        ">
+
+          <div style="
+            font-size:38px;
+            text-align:center;
+            filter:drop-shadow(0 0 7px rgba(212,175,55,.35));
+          ">${medals[i]}</div>
+
+          <div style="
+            width:48px;
+            height:48px;
+            border:2px solid var(--gold);
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:var(--gold);
+            font-size:23px;
+            font-weight:bold;
+            background:linear-gradient(145deg,#29200c,#080808);
+          ">${safe(initial)}</div>
+
+          <div style="min-width:0;">
+            <div style="font-weight:bold;color:#fff;font-size:14px;">
+              ${safe(r.name)}
+            </div>
+            <div style="font-size:11px;color:#aaa;margin-top:4px;">
+              ${safe(r.city || "Pakistan")}
+            </div>
           </div>
+
+          <div style="text-align:right;white-space:nowrap;">
+            <div style="color:var(--gold);font-weight:bold;font-size:15px;">
+              ${money(r.profit)}
+            </div>
+            <div style="font-size:11px;color:#ccc;margin-top:4px;">
+              ${r.orderCount} Orders
+            </div>
+          </div>
+
         </div>
-        <div style="text-align:right;">
-          <div style="color:var(--gold);font-weight:bold;font-size:13px;">${money(r.profit)}</div>
-          <div style="font-size:10px;color:var(--muted);">${r.orderCount} Orders</div>
-        </div>
-      </div>
-    `).join("")
-    : '<div class="empty">No reseller records yet.</div>';
+      `;
+    }).join("")
+  : '<div class="empty">No reseller records yet.</div>';
+
 
   // Reseller Performance Table
   const perfRows = currentResellers.map(r=>{
