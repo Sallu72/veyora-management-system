@@ -1127,6 +1127,7 @@ function renderChart(){
     filter.dataset.listenerAttached = 'true';
   }
 }
+
 // POPULATE TABLES & SNAPSHOT
 
 function renderTables(){
@@ -1156,14 +1157,14 @@ function renderTables(){
 
   const ownerThisMonth = currentOrders.reduce((sum,o)=>{
     const date = getOwnerOrderDate(o);
-    return date && date >= thisMonthStart &&
-      date <= now ? sum+Number(o.owner_profit||0) : sum;
+    return date && date >= thisMonthStart && date <= now
+      ? sum+Number(o.owner_profit||0) : sum;
   },0);
 
   const ownerLastMonth = currentOrders.reduce((sum,o)=>{
     const date = getOwnerOrderDate(o);
-    return date && date >= lastMonthStart &&
-      date < thisMonthStart ? sum+Number(o.owner_profit||0) : sum;
+    return date && date >= lastMonthStart && date < thisMonthStart
+      ? sum+Number(o.owner_profit||0) : sum;
   },0);
 
   document.getElementById("ownerTotalProfit").textContent = money(ownerTotal);
@@ -1174,7 +1175,6 @@ function renderTables(){
   const ownerFilter = document.getElementById("ownerProfitPeriodFilter");
 
   function renderOwnerProfitHistory(){
-
     const selected = ownerFilter ? ownerFilter.value : "6";
     const today = new Date();
     const currentMonth = new Date(today.getFullYear(),today.getMonth(),1);
@@ -1232,31 +1232,79 @@ function renderTables(){
 
   renderOwnerProfitHistory();
 
-  // RESELLER TABLE
-  document.getElementById("resellerTable").innerHTML = currentResellers.length
-    ? currentResellers.map(r=>`
-      <tr>
-        <td>${safe(r.name)}</td>
-        <td>${safe(r.city)}</td>
-        <td>${safe(r.phone)}</td>
-        <td>${safe(r.joining_date)}</td>
-        <td><span class="status approved">${safe(r.status||'Active')}</span></td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="5" class="empty">No resellers.</td></tr>';
+  // RESELLER SUMMARY
+  const totalResellersEl = document.getElementById("totalResellers");
+  const activeResellersEl = document.getElementById("activeResellers");
+
+  if(totalResellersEl){
+    totalResellersEl.textContent = currentResellers.length;
+  }
+
+  if(activeResellersEl){
+    activeResellersEl.textContent = currentResellers.filter(
+      r => (r.status || "Active").toLowerCase() === "active"
+    ).length;
+  }
+
+  // RESELLER LIST AND SEARCH
+  function renderResellerList(){
+    const searchInput = document.getElementById("resellerSearch");
+    const searchText = searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
+
+    const filtered = currentResellers.filter(r =>
+      (r.name || "").toLowerCase().includes(searchText) ||
+      (r.city || "").toLowerCase().includes(searchText) ||
+      (r.phone || "").toLowerCase().includes(searchText)
+    );
+
+    document.getElementById("resellerTable").innerHTML = filtered.length
+      ? filtered.map((r,index)=>`
+        <tr>
+          <td>${index+1}</td>
+          <td style="color:var(--gold);font-weight:bold;">
+            ${safe(r.name)}
+          </td>
+          <td>${safe(r.city)}</td>
+          <td>${safe(r.phone)}</td>
+          <td>${safe(r.joining_date)}</td>
+          <td>
+            <span class="status ${
+              (r.status||"Active").toLowerCase()==="active"
+                ? "approved" : "pending"
+            }">${safe(r.status||"Active")}</span>
+          </td>
+        </tr>
+      `).join("")
+      : '<tr><td colspan="6" class="empty">No resellers found.</td></tr>';
+  }
+
+  renderResellerList();
+
+  const resellerSearch = document.getElementById("resellerSearch");
+
+  if(resellerSearch && !resellerSearch.dataset.listenerAttached){
+    resellerSearch.addEventListener("input",renderResellerList);
+    resellerSearch.dataset.listenerAttached = "true";
+  }
 
   // ORDERS TABLE
   document.getElementById("ordersTable").innerHTML = currentOrders.length
     ? currentOrders.map(o=>`
       <tr>
         <td>${safe(o.order_number)}</td>
-        <td>${safe(o.order_date)}</td>
+        <td>${safe(o.order_date || o.created_at)}</td>
         <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner")}</td>
         <td>${safe(o.customer_name)}</td>
         <td>${safe(o.product_name)}</td>
         <td>${safe(o.quantity||1)}</td>
         <td>${money(o.total_price)}</td>
-        <td><span class="status ${o.payment_status==="Approved"?"approved":"pending"}">${safe(o.payment_status||"Approved")}</span></td>
+        <td>
+          <span class="status ${
+            o.payment_status==="Approved" ? "approved" : "pending"
+          }">${safe(o.payment_status||"Approved")}</span>
+        </td>
       </tr>
     `).join("")
     : '<tr><td colspan="8" class="empty">No orders.</td></tr>';
@@ -1283,90 +1331,160 @@ function renderTables(){
         <td>${safe(c.created_at)}</td>
       </tr>
     `).join("")
-: '<tr><td colspan="5" class="empty">No resellers.</td></tr>';
+    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
 
-renderResellerList();
-
-const resellerSearch = document.getElementById("resellerSearch");
-
-if(resellerSearch && !resellerSearch.dataset.listenerAttached){
-  resellerSearch.addEventListener("input",renderResellerList);
-  resellerSearch.dataset.listenerAttached = "true";
-
-}
-
+// SNAPSHOT DROPDOWN
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
-  select.innerHTML = '<option value="">Select Reseller</option>' + currentResellers.map(r=>`<option value="${r.id}">${safe(r.name)}</option>`).join("");
+  if(!select) return;
+
+  select.innerHTML =
+    '<option value="">Select Reseller</option>' +
+    currentResellers.map(r=>
+      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
+    ).join("");
 }
 
-document.getElementById("snapshotResellerSelect").addEventListener("change", e => {
-  const id = e.target.value;
-  const container = document.getElementById("resellerSnapshotContent");
-  if(!id){
-    container.innerHTML = '<div style="font-size:12px; color:var(--muted); padding:10px;">Choose a reseller above to view performance analytics.</div>';
-    return;
-  }
-  const r = currentResellers.find(x => x.id === id);
-  const rOrders = currentOrders.filter(o => o.reseller_id === id);
-  const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
-  const sales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
+const snapshotSelect = document.getElementById("snapshotResellerSelect");
 
-  container.innerHTML = `
-    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:12px;">
-      <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">${r.name.charAt(0)}</div>
-      <div style="text-align:left;">
-        <div style="font-weight:bold; color:var(--gold); font-size:14px;">${safe(r.name)}</div>
-        <div style="font-size:11px; color:var(--muted);">${safe(r.city)} &bull; Active</div>
+if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
+  snapshotSelect.addEventListener("change",e=>{
+    const id = e.target.value;
+    const container = document.getElementById("resellerSnapshotContent");
+
+    if(!id){
+      container.innerHTML =
+        '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
+      return;
+    }
+
+    const r = currentResellers.find(x=>String(x.id)===String(id));
+    if(!r) return;
+
+    const rOrders = currentOrders.filter(
+      o=>String(o.reseller_id)===String(id)
+    );
+
+    const profit = rOrders.reduce(
+      (s,o)=>s+Number(o.reseller_profit||0),0
+    );
+
+    const sales = rOrders.reduce(
+      (s,o)=>s+Number(o.total_price||0),0
+    );
+
+    container.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
+        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">
+          ${safe((r.name||"R").charAt(0))}
+        </div>
+        <div style="text-align:left;">
+          <div style="font-weight:bold;color:var(--gold);font-size:14px;">
+            ${safe(r.name)}
+          </div>
+          <div style="font-size:11px;color:var(--muted);">
+            ${safe(r.city)} &bull; ${safe(r.status||"Active")}
+          </div>
+        </div>
       </div>
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center;">
-      <div style="background:#0b0b09; padding:8px; border-radius:8px; border:1px solid rgba(212,175,55,0.15)">
-        <div style="font-size:10px; color:var(--muted);">Orders</div>
-        <div style="font-weight:bold; font-size:14px; color:var(--gold-light);">${rOrders.length}</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
+          <div style="font-size:10px;color:var(--muted);">Orders</div>
+          <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">
+            ${rOrders.length}
+          </div>
+        </div>
+
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
+          <div style="font-size:10px;color:var(--muted);">Sales</div>
+          <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">
+            ${money(sales)}
+          </div>
+        </div>
+
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
+          <div style="font-size:10px;color:var(--muted);">Profit</div>
+          <div style="font-weight:bold;font-size:13px;color:var(--gold);">
+            ${money(profit)}
+          </div>
+        </div>
       </div>
-      <div style="background:#0b0b09; padding:8px; border-radius:8px; border:1px solid rgba(212,175,55,0.15)">
-        <div style="font-size:10px; color:var(--muted);">Sales</div>
-        <div style="font-weight:bold; font-size:13px; color:var(--gold-light);">${money(sales)}</div>
-      </div>
-      <div style="background:#0b0b09; padding:8px; border-radius:8px; border:1px solid rgba(212,175,55,0.15)">
-        <div style="font-size:10px; color:var(--muted);">Profit</div>
-        <div style="font-weight:bold; font-size:13px; color:var(--gold);">${money(profit)}</div>
-      </div>
-    </div>
-  `;
-});
-// ADD RESELLER FORM
-document.addEventListener("DOMContentLoaded", function(){
+    `;
+  });
 
-  const addResellerBtn = document.getElementById("addResellerBtn");
-  const addResellerForm = document.getElementById("addResellerForm");
-  const cancelResellerBtn = document.getElementById("cancelResellerBtn");
+  snapshotSelect.dataset.listenerAttached = "true";
+}
 
-  if(addResellerBtn && addResellerForm){
-    addResellerBtn.onclick = function(){
-      addResellerForm.style.display = "block";
-    };
-  }
+// ADD RESELLER: OPEN AND CLOSE FORM
+const addResellerBtn = document.getElementById("addResellerBtn");
+const addResellerForm = document.getElementById("addResellerForm");
+const cancelResellerBtn = document.getElementById("cancelResellerBtn");
+const saveResellerBtn = document.getElementById("saveResellerBtn");
 
-  if(cancelResellerBtn && addResellerForm){
-    cancelResellerBtn.onclick = function(){
-      addResellerForm.style.display = "none";
-    };
-  }
+if(addResellerBtn && addResellerForm){
+  addResellerBtn.addEventListener("click",()=>{
+    addResellerForm.style.display = "block";
+    document.getElementById("newResellerName").focus();
+  });
+}
 
-});
-// RESTORE SESSION
-async function checkExistingSession(){
-  const {data} = await db.auth.getSession();
-  if(data.session && await verifyOwner(data.session.user)){
-    showApp();
+if(cancelResellerBtn && addResellerForm){
+  cancelResellerBtn.addEventListener("click",()=>{
+    addResellerForm.style.display = "none";
+    document.getElementById("newResellerName").value = "";
+    document.getElementById("newResellerCity").value = "";
+    document.getElementById("newResellerPhone").value = "";
+    document.getElementById("newResellerJoiningDate").value = "";
+  });
+}
+
+// SAVE RESELLER TO SUPABASE
+if(saveResellerBtn){
+  saveResellerBtn.addEventListener("click",async()=>{
+
+    const name = document.getElementById("newResellerName").value.trim();
+    const city = document.getElementById("newResellerCity").value.trim();
+    const phone = document.getElementById("newResellerPhone").value.trim();
+    const joiningDate = document.getElementById("newResellerJoiningDate").value;
+
+    if(!name || !city || !phone || !joiningDate){
+      alert("Please fill in all four reseller details.");
+      return;
+    }
+
+    saveResellerBtn.disabled = true;
+    saveResellerBtn.textContent = "Saving...";
+
+    const {error} = await db.from("resellers").insert([{
+      name: name,
+      city: city,
+      phone: phone,
+      joining_date: joiningDate,
+      status: "Active"
+    }]);
+
+    saveResellerBtn.disabled = false;
+    saveResellerBtn.textContent = "Save Reseller";
+
+    if(error){
+      alert("Could not save reseller: " + error.message);
+      return;
+    }
+
+    alert("Reseller added successfully!");
+
+    addResellerForm.style.display = "none";
+
+    document.getElementById("newResellerName").value = "";
+    document.getElementById("newResellerCity").value = "";
+    document.getElementById("newResellerPhone").value = "";
+    document.getElementById("newResellerJoiningDate").value = "";
+
     await loadBusinessData();
-  }
+  });
 }
-
-if(!SUPABASE_URL.includes("PASTE_")){ checkExistingSession(); }
 </script>
 </body>
 </html>
