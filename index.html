@@ -1536,15 +1536,37 @@ function renderTables(){
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-  // PAYMENTS & CUSTOMERS
-  document.getElementById("paymentsTable").innerHTML = currentPayments.length
-    ? currentPayments.map(p=>`<tr><td>${safe(p.order_id)}</td><td>${money(p.amount)}</td><td>${safe(p.status)}</td><td>${safe(p.approved_at || "—")}</td></tr>`).join("")
-    : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
+  
+const paymentsTable = document.getElementById("paymentsTable");
 
-  document.getElementById("customersTable").innerHTML = currentCustomers.length
-    ? currentCustomers.map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${safe(c.city)}</td><td>${safe(c.created_at)}</td></tr>`).join("")
-    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
+if(paymentsTable){
+  paymentsTable.innerHTML = currentPayments.length
+    ? currentPayments.map(p => {
+        const order = currentOrders.find(o =>
+          String(o.id) === String(p.order_id) ||
+          String(o.order_number) === String(p.order_id)
+        );
+
+        const reseller = order
+          ? currentResellers.find(r =>
+              String(r.id) === String(order.reseller_id)
+            )
+          : null;
+
+        return `
+          <tr>
+            <td>${safe(order?.order_number || p.order_id || "—")}</td>
+            <td>${safe(order?.customer_name || "—")}</td>
+            <td>${safe(reseller?.name || "Owner")}</td>
+            <td>${money(p.amount)}</td>
+            <td>${safe(p.status || "Pending")}</td>
+            <td>${safe(p.approved_at || "—")}</td>
+          </tr>
+        `;
+      }).join("")
+    : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
 }
+
 
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
