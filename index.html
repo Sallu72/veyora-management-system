@@ -468,16 +468,78 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     </section>
 
     <!-- OTHER SECTIONS (Owner, Resellers, Orders, Payments, Customers, Reports, History, Control, Settings) -->
-    <section id="page-owner" class="section">
-      <p class="section-intro">Your personal profit records from all orders.</p>
-      <div class="panel">
-        <div class="panel-head"><h3>Owner Profit Details</h3></div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Date</th><th>Customer</th><th>Product</th><th>Order No</th><th>My Profit</th></tr></thead>
-          <tbody id="ownerTable"></tbody>
-        </table></div>
-      </div>
-    </section>
+   
+<section id="page-owner" class="section">
+
+  <p class="section-intro">Your personal profit records from all business orders.</p>
+
+  <!-- OWNER PROFIT SUMMARY -->
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Total Owner Profit</div>
+      <div class="card-value" id="ownerTotalProfit">Rs. 0</div>
+      <div class="card-note">All-time earnings</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">This Month Profit</div>
+      <div class="card-value" id="ownerThisMonthProfit">Rs. 0</div>
+      <div class="card-note">Current month earnings</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Last Month Profit</div>
+      <div class="card-value" id="ownerLastMonthProfit">Rs. 0</div>
+      <div class="card-note">Previous month earnings</div>
+    </div>
+
+  </div>
+
+  <!-- OWNER PROFIT HISTORY -->
+  <div class="panel" style="margin-top:20px;">
+
+    <div class="panel-head">
+      <h3>Owner Profit History</h3>
+
+      <select id="ownerProfitPeriodFilter" class="filter">
+        <option value="1">Last 1 Month</option>
+        <option value="2">Last 2 Months</option>
+        <option value="3">Last 3 Months</option>
+        <option value="4">Last 4 Months</option>
+        <option value="5">Last 5 Months</option>
+        <option value="6" selected>Last 6 Months</option>
+        <option value="9">Last 9 Months</option>
+        <option value="12">Last 12 Months</option>
+        <option value="all">All Time</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Order No</th>
+            <th>Reseller</th>
+            <th>My Profit</th>
+          </tr>
+        </thead>
+
+        <tbody id="ownerTable">
+          <tr>
+            <td colspan="6" class="empty">Loading profit records...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</section>
+
 
     <section id="page-resellers" class="section">
       <p class="section-intro">Manage your reseller accounts and performance.</p>
