@@ -735,6 +735,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <input id="newOrderNumber" placeholder="Order Number">
             <input id="newOrderCustomer" placeholder="Customer Name">
             <input id="newOrderPhone" placeholder="Customer Phone">
+            <input id="newOrderCity" placeholder="Customer City">
             <input id="newOrderProduct" placeholder="Product Name">
             <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
             <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
@@ -1876,6 +1877,8 @@ window.editOrder = async function(orderId) {
   document.getElementById("orderReseller").value = order.reseller_id || "";
   document.getElementById("newOrderNumber").value = order.order_number || "";
   document.getElementById("newOrderCustomer").value = order.customer_name || "";
+  document.getElementById("newOrderPhone").value = order.customer_phone || "";
+document.getElementById("newOrderCity").value = order.customer_city || "";
   document.getElementById("newOrderProduct").value = order.product_name || "";
   document.getElementById("newOrderQuantity").value = order.quantity || 1;
   document.getElementById("newOrderPrice").value = order.total_price || 0;
@@ -1920,6 +1923,7 @@ if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
     document.getElementById("newOrderNumber").value = "";
     document.getElementById("newOrderCustomer").value = "";
     document.getElementById("newOrderPhone").value = "";
+    document.getElementById("newOrderCity").value = "";
     document.getElementById("newOrderProduct").value = "";
     document.getElementById("newOrderQuantity").value = "1";
     document.getElementById("newOrderPrice").value = "";
@@ -1950,6 +1954,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     const orderNumber = document.getElementById("newOrderNumber").value.trim();
     const customerName = document.getElementById("newOrderCustomer").value.trim();
     const customerPhone = document.getElementById("newOrderPhone").value.trim();
+    const customerCity = document.getElementById("newOrderCity").value.trim();
     const productName = document.getElementById("newOrderProduct").value.trim();
     const quantity = Number(document.getElementById("newOrderQuantity").value);
     const totalPrice = Number(document.getElementById("newOrderPrice").value);
@@ -1991,9 +1996,38 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
 
       if (error) throw error;
 
-      if (!editingOrderId) {
-        await db.from("customers").insert([{ name: customerName, phone: customerPhone,city: document.getElementById("newCustomerCity").value.trim() }]);
-      }
+      // SAVE OR UPDATE CUSTOMER RECORD
+const { data: existingCustomer, error: findError } = await db
+  .from("customers")
+  .select("id")
+  .eq("phone", customerPhone)
+  .limit(1)
+  .maybeSingle();
+
+if (findError) throw findError;
+
+if (existingCustomer) {
+  const { error: customerError } = await db
+    .from("customers")
+    .update({
+      name: customerName,
+      phone: customerPhone,
+      city: customerCity
+    })
+    .eq("id", existingCustomer.id);
+
+  if (customerError) throw customerError;
+} else {
+  const { error: customerError } = await db
+    .from("customers")
+    .insert([{
+      name: customerName,
+      phone: customerPhone,
+      city: customerCity
+    }]);
+
+  if (customerError) throw customerError;
+}
 
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
       editingOrderId = null;
