@@ -577,7 +577,23 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         style="width:100%;max-width:350px;"
       >
     </div>
+<div id="addResellerForm" class="panel" style="display:none;margin-bottom:20px;">
+  <div class="panel-head">
+    <h3>Add New Reseller</h3>
+  </div>
 
+  <div style="padding:15px;">
+    <input id="newResellerName" placeholder="Reseller Name">
+    <input id="newResellerCity" placeholder="City">
+    <input id="newResellerPhone" placeholder="Phone Number">
+    <input id="newResellerJoiningDate" type="date">
+
+    <div style="margin-top:15px;display:flex;gap:10px;">
+      <button class="view-all" id="saveResellerBtn">Save Reseller</button>
+      <button class="view-all" id="cancelResellerBtn">Cancel</button>
+    </div>
+  </div>
+</div>
     <div class="table-wrap">
       <table>
         <thead>
