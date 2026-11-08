@@ -1535,19 +1535,66 @@ if (paymentsTable) {
 }
 
 
-// CUSTOMERS TABLE
-document.getElementById("customersTable").innerHTML = currentCustomers.length
-  ? currentCustomers.map(c => `
-      <tr>
-        <td>${safe(c.name)}</td>
-        <td>${safe(c.phone)}</td>
-        <td>${safe(c.city)}</td>
-        <td>${safe(c.created_at)}</td>
-      </tr>
-    `).join("")
-  : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 
+// CUSTOMERS TABLE - SHOW CUSTOMERS FROM CUSTOMERS + ORDERS
+
+const customersTable = document.getElementById("customersTable");
+
+if (customersTable) {
+
+  const customerRecords = new Map();
+
+  // First: Customers table records
+  currentCustomers.forEach(c => {
+    const name = c.name || "—";
+    const phone = c.phone || "";
+    const key = phone
+      ? "phone:" + phone.trim()
+      : "name:" + name.trim().toLowerCase();
+
+    customerRecords.set(key, {
+      name: name,
+      phone: phone || "—",
+      city: c.city || "—",
+      joined: c.created_at || "—"
+    });
+  });
+
+  // Second: Add customers from Orders
+  currentOrders.forEach(o => {
+    const name = o.customer_name || "";
+    const phone = o.customer_phone || o.phone || "";
+
+    if (!name && !phone) return;
+
+    const key = phone
+      ? "phone:" + phone.trim()
+      : "name:" + name.trim().toLowerCase();
+
+    if (!customerRecords.has(key)) {
+      customerRecords.set(key, {
+        name: name || "—",
+        phone: phone || "—",
+        city: o.city || "—",
+        joined: o.order_date || o.created_at || "—"
+      });
+    }
+  });
+
+  const customers = Array.from(customerRecords.values());
+
+  customersTable.innerHTML = customers.length
+    ? customers.map(c => `
+        <tr>
+          <td>${safe(c.name)}</td>
+          <td>${safe(c.phone)}</td>
+          <td>${safe(c.city)}</td>
+          <td>${safe(c.joined)}</td>
+        </tr>
+      `).join("")
+    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
+
 
 
 // RESELLER PROFILE ORDER HISTORY
