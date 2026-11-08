@@ -1414,7 +1414,133 @@ function renderTables(){
     `).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
+// OPEN RESELLER PROFILE
+let selectedResellerId = null;
 
+function openResellerProfile(id){
+
+  selectedResellerId = id;
+
+  const reseller = currentResellers.find(
+    r => String(r.id) === String(id)
+  );
+
+  if(!reseller) return;
+
+  const orders = currentOrders.filter(
+    o => String(o.reseller_id) === String(id)
+  );
+
+  document.getElementById("profileInitial").textContent =
+    (reseller.name || "R").charAt(0).toUpperCase();
+
+  document.getElementById("profileName").textContent = reseller.name || "—";
+  document.getElementById("profilePhone").textContent = reseller.phone || "—";
+  document.getElementById("profileCity").textContent = reseller.city || "—";
+  document.getElementById("profileJoiningDate").textContent = reseller.joining_date || "—";
+  document.getElementById("profileTotalOrders").textContent = orders.length;
+
+  const status = reseller.status || "Active";
+  const statusEl = document.getElementById("profileStatus");
+  statusEl.textContent = status;
+  statusEl.className = "status " +
+    (status.toLowerCase() === "active" ? "approved" : "pending");
+
+  document.getElementById("resellerProfile").style.display = "block";
+
+  renderResellerProfileOrders();
+
+  document.getElementById("resellerProfile").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+
+// RESELLER PROFILE ORDER HISTORY
+function renderResellerProfileOrders(){
+
+  if(!selectedResellerId) return;
+
+  const filter = document.getElementById("resellerProfileFilter");
+  const selected = filter ? filter.value : "6";
+
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  if(selected !== "all"){
+    start.setMonth(start.getMonth() - (Math.max(1,Number(selected)||6) - 1));
+  }
+
+  const orders = currentOrders.filter(o=>{
+    if(String(o.reseller_id) !== String(selectedResellerId)) return false;
+
+    const value = o.order_date || o.created_at;
+    if(!value) return false;
+
+    const date = new Date(value);
+    return !isNaN(date.getTime()) &&
+      (selected === "all" || date >= start) &&
+      date <= now;
+  });
+
+  const totalProfit = orders.reduce(
+    (sum,o)=>sum+Number(o.reseller_profit||0),0
+  );
+
+  const approvedPayment = orders.reduce((sum,o)=>{
+    return String(o.payment_status||"").toLowerCase() === "approved"
+      ? sum+Number(o.reseller_profit||0) : sum;
+  },0);
+
+  const pendingPayment = orders.reduce((sum,o)=>{
+    return String(o.payment_status||"").toLowerCase() === "pending"
+      ? sum+Number(o.reseller_profit||0) : sum;
+  },0);
+
+  document.getElementById("profileTotalOrders").textContent = orders.length;
+  document.getElementById("profileTotalProfit").textContent = money(totalProfit);
+  document.getElementById("profileApprovedPayment").textContent = money(approvedPayment);
+  document.getElementById("profilePendingPayment").textContent = money(pendingPayment);
+
+  document.getElementById("resellerProfileOrders").innerHTML = orders.length
+    ? orders.map(o=>`
+      <tr>
+        <td>${safe(o.customer_name)}</td>
+        <td>${safe(o.product_name)}</td>
+        <td>${safe(o.order_date || o.created_at)}</td>
+        <td style="color:var(--gold);font-weight:bold;">
+          ${money(o.reseller_profit)}
+        </td>
+        <td>
+          <span class="status ${
+            String(o.payment_status||"Pending").toLowerCase() === "approved"
+              ? "approved" : "pending"
+          }">${safe(o.payment_status || "Pending")}</span>
+        </td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="5" class="empty">No orders found for this period.</td></tr>';
+}
+
+
+// PROFILE FILTER
+const resellerProfileFilter = document.getElementById("resellerProfileFilter");
+
+if(resellerProfileFilter && !resellerProfileFilter.dataset.listenerAttached){
+  resellerProfileFilter.addEventListener("change",renderResellerProfileOrders);
+  resellerProfileFilter.dataset.listenerAttached = "true";
+}
+
+
+// BACK TO RESELLER LIST
+document.getElementById("backToResellersBtn").addEventListener("click",()=>{
+  document.getElementById("resellerProfile").style.display = "none";
+  document.getElementById("resellerProfile").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+});
 // SNAPSHOT DROPDOWN
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
