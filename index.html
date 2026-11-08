@@ -276,27 +276,42 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       
       <!-- MAIN KPI CARDS -->
       <div class="cards">
-        <div class="card">
-          <div class="card-label">Total Profit</div>
-          <div class="card-value" id="totalProfit">Rs. 0</div>
-          <div class="card-note"><span>Owner + Resellers</span> <span class="positive">+18.5%</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Owner Profit</div>
-          <div class="card-value" id="ownerProfit">Rs. 0</div>
-          <div class="card-note"><span>Your earnings</span> <span class="positive">+15.2%</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Resellers Profit</div>
-          <div class="card-value" id="resellerProfit">Rs. 0</div>
-          <div class="card-note"><span>Combined earnings</span> <span class="positive">+20.1%</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Total Sales</div>
-          <div class="card-value" id="totalSalesMain">Rs. 0</div>
-          <div class="card-note"><span>Total revenue</span> <span class="positive">+20.8%</span></div>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-label">Total Profit</div>
+    <div class="card-value" id="totalProfit">Rs. 0</div>
+    <div class="card-note">
+      <span>Owner + Resellers</span>
+      <span id="totalProfitGrowth">—</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Owner Profit</div>
+    <div class="card-value" id="ownerProfit">Rs. 0</div>
+    <div class="card-note">
+      <span>Your earnings</span>
+      <span id="ownerProfitGrowth">—</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Resellers Profit</div>
+    <div class="card-value" id="resellerProfit">Rs. 0</div>
+    <div class="card-note">
+      <span>Combined earnings</span>
+      <span id="resellerProfitGrowth">—</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Total Sales</div>
+    <div class="card-value" id="totalSalesMain">Rs. 0</div>
+    <div class="card-note">
+      <span>Total revenue</span>
+      <span id="totalSalesGrowth">—</span>
+    </div>
+  </div>
+</div>
 
       <!-- CHART & TOP RESELLERS ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
@@ -319,7 +334,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Top 3 Resellers</h3>
-            <span style="font-size:11px; color:var(--gold); cursor:pointer;">View All →</span>
+            <button class="view-all" data-page="resellers">View All →</button>
           </div>
           <div id="topResellers" class="empty">No reseller records yet.</div>
         </div>
