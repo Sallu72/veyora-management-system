@@ -1879,7 +1879,80 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
 
   snapshotSelect.dataset.listenerAttached = "true";
 }
+// EDIT AND DELETE ORDER FUNCTIONS
 
+let editingOrderId = null;
+
+// EDIT ORDER
+window.editOrder = async function(orderId) {
+
+  const order = currentOrders.find(
+    o => String(o.id) === String(orderId)
+  );
+
+  if (!order) {
+    alert("Order not found.");
+    return;
+  }
+
+  populateOrderResellers();
+
+  editingOrderId = order.id;
+
+  document.getElementById("orderReseller").value = order.reseller_id || "";
+  document.getElementById("newOrderNumber").value = order.order_number || "";
+  document.getElementById("newOrderCustomer").value = order.customer_name || "";
+  document.getElementById("newOrderProduct").value = order.product_name || "";
+  document.getElementById("newOrderQuantity").value = order.quantity || 1;
+  document.getElementById("newOrderPrice").value = order.total_price || 0;
+  document.getElementById("newOrderOwnerProfit").value = order.owner_profit || 0;
+  document.getElementById("newOrderResellerProfit").value = order.reseller_profit || 0;
+  document.getElementById("newOrderDate").value =
+    order.order_date || "";
+
+  document.getElementById("newOrderStatus").value =
+    order.payment_status || "Pending";
+
+  document.getElementById("addOrderForm").style.display = "block";
+
+  document.getElementById("saveOrderBtn").textContent = "Update Order";
+
+  document.getElementById("addOrderForm").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+};
+
+
+// DELETE ORDER
+window.deleteOrder = async function(orderId) {
+
+  const confirmDelete = confirm(
+    "Are you sure you want to permanently delete this order?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+
+    const { error } = await db
+      .from("orders")
+      .delete()
+      .eq("id", orderId);
+
+    if (error) throw error;
+
+    alert("Order deleted successfully!");
+
+    await loadBusinessData();
+
+  } catch (error) {
+
+    alert("Could not delete order: " + error.message);
+
+  }
+
+};
 // ADD NEW ORDER: OPEN AND CLOSE FORM
 
 const addOrderBtn = document.getElementById("addOrderBtn");
@@ -1950,31 +2023,61 @@ if(saveOrderBtn){
 
     try{
 
-      const {error} = await db.from("orders").insert([{
-        reseller_id: resellerId,
-        order_number: orderNumber,
-        customer_name: customerName,
-        product_name: productName,
-        quantity: quantity,
-        total_price: totalPrice,
-        owner_profit: ownerProfit,
-        reseller_profit: resellerProfit,
-        order_date: orderDate,
-        payment_status: paymentStatus
-      }]);
+      const orderData = {
+  reseller_id: resellerId,
+  order_number: orderNumber,
+  customer_name: customerName,
+  product_name: productName,
+  quantity: quantity,
+  total_price: totalPrice,
+  owner_profit: ownerProfit,
+  reseller_profit: resellerProfit,
+  order_date: orderDate,
+  payment_status: paymentStatus
+};
 
-      if(error) throw error;
+let error;
 
-      const {error: customerError} = await db.from("customers").insert([{
-        name: customerName,
-        phone: customerPhone
-      }]);
+if (editingOrderId) {
 
-      if(customerError){
-        console.error("Customer record warning:",customerError);
+  const result = await db
+    .from("orders")
+    .update(orderData)
+    .eq("id", editingOrderId);
+
+  error = result.error;
+
+} else {
+
+  const result = await db
+    .from("orders")
+    .insert([orderData]);
+
+  error = result.error;
+}
+
+if (error) throw error;
+
+           // Save customer only when creating a NEW order
+      if (!editingOrderId) {
+
+        const {error: customerError} = await db.from("customers").insert([{
+          name: customerName,
+          phone: customerPhone
+        }]);
+
+        if(customerError){
+          console.error("Customer record warning:", customerError);
+        }
       }
 
-      alert("Order saved successfully!");
+      if (editingOrderId) {
+        alert("Order updated successfully!");
+      } else {
+        alert("Order saved successfully!");
+      }
+
+      editingOrderId = null;
 
       document.getElementById("newOrderNumber").value = "";
       document.getElementById("newOrderCustomer").value = "";
@@ -1990,6 +2093,8 @@ if(saveOrderBtn){
 
       addOrderForm.style.display = "none";
 
+      saveOrderBtn.textContent = "Save Order";
+
       await loadBusinessData();
 
     }catch(error){
@@ -1999,14 +2104,16 @@ if(saveOrderBtn){
     }finally{
 
       saveOrderBtn.disabled = false;
-      saveOrderBtn.textContent = "Save Order";
+
+      if (!editingOrderId) {
+        saveOrderBtn.textContent = "Save Order";
+      }
 
     }
 
   });
 
 }
-
 // ADD RESELLER: OPEN AND CLOSE FORM
 const addResellerBtn = document.getElementById("addResellerBtn");
 const addResellerForm = document.getElementById("addResellerForm");
