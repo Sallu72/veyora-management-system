@@ -1537,14 +1537,18 @@ function renderTables(){
   }
 
   
+
+// PAYMENTS & CUSTOMERS
+
+// PAYMENT HISTORY
 const paymentsTable = document.getElementById("paymentsTable");
 
 if(paymentsTable){
   paymentsTable.innerHTML = currentPayments.length
     ? currentPayments.map(p => {
+
         const order = currentOrders.find(o =>
-          String(o.id) === String(p.order_id) ||
-          String(o.order_number) === String(p.order_id)
+          String(o.id) === String(p.order_id)
         );
 
         const reseller = order
@@ -1565,6 +1569,21 @@ if(paymentsTable){
         `;
       }).join("")
     : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
+}
+
+
+// CUSTOMERS TABLE
+document.getElementById("customersTable").innerHTML = currentCustomers.length
+  ? currentCustomers.map(c => `
+      <tr>
+        <td>${safe(c.name)}</td>
+        <td>${safe(c.phone)}</td>
+        <td>${safe(c.city)}</td>
+        <td>${safe(c.created_at)}</td>
+      </tr>
+    `).join("")
+  : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
+
 }
 
 
