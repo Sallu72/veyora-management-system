@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- Chart.js for graphs -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 :root {
   --black: #0b0b09;
@@ -653,6 +653,9 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <option value="12">Last 12 Months</option>
             <option value="all">All Time</option>
           </select>
+          <button class="view-all" id="downloadResellerReport">
+  ↓ Download PNG Report
+</button>
         </div>
 
         <div class="table-wrap">
@@ -1413,6 +1416,50 @@ function renderTables(){
       </tr>
     `).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
+}
+  // DOWNLOAD RESELLER REPORT AS PNG
+
+const downloadResellerReport =
+  document.getElementById("downloadResellerReport");
+
+if(downloadResellerReport){
+
+  downloadResellerReport.addEventListener("click",async()=>{
+
+    const profile = document.getElementById("resellerProfileContent");
+
+    if(typeof html2canvas === "undefined"){
+      alert("PNG library is missing.");
+      return;
+    }
+
+    downloadResellerReport.disabled = true;
+    downloadResellerReport.textContent = "Preparing...";
+
+    try{
+
+      const canvas = await html2canvas(profile,{
+        backgroundColor:"#0b0b09",
+        scale:2,
+        useCORS:true
+      });
+
+      const link = document.createElement("a");
+      link.download = "VEYORA-Reseller-Report.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+    }catch(error){
+
+      alert("Download failed: " + error.message);
+
+    }
+
+    downloadResellerReport.disabled = false;
+    downloadResellerReport.textContent = "↓ Download PNG Report";
+
+  });
+
 }
 // OPEN RESELLER PROFILE
 let selectedResellerId = null;
