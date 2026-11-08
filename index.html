@@ -1065,40 +1065,161 @@ function renderChart(){
   }
 }
 // POPULATE TABLES & SNAPSHOT
-function renderTables(){
-  document.getElementById("ownerTable").innerHTML = currentOrders.length
-    ? currentOrders.map(o=>`
-      <tr>
-        <td>${safe(o.order_date)}</td>
-        <td>${safe(o.customer_name)}</td>
-        <td>${safe(o.product_name)}</td>
-        <td>${safe(o.order_number)}</td>
-        <td style="color:var(--gold);">${money(o.owner_profit)}</td>
-      </tr>`).join("")
-    : '<tr><td colspan="5" class="empty">No records.</td></tr>';
 
+function renderTables(){
+
+  // OWNER PROFIT DATE HELPER
+  function getOwnerOrderDate(order){
+    const value = order.order_date || order.created_at;
+    if(!value) return null;
+
+    if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
+      const parts = value.split("-").map(Number);
+      return new Date(parts[0],parts[1]-1,parts[2]);
+    }
+
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // OWNER PROFIT SUMMARY
+  const now = new Date();
+  const thisMonthStart = new Date(now.getFullYear(),now.getMonth(),1);
+  const lastMonthStart = new Date(now.getFullYear(),now.getMonth()-1,1);
+
+  const ownerTotal = currentOrders.reduce(
+    (sum,o)=>sum+Number(o.owner_profit||0),0
+  );
+
+  const ownerThisMonth = currentOrders.reduce((sum,o)=>{
+    const date = getOwnerOrderDate(o);
+    return date && date >= thisMonthStart &&
+      date <= now ? sum+Number(o.owner_profit||0) : sum;
+  },0);
+
+  const ownerLastMonth = currentOrders.reduce((sum,o)=>{
+    const date = getOwnerOrderDate(o);
+    return date && date >= lastMonthStart &&
+      date < thisMonthStart ? sum+Number(o.owner_profit||0) : sum;
+  },0);
+
+  document.getElementById("ownerTotalProfit").textContent = money(ownerTotal);
+  document.getElementById("ownerThisMonthProfit").textContent = money(ownerThisMonth);
+  document.getElementById("ownerLastMonthProfit").textContent = money(ownerLastMonth);
+
+  // OWNER PROFIT HISTORY
+  const ownerFilter = document.getElementById("ownerProfitPeriodFilter");
+
+  function renderOwnerProfitHistory(){
+
+    const selected = ownerFilter ? ownerFilter.value : "6";
+    const today = new Date();
+    const currentMonth = new Date(today.getFullYear(),today.getMonth(),1);
+
+    let startMonth;
+
+    if(selected === "all"){
+      const dates = currentOrders.map(getOwnerOrderDate).filter(Boolean);
+
+      if(dates.length){
+        const earliest = dates.reduce((a,b)=>a<b?a:b);
+        startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
+      }else{
+        startMonth = currentMonth;
+      }
+    }else{
+      const months = Math.max(1,Number(selected)||6);
+      startMonth = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth()-months+1,
+        1
+      );
+    }
+
+    const filteredOrders = currentOrders.filter(o=>{
+      const date = getOwnerOrderDate(o);
+      return date && date >= startMonth && date <= today;
+    });
+
+    document.getElementById("ownerTable").innerHTML = filteredOrders.length
+      ? filteredOrders.map(o=>{
+          const resellerName =
+            currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner";
+
+          return `
+            <tr>
+              <td>${safe(o.order_date || o.created_at)}</td>
+              <td>${safe(o.customer_name)}</td>
+              <td>${safe(o.product_name)}</td>
+              <td>${safe(o.order_number)}</td>
+              <td>${safe(resellerName)}</td>
+              <td style="color:var(--gold);font-weight:bold;">
+                ${money(o.owner_profit)}
+              </td>
+            </tr>
+          `;
+        }).join("")
+      : '<tr><td colspan="6" class="empty">No profit records for this period.</td></tr>';
+  }
+
+  if(ownerFilter && !ownerFilter.dataset.listenerAttached){
+    ownerFilter.addEventListener("change",renderOwnerProfitHistory);
+    ownerFilter.dataset.listenerAttached = "true";
+  }
+
+  renderOwnerProfitHistory();
+
+  // RESELLER TABLE
   document.getElementById("resellerTable").innerHTML = currentResellers.length
     ? currentResellers.map(r=>`
-      <tr><td>${safe(r.name)}</td><td>${safe(r.city)}</td><td>${safe(r.phone)}</td><td>${safe(r.joining_date)}</td><td><span class="status approved">${safe(r.status||'Active')}</span></td></tr>`).join("")
+      <tr>
+        <td>${safe(r.name)}</td>
+        <td>${safe(r.city)}</td>
+        <td>${safe(r.phone)}</td>
+        <td>${safe(r.joining_date)}</td>
+        <td><span class="status approved">${safe(r.status||'Active')}</span></td>
+      </tr>
+    `).join("")
     : '<tr><td colspan="5" class="empty">No resellers.</td></tr>';
 
+  // ORDERS TABLE
   document.getElementById("ordersTable").innerHTML = currentOrders.length
     ? currentOrders.map(o=>`
       <tr>
-        <td>${safe(o.order_number)}</td><td>${safe(o.order_date)}</td>
+        <td>${safe(o.order_number)}</td>
+        <td>${safe(o.order_date)}</td>
         <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner")}</td>
-        <td>${safe(o.customer_name)}</td><td>${safe(o.product_name)}</td>
-        <td>${safe(o.quantity||1)}</td><td>${money(o.total_price)}</td>
+        <td>${safe(o.customer_name)}</td>
+        <td>${safe(o.product_name)}</td>
+        <td>${safe(o.quantity||1)}</td>
+        <td>${money(o.total_price)}</td>
         <td><span class="status ${o.payment_status==="Approved"?"approved":"pending"}">${safe(o.payment_status||"Approved")}</span></td>
-      </tr>`).join("")
+      </tr>
+    `).join("")
     : '<tr><td colspan="8" class="empty">No orders.</td></tr>';
 
+  // PAYMENTS TABLE
   document.getElementById("paymentsTable").innerHTML = currentPayments.length
-    ? currentPayments.map(p=>`<tr><td>${safe(p.order_id)}</td><td>${money(p.amount)}</td><td>${safe(p.status)}</td><td>${safe(p.approved_at || "—")}</td></tr>`).join("")
+    ? currentPayments.map(p=>`
+      <tr>
+        <td>${safe(p.order_id)}</td>
+        <td>${money(p.amount)}</td>
+        <td>${safe(p.status)}</td>
+        <td>${safe(p.approved_at || "—")}</td>
+      </tr>
+    `).join("")
     : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
 
+  // CUSTOMERS TABLE
   document.getElementById("customersTable").innerHTML = currentCustomers.length
-    ? currentCustomers.map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${safe(c.city)}</td><td>${safe(c.created_at)}</td></tr>`).join("")
+    ? currentCustomers.map(c=>`
+      <tr>
+        <td>${safe(c.name)}</td>
+        <td>${safe(c.phone)}</td>
+        <td>${safe(c.city)}</td>
+        <td>${safe(c.created_at)}</td>
+      </tr>
+    `).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
 
