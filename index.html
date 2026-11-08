@@ -1536,19 +1536,39 @@ if (paymentsTable) {
 
 
 
-// CUSTOMERS TABLE
-document.getElementById("customersTable").innerHTML = currentCustomers.length
-  ? currentCustomers.map(c => `
-      <tr>
-        <td>${safe(c.name)}</td>
-        <td>${safe(c.phone)}</td>
-        <td>${safe(c.city)}</td>
-        <td>${safe(c.created_at)}</td>
-      </tr>
-    `).join("")
-  : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 
-}
+// CUSTOMERS TABLE - FROM ORDERS
+const customerRecords = {};
+
+currentOrders.forEach(o => {
+  const name = o.customer_name || "—";
+  const phone = o.customer_phone || o.phone || "—";
+
+  const key = phone !== "—"
+    ? phone.trim()
+    : name.trim().toLowerCase();
+
+  if (!customerRecords[key]) {
+    customerRecords[key] = {
+      name: name,
+      phone: phone,
+      city: o.city || "—",
+      joined: o.order_date || o.created_at || "—"
+    };
+  }
+});
+
+document.getElementById("customersTable").innerHTML =
+  Object.values(customerRecords).length
+    ? Object.values(customerRecords).map(c => `
+        <tr>
+          <td>${safe(c.name)}</td>
+          <td>${safe(c.phone)}</td>
+          <td>${safe(c.city)}</td>
+          <td>${safe(c.joined)}</td>
+        </tr>
+      `).join("")
+    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
