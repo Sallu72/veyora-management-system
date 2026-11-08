@@ -856,9 +856,10 @@ function renderChart(){
         },
         y: {
   beginAtZero: true,
+  suggestedMax: 100,
   ticks: {
     color: '#9e9785',
-    precision: 0,
+    stepSize: 20,
     callback: function(value) {
       return 'Rs. ' + value.toLocaleString();
     }
