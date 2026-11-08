@@ -636,6 +636,7 @@ function renderAll(){
 }
 
 // RENDER DASHBOARD & METRICS
+
 function renderOverview(){
   const owner = currentOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
   const reseller = currentOrders.reduce((sum,o)=>sum+Number(o.reseller_profit||0),0);
@@ -652,21 +653,21 @@ function renderOverview(){
     const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
     const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
     return {...r, profit, orderCount:rOrders.length, sales:rSales};
-  }).sort((a,b)=>b.profit - a.profit).slice(0,3);
+  }).sort((a,b)=>b.profit-a.profit).slice(0,3);
 
   document.getElementById("topResellers").innerHTML = ranking.length
     ? ranking.map((r,i)=>`
       <div class="top-reseller-row">
-        <div style="display:flex; align-items:center;">
+        <div style="display:flex;align-items:center;">
           <div class="reseller-badge">${i+1}</div>
           <div>
-            <div style="font-weight:bold; color:var(--gold-light); font-size:13px;">${safe(r.name)}</div>
-            <div style="font-size:11px; color:var(--muted);">${safe(r.city || 'Pakistan')}</div>
+            <div style="font-weight:bold;color:var(--gold-light);font-size:13px;">${safe(r.name)}</div>
+            <div style="font-size:11px;color:var(--muted);">${safe(r.city||'Pakistan')}</div>
           </div>
         </div>
         <div style="text-align:right;">
-          <div style="color:var(--gold); font-weight:bold; font-size:13px;">${money(r.profit)}</div>
-          <div style="font-size:10px; color:var(--muted);">${r.orderCount} Orders</div>
+          <div style="color:var(--gold);font-weight:bold;font-size:13px;">${money(r.profit)}</div>
+          <div style="font-size:10px;color:var(--muted);">${r.orderCount} Orders</div>
         </div>
       </div>
     `).join("")
@@ -677,8 +678,8 @@ function renderOverview(){
     const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
     const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
     const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
-    return {...r, profit, orderCount:rOrders.length, sales:rSales};
-  }).sort((a,b)=>b.profit - a.profit);
+    return {...r,profit,orderCount:rOrders.length,sales:rSales};
+  }).sort((a,b)=>b.profit-a.profit);
 
   document.getElementById("resellerPerformanceTable").innerHTML = perfRows.length
     ? perfRows.map((r,i)=>`
@@ -694,21 +695,129 @@ function renderOverview(){
     `).join("")
     : '<tr><td colspan="7" class="empty">No performance records found.</td></tr>';
 
-  // Recent Orders Table on Dashboard
+  // Recent Orders Table
   const recent = currentOrders.slice(0,4);
+
   document.getElementById("recentOrdersTable").innerHTML = recent.length
     ? recent.map((o,i)=>`
       <tr>
         <td>${i+1}</td>
         <td>${safe(o.customer_name)}</td>
-        <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name || "Direct")}</td>
+        <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name||"Direct")}</td>
         <td>${safe(o.product_name)}</td>
         <td>${money(o.total_price)}</td>
-        <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status || "Paid")}</span></td>
+        <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status||"Paid")}</span></td>
       </tr>
     `).join("")
     : '<tr><td colspan="6" class="empty">No orders recorded yet.</td></tr>';
+
+  // Monthly Summary
+  const monthlyFilter = document.getElementById("monthlySummaryPeriodFilter");
+  const monthlyTable = document.getElementById("monthlySummaryTable");
+
+  if(monthlyTable){
+
+    function getOrderDate(order){
+      const value = order.order_date || order.created_at;
+      if(!value) return null;
+
+      if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
+        const parts = value.split("-").map(Number);
+        return new Date(parts[0],parts[1]-1,parts[2]);
+      }
+
+      const date = new Date(value);
+      return isNaN(date.getTime()) ? null : date;
+    }
+
+    function renderMonthlyRows(){
+      const selected = monthlyFilter ? monthlyFilter.value : "6";
+      const now = new Date();
+      const currentMonth = new Date(now.getFullYear(),now.getMonth(),1);
+
+      const datedOrders = currentOrders.map(order=>{
+        const date = getOrderDate(order);
+        return date ? {...order,_monthlyDate:date} : null;
+      }).filter(Boolean);
+
+      let startMonth;
+
+      if(selected === "all"){
+        if(datedOrders.length){
+          const earliest = datedOrders.reduce((min,o)=>
+            o._monthlyDate < min ? o._monthlyDate : min,
+            datedOrders[0]._monthlyDate
+          );
+          startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
+        }else{
+          startMonth = currentMonth;
+        }
+      }else{
+        const months = Math.max(1,Number(selected)||6);
+        startMonth = new Date(
+          currentMonth.getFullYear(),
+          currentMonth.getMonth()-months+1,
+          1
+        );
+      }
+
+      const rows = [];
+
+      for(
+        let date = new Date(currentMonth);
+        date >= startMonth;
+        date.setMonth(date.getMonth()-1)
+      ){
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        const monthOrders = datedOrders.filter(o=>
+          o._monthlyDate.getFullYear()===year &&
+          o._monthlyDate.getMonth()===month
+        );
+
+        if(monthOrders.length){
+          const monthSales = monthOrders.reduce(
+            (sum,o)=>sum+Number(o.total_price||0),0
+          );
+
+          const monthOwnerProfit = monthOrders.reduce(
+            (sum,o)=>sum+Number(o.owner_profit||0),0
+          );
+
+          rows.push({
+            label:date.toLocaleDateString("en-US",{
+              month:"short",
+              year:"numeric"
+            }),
+            orders:monthOrders.length,
+            sales:monthSales,
+            profit:monthOwnerProfit
+          });
+        }
+      }
+
+      monthlyTable.innerHTML = rows.length
+        ? rows.map(row=>`
+          <tr>
+            <td>${row.label}</td>
+            <td>${row.orders}</td>
+            <td>${money(row.sales)}</td>
+            <td style="color:var(--gold);">${money(row.profit)}</td>
+          </tr>
+        `).join("")
+        : '<tr><td colspan="4" class="empty">No monthly records yet.</td></tr>';
+    }
+
+    if(monthlyFilter && !monthlyFilter.dataset.listenerAttached){
+      monthlyFilter.addEventListener("change",renderMonthlyRows);
+      monthlyFilter.dataset.listenerAttached = "true";
+    }
+
+    renderMonthlyRows();
+  }
 }
+
 
 // RENDER CHART.JS PROFIT OVERVIEW
 function renderChart(){
