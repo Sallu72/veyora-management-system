@@ -712,31 +712,163 @@ function renderOverview(){
 
 // RENDER CHART.JS PROFIT OVERVIEW
 function renderChart(){
-  const ctx = document.getElementById('profitChart').getContext('2d');
-  if(profitChartInstance) profitChartInstance.destroy();
+  const canvas = document.getElementById('profitChart');
+  if(!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+
+  if(profitChartInstance) {
+    profitChartInstance.destroy();
+  }
+
+  const filter = document.getElementById('chartPeriodFilter');
+  const selectedPeriod = filter ? filter.value : '6';
+
+  const orders = currentOrders || [];
+
+  // Convert order date into a valid local date
+  function getDate(order){
+    const value = order.order_date || order.created_at;
+    if(!value) return null;
+
+    if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
+      const parts = value.split('-').map(Number);
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // Convert database amounts into numbers
+  function getAmount(value){
+    return Number(value) || 0;
+  }
+
+  const now = new Date();
+  const months = [];
+
+  if(selectedPeriod === 'all'){
+    let earliestDate = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    orders.forEach(order => {
+      const date = getDate(order);
+      if(date && date < earliestDate){
+        earliestDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      }
+    });
+
+    let date = new Date(
+      earliestDate.getFullYear(),
+      earliestDate.getMonth(),
+      1
+    );
+
+    while(date <= now){
+      months.push(new Date(date));
+      date.setMonth(date.getMonth() + 1);
+    }
+
+  } else {
+    const count = Number(selectedPeriod) || 6;
+
+    for(let i = count - 1; i >= 0; i--){
+      months.push(
+        new Date(now.getFullYear(), now.getMonth() - i, 1)
+      );
+    }
+  }
+
+  const labels = [];
+  const totalProfitData = [];
+  const ownerProfitData = [];
+  const resellerProfitData = [];
+
+  months.forEach(month => {
+    const year = month.getFullYear();
+    const monthNumber = month.getMonth();
+
+    labels.push(
+      month.toLocaleString('en-US', {month: 'short'}) + ' ' + year
+    );
+
+    let ownerTotal = 0;
+    let resellerTotal = 0;
+
+    orders.forEach(order => {
+      const orderDate = getDate(order);
+
+      if(
+        orderDate &&
+        orderDate.getFullYear() === year &&
+        orderDate.getMonth() === monthNumber
+      ){
+        ownerTotal += getAmount(order.owner_profit);
+        resellerTotal += getAmount(order.reseller_profit);
+      }
+    });
+
+    ownerProfitData.push(ownerTotal);
+    resellerProfitData.push(resellerTotal);
+    totalProfitData.push(ownerTotal + resellerTotal);
+  });
 
   profitChartInstance = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+      labels: labels,
       datasets: [
-        { label: 'Total Profit', data: [110000, 125000, 115000, 135000, 145000, 165000], backgroundColor: '#d4af37', borderRadius: 4 },
-        { label: 'Owner', data: [45000, 52000, 48000, 58000, 62000, 75000], backgroundColor: '#0ea5e9', borderRadius: 4 },
-        { label: 'Resellers', data: [65000, 73000, 67000, 77000, 83000, 90000], backgroundColor: '#a855f7', borderRadius: 4 }
+        {
+          label: 'Total Profit',
+          data: totalProfitData,
+          backgroundColor: '#d4af37',
+          borderRadius: 4
+        },
+        {
+          label: 'Owner',
+          data: ownerProfitData,
+          backgroundColor: '#0ea5e9',
+          borderRadius: 4
+        },
+        {
+          label: 'Resellers',
+          data: resellerProfitData,
+          backgroundColor: '#a855f7',
+          borderRadius: 4
+        }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#9e9785', font: { size: 10 } } } },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#9e9785',
+            font: { size: 10 }
+          }
+        }
+      },
       scales: {
-        x: { ticks: { color: '#9e9785' }, grid: { display: false } },
-        y: { ticks: { color: '#9e9785' }, grid: { color: 'rgba(212,175,55,0.08)' } }
+        x: {
+          ticks: { color: '#9e9785' },
+          grid: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#9e9785' },
+          grid: { color: 'rgba(212,175,55,0.08)' }
+        }
       }
     }
   });
-}
 
+  // Update graph whenever the dropdown changes
+  if(filter && !filter.dataset.listenerAttached){
+    filter.addEventListener('change', renderChart);
+    filter.dataset.listenerAttached = 'true';
+  }
+}
 // POPULATE TABLES & SNAPSHOT
 function renderTables(){
   document.getElementById("ownerTable").innerHTML = currentOrders.length
