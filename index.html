@@ -707,57 +707,7 @@ function renderOverview(){
         <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status || "Paid")}</span></td>
       </tr>
     `).join("")
-      // Monthly Summary - Actual Database Records
-  const monthlyTable = document.getElementById("monthlySummaryTable");
-
-  if(currentOrders.length === 0){
-    monthlyTable.innerHTML = `
-      <tr>
-        <td colspan="4" class="empty">No monthly records yet.</td>
-      </tr>
-    `;
-  } else {
-    const monthlyRows = [];
-
-    for(let i = 0; i < 6; i++){
-      const date = new Date();
-      date.setDate(1);
-      date.setMonth(date.getMonth() - i);
-
-      const year = date.getFullYear();
-      const month = date.getMonth();
-
-      const monthOrders = currentOrders.filter(o => {
-        const value = o.order_date || o.created_at;
-        if(!value) return false;
-
-        const orderDate = new Date(value);
-
-        return !isNaN(orderDate.getTime()) &&
-          orderDate.getFullYear() === year &&
-          orderDate.getMonth() === month;
-      });
-
-      const monthSales = monthOrders.reduce(
-        (sum,o) => sum + Number(o.total_price || 0), 0
-      );
-
-      const monthOwnerProfit = monthOrders.reduce(
-        (sum,o) => sum + Number(o.owner_profit || 0), 0
-      );
-
-      monthlyRows.push(`
-        <tr>
-          <td>${date.toLocaleString('en-US',{month:'short',year:'numeric'})}</td>
-          <td>${monthOrders.length}</td>
-          <td>${money(monthSales)}</td>
-          <td>${money(monthOwnerProfit)}</td>
-        </tr>
-      `);
-    }
-
-    monthlyTable.innerHTML = monthlyRows.join("");
-  }
+    : '<tr><td colspan="6" class="empty">No orders recorded yet.</td></tr>';
 }
 
 // RENDER CHART.JS PROFIT OVERVIEW
