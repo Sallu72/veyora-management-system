@@ -1555,48 +1555,181 @@ function populateResellerSnapshotDropdown(){
     currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
+
+// RESELLER DETAILS SNAPSHOT
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
+
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
+
   snapshotSelect.addEventListener("change", e => {
+
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
 
     if(!id){
-      container.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
+      container.innerHTML = `
+        <div style="text-align:center;padding:25px 10px;">
+          <div style="font-size:50px;">🏆</div>
+          <h3 style="color:var(--gold);margin-top:10px;">Reseller Performance</h3>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;">
+            Select a reseller to view performance.
+          </p>
+        </div>`;
       return;
     }
 
     const r = currentResellers.find(x => String(x.id) === String(id));
     if(!r) return;
 
-    const rOrders = currentOrders.filter(o => String(o.reseller_id) === String(id));
-    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
-    const sales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
+    const rOrders = currentOrders.filter(
+      o => String(o.reseller_id) === String(id)
+    );
+
+    const profit = rOrders.reduce(
+      (s,o) => s + Number(o.reseller_profit || 0), 0
+    );
+
+    const sales = rOrders.reduce(
+      (s,o) => s + Number(o.total_price || 0), 0
+    );
+
+    const paid = rOrders
+      .filter(o => ["paid","approved"].includes(
+        String(o.payment_status || "").toLowerCase()
+      ))
+      .reduce((s,o) => s + Number(o.total_price || 0), 0);
+
+    const pending = rOrders
+      .filter(o => String(o.payment_status || "").toLowerCase() === "pending")
+      .reduce((s,o) => s + Number(o.total_price || 0), 0);
+
+    const initial = (r.name || "R").trim().charAt(0).toUpperCase();
 
     container.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
-        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">${safe((r.name || "R").charAt(0))}</div>
-        <div style="text-align:left;">
-          <div style="font-weight:bold;color:var(--gold);font-size:14px;">${safe(r.name)}</div>
-          <div style="font-size:11px;color:var(--muted);">${safe(r.city)} &bull; ${safe(r.status || "Active")}</div>
+      <div style="
+        display:grid;
+        grid-template-columns:125px minmax(0,1fr);
+        gap:12px;
+        align-items:stretch;
+      ">
+
+        <!-- GOLDEN RESELLER BADGE -->
+        <div style="
+          background:linear-gradient(160deg,#17130a,#080808);
+          border:1px solid rgba(212,175,55,.3);
+          border-radius:12px;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          padding:12px 5px;
+          text-align:center;
+        ">
+
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#e8bd42;
+            font-size:32px;
+            gap:0;
+            filter:drop-shadow(0 0 5px rgba(212,175,55,.35));
+          ">
+            <span style="transform:rotate(-35deg);">❧</span>
+            <div style="
+              width:58px;
+              height:58px;
+              border:3px solid #d8aa32;
+              border-radius:50%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              background:linear-gradient(145deg,#392b0b,#090909);
+              color:#ffdc70;
+              font-size:32px;
+              font-weight:bold;
+              box-shadow:0 0 12px rgba(212,175,55,.25);
+            ">${safe(initial)}</div>
+            <span style="transform:rotate(35deg);">❧</span>
+          </div>
+
+          <div style="
+            color:#fff;
+            font-size:13px;
+            font-weight:bold;
+            margin-top:12px;
+            overflow-wrap:anywhere;
+          ">${safe(r.name)}</div>
+
+          <div style="font-size:11px;color:#bbb;margin-top:3px;">
+            ${safe(r.city || "Pakistan")}
+          </div>
+
+          <span style="
+            background:linear-gradient(90deg,#d69e20,#ffe17b);
+            color:#171000;
+            font-weight:bold;
+            font-size:11px;
+            padding:4px 14px;
+            border-radius:20px;
+            margin-top:8px;
+          ">${safe(r.status || "Active")}</span>
+
         </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Orders</div>
-          <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">${rOrders.length}</div>
+
+        <!-- RESELLER STATISTICS -->
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(6,minmax(0,1fr));
+          grid-template-rows:1fr 1fr;
+          gap:1px;
+          background:rgba(212,175,55,.25);
+          border:1px solid rgba(212,175,55,.25);
+          border-radius:12px;
+          overflow:hidden;
+        ">
+
+          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
+            <div style="font-size:12px;color:#eee;">Total Orders</div>
+            <div style="font-size:18px;font-weight:bold;color:#ffdc70;margin-top:7px;">
+              ${rOrders.length}
+            </div>
+          </div>
+
+          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
+            <div style="font-size:12px;color:#eee;">Total Sales</div>
+            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">
+              ${money(sales)}
+            </div>
+          </div>
+
+          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
+            <div style="font-size:12px;color:#eee;">Profit</div>
+            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">
+              ${money(profit)}
+            </div>
+          </div>
+
+          <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
+            <div style="font-size:12px;color:#eee;">Paid</div>
+            <div style="font-size:16px;font-weight:bold;color:#19d66b;margin-top:7px;">
+              ${money(paid)}
+            </div>
+          </div>
+
+          <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
+            <div style="font-size:12px;color:#eee;">Pending</div>
+            <div style="font-size:16px;font-weight:bold;color:#ffad35;margin-top:7px;">
+              ${money(pending)}
+            </div>
+          </div>
+
         </div>
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Sales</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">${money(sales)}</div>
-        </div>
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Profit</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold);">${money(profit)}</div>
-        </div>
+
       </div>
     `;
   });
+
   snapshotSelect.dataset.listenerAttached = "true";
 }
 
