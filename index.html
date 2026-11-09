@@ -1134,6 +1134,7 @@ th{
             <input id="newOrderNumber" placeholder="Order Number">
             <input id="newOrderCustomer" placeholder="Customer Name">
             <input id="newOrderPhone" placeholder="Customer Phone">
+            <input id="newOrderCity" placeholder="City Name">
             <input id="newOrderProduct" placeholder="Product Name">
             <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
             <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
@@ -2207,6 +2208,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     const orderNumber = document.getElementById("newOrderNumber").value.trim();
     const customerName = document.getElementById("newOrderCustomer").value.trim();
     const customerPhone = document.getElementById("newOrderPhone").value.trim();
+    const city = document.getElementById("newOrderCity").value.trim();
     const productName = document.getElementById("newOrderProduct").value.trim();
     const quantity = Number(document.getElementById("newOrderQuantity").value);
     const totalPrice = Number(document.getElementById("newOrderPrice").value);
@@ -2228,6 +2230,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
         reseller_id:resellerId,
         order_number:orderNumber,
         customer_name:customerName,
+        city:city,
         product_name:productName,
         quantity:quantity,
         total_price:totalPrice,
