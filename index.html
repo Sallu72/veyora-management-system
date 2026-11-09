@@ -2502,15 +2502,45 @@ window.editOrder = async function(orderId){
     block:"start"
   });
 };
-
 // DELETE ORDER
 window.deleteOrder = async function(orderId){
   if(!confirm("Are you sure you want to permanently delete this order?")) return;
 
   try{
-    const {error} = await db.from("orders").delete().eq("id",orderId);
+    // Get order details first
+    const {data: order, error: fetchError} = await db
+      .from("orders")
+      .select("customer_name")
+      .eq("id",orderId)
+      .single();
 
-    if(error) throw error;
+    if(fetchError) throw fetchError;
+
+    // Delete order
+    const {error: deleteError} = await db
+      .from("orders")
+      .delete()
+      .eq("id",orderId);
+
+    if(deleteError) throw deleteError;
+
+    // Check whether this customer has other orders
+    const {data: remainingOrders, error: checkError} = await db
+      .from("orders")
+      .select("id")
+      .eq("customer_name",order.customer_name);
+
+    if(checkError) throw checkError;
+
+    // Delete customer only if no other orders remain
+    if(!remainingOrders || remainingOrders.length === 0){
+      const {error: customerError} = await db
+        .from("customers")
+        .delete()
+        .eq("name",order.customer_name);
+
+      if(customerError) throw customerError;
+    }
 
     alert("Order deleted successfully!");
     await loadBusinessData();
@@ -2519,7 +2549,6 @@ window.deleteOrder = async function(orderId){
     alert("Could not delete order: "+error.message);
   }
 };
-
 const addOrderBtn = document.getElementById("addOrderBtn");
 const addOrderForm = document.getElementById("addOrderForm");
 const cancelOrderBtn = document.getElementById("cancelOrderBtn");
