@@ -2605,41 +2605,65 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     saveOrderBtn.textContent = "Saving...";
 
     try{
-      const orderData = {
-        reseller_id:resellerId,
-        order_number:orderNumber,
-        customer_name:customerName,
-        product_name:productName,
-        quantity:quantity,
-        total_price:totalPrice,
-        owner_profit:ownerProfit,
-        reseller_profit:resellerProfit,
-        order_date:orderDate,
-        payment_status:paymentStatus
-      };
+     const orderData = {
+  reseller_id:resellerId,
+  order_number:orderNumber,
+  customer_name:customerName,
+  product_name:productName,
+  quantity:quantity,
+  total_price:totalPrice,
+  owner_profit:ownerProfit,
+  reseller_profit:resellerProfit,
+  order_date:orderDate,
+  payment_status:paymentStatus
+};
 
-      let error;
+let error;
+let savedOrder;
 
-      if(editingOrderId){
-        const res = await db.from("orders")
-          .update(orderData)
-          .eq("id",editingOrderId);
+if(editingOrderId){
+  const res = await db.from("orders")
+    .update(orderData)
+    .eq("id",editingOrderId)
+    .select()
+    .single();
 
-        error = res.error;
-      }else{
-        const res = await db.from("orders").insert([orderData]);
-        error = res.error;
-      }
+  error = res.error;
+  savedOrder = res.data;
 
-      if(error) throw error;
+}else{
+  const res = await db.from("orders")
+    .insert([orderData])
+    .select()
+    .single();
 
-      if(!editingOrderId){
-        await db.from("customers").insert([{
-          name:customerName,
-          phone:customerPhone
-        }]);
-      }
+  error = res.error;
+  savedOrder = res.data;
+}
 
+if(error) throw error;
+
+if(savedOrder){
+  const paymentRecord = {
+    order_id:savedOrder.id,
+    amount:totalPrice,
+    status:paymentStatus
+  };
+
+  const paymentRes = await db.from("payments")
+    .upsert(paymentRecord,{onConflict:"order_id"});
+
+  if(paymentRes.error) throw paymentRes.error;
+}
+
+if(!editingOrderId){
+  await db.from("customers").insert([{
+    name:customerName,
+    phone:customerPhone
+  }]);
+}
+
+await loadBusinessData();
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
 
       editingOrderId = null;
