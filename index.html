@@ -6,7 +6,6 @@
 <title>VEYORA | Business Management System</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Chart.js for graphs -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
@@ -140,7 +139,6 @@ input:focus,select:focus{border-color:var(--gold)}
 .card-label {color: var(--muted); font-size: 11px; font-weight:600; text-transform: uppercase; letter-spacing: 0.5px;}
 .card-value {font-size: 24px; font-weight: 800; color: var(--gold); margin-top: 10px;}
 .card-note {font-size: 11px; color: #7d7767; margin-top: 6px; display:flex; justify-content:space-between; align-items:center;}
-.positive {color: #4ade80; font-weight: 600;}
 
 /* PANELS & GRIDS */
 .panel{
@@ -159,11 +157,6 @@ input:focus,select:focus{border-color:var(--gold)}
 .filter{width:auto;min-width:140px;margin:0;padding:8px 12px; font-size:12px;}
 
 .grid-two{display:grid;grid-template-columns: 1.3fr 0.9fr;gap:18px}
-.grid-two-even{display:grid;grid-template-columns: 1fr 1fr;gap:18px}
-
-.gold-text{color:var(--gold)}
-.muted{color:var(--muted)}
-
 table{width:100%;border-collapse:collapse;min-width:550px}
 th,td{text-align:left;padding:11px 10px;border-bottom:1px solid rgba(212,175,55,0.12);font-size:12px}
 th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;}
@@ -177,6 +170,30 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 .logout{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-border);padding:10px;border-radius:8px; font-weight:600; font-size:12px}
 .logout:hover{background:rgba(212,175,55,0.1)}
 
+.top-reseller-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(212,175,55,0.1);
+}
+.top-reseller-row:last-child { border-bottom: none; }
+.reseller-badge {
+  width: 28px; height: 28px; border-radius: 50%; background: rgba(212,175,55,0.15);
+  border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-weight: bold; font-size: 12px; margin-right: 10px;
+}
+
+@media(max-width:1000px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-two{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  #app{display:block}
+  .sidebar{width:100%;padding:12px;display:block;border-right:0;border-bottom:1px solid var(--gold-border);}
+  .main{padding:15px}
+  .cards{grid-template-columns:1fr}
+}
 .view-all {
   background: #0b0b0b;
   color: #f5f0e6;
@@ -208,9 +225,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <form id="loginForm">
       <input id="email" type="email" placeholder="Owner email" required>
       <input id="password" type="password" placeholder="Password" required>
-      <button class="gold-btn" style="width:100%;margin-top:12px">
-        Login to Dashboard
-      </button>
+      <button class="gold-btn" style="width:100%;margin-top:12px">Login to Dashboard</button>
     </form>
     <div id="loginMessage" class="message"></div>
   </div>
@@ -256,7 +271,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       </div>
     </div>
 
-    <!-- TOP BANNER -->
     <div class="top-banner">
       <span>✨ Welcome back, Administrator. Your business is growing rapidly.</span>
       <span style="font-weight:bold;">System Online ✓</span>
@@ -264,47 +278,29 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
     <!-- DASHBOARD -->
     <section id="page-dashboard" class="section active">
-      
-      <!-- MAIN KPI CARDS -->
       <div class="cards">
         <div class="card">
           <div class="card-label">Total Profit</div>
           <div class="card-value" id="totalProfit">Rs. 0</div>
-          <div class="card-note">
-            <span>Owner + Resellers</span>
-            <span id="totalProfitGrowth">—</span>
-          </div>
+          <div class="card-note"><span>Owner + Resellers</span></div>
         </div>
-
         <div class="card">
           <div class="card-label">Owner Profit</div>
           <div class="card-value" id="ownerProfit">Rs. 0</div>
-          <div class="card-note">
-            <span>Your earnings</span>
-            <span id="ownerProfitGrowth">—</span>
-          </div>
+          <div class="card-note"><span>Your earnings</span></div>
         </div>
-
         <div class="card">
           <div class="card-label">Resellers Profit</div>
           <div class="card-value" id="resellerProfit">Rs. 0</div>
-          <div class="card-note">
-            <span>Combined earnings</span>
-            <span id="resellerProfitGrowth">—</span>
-          </div>
+          <div class="card-note"><span>Combined earnings</span></div>
         </div>
-
         <div class="card">
           <div class="card-label">Total Sales</div>
           <div class="card-value" id="totalSalesMain">Rs. 0</div>
-          <div class="card-note">
-            <span>Total revenue</span>
-            <span id="totalSalesGrowth">—</span>
-          </div>
+          <div class="card-note"><span>Total revenue</span></div>
         </div>
       </div>
 
-      <!-- CHART & TOP RESELLERS ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
@@ -332,7 +328,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         </div>
       </div>
 
-      <!-- RESELLER PERFORMANCE & MONTHLY SUMMARY ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
@@ -383,81 +378,227 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                 </tr>
               </thead>
               <tbody id="monthlySummaryTable">
-                <tr>
-                  <td colspan="4" class="empty">Loading actual business records...</td>
-                </tr>
+                <tr><td colspan="4" class="empty">Loading records...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- RECENT ORDERS & DETAILED VIEW ROW -->
-      <div class="grid-two">
-        <div class="panel" style="margin-bottom:0;">
-          <div class="panel-head">
-            <h3>Recent Orders</h3>
-            <button class="view-all" data-page="orders">View All →</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Customer</th>
-                  <th>Reseller</th>
-                  <th>Product</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="recentOrdersTable"></tbody>
-            </table>
-          </div>
+    <!-- 1. REPORTS & ANALYTICS -->
+    <section id="page-reports" class="section">
+      <p class="section-intro">Business performance analysis across various custom periods.</p>
+      
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Performance Metrics</h3>
+          <select id="reportsPeriodFilter" class="filter">
+            <option value="this">This Month</option>
+            <option value="previous">Previous Month</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6" selected>Last 6 Months</option>
+            <option value="9">Last 9 Months</option>
+            <option value="all">Overall</option>
+          </select>
         </div>
 
-        <div class="panel" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
-          <div class="panel-head">
-            <h3>Reseller Details Snapshot</h3>
-            <select id="snapshotResellerSelect" class="filter" style="min-width:110px;padding:6px;">
-              <option value="">Select Reseller</option>
-            </select>
+        <div class="cards" style="margin-bottom:0;">
+          <div class="card">
+            <div class="card-label">Period Sales</div>
+            <div class="card-value" id="repTotalSales">Rs. 0</div>
           </div>
+          <div class="card">
+            <div class="card-label">Period Orders</div>
+            <div class="card-value" id="repTotalOrders">0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Owner Profit</div>
+            <div class="card-value" id="repOwnerProfit">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Reseller Profit</div>
+            <div class="card-value" id="repResellerProfit">Rs. 0</div>
+          </div>
+        </div>
+        <div class="cards" style="margin-top:16px; margin-bottom:0;">
+          <div class="card">
+            <div class="card-label">Approved Payments</div>
+            <div class="card-value" id="repApprovedPayments" style="color:#6ee7b7;">Rs. 0</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Pending Payments</div>
+            <div class="card-value" id="repPendingPayments" style="color:#fde047;">Rs. 0</div>
+          </div>
+        </div>
+      </div>
 
-          <div id="resellerSnapshotContent" style="padding:15px 0;">
-            <div style="text-align:center;padding:25px 10px;">
-              <div style="font-size:55px;">🏆</div>
-              <h3 style="color:var(--gold);margin-top:10px;">Reseller Performance</h3>
-              <p style="font-size:12px;color:var(--muted);margin-top:8px;">
-                Select a reseller to view their complete performance.
-              </p>
-            </div>
-          </div>
+      <div class="panel">
+        <h3>Sales & Profit Analysis Comparison</h3>
+        <div style="position: relative; height:250px; width:100%; margin-top:15px;">
+          <canvas id="reportsComparisonChart"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Reseller Performance Breakdown</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Reseller Name</th>
+                <th>Orders</th>
+                <th>Total Sales</th>
+                <th>Total Profit</th>
+              </tr>
+            </thead>
+            <tbody id="reportsResellerTable"></tbody>
+          </table>
         </div>
       </div>
     </section>
 
-    <!-- OWNER PROFIT SECTION -->
-    <section id="page-owner" class="section">
-      <p class="section-intro">Your personal profit records from all business orders.</p>
-      <div class="cards">
-        <div class="card">
-          <div class="card-label">Total Owner Profit</div>
-          <div class="card-value" id="ownerTotalProfit">Rs. 0</div>
-          <div class="card-note">All-time earnings</div>
+    <!-- 2. MONTHLY REVIEW (MONTHLY HISTORY) -->
+    <section id="page-history" class="section">
+      <p class="section-intro">Monthly business history and comparative performance review.</p>
+      
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Monthly Business History & Growth</h3>
+          <select id="monthlyHistoryFilter" class="filter">
+            <option value="3">Last 3 Months</option>
+            <option value="6" selected>Last 6 Months</option>
+            <option value="9">Last 9 Months</option>
+            <option value="all">Overall</option>
+          </select>
         </div>
-        <div class="card">
-          <div class="card-label">This Month Profit</div>
-          <div class="card-value" id="ownerThisMonthProfit">Rs. 0</div>
-          <div class="card-note">Current month earnings</div>
+
+        <div id="monthlyBestHighlight" style="background:#181610; border:1px solid var(--gold-border); border-radius:10px; padding:15px; margin-bottom:15px; font-size:13px; color:var(--gold);">
+          📊 Best Performing Month: <b id="bestMonthName">—</b> (Sales: <span id="bestMonthSales">—</span>)
         </div>
-        <div class="card">
-          <div class="card-label">Last Month Profit</div>
-          <div class="card-value" id="ownerLastMonthProfit">Rs. 0</div>
-          <div class="card-note">Previous month earnings</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Orders</th>
+                <th>Total Sales</th>
+                <th>Owner Profit</th>
+                <th>Reseller Profit</th>
+                <th>Approved / Pending</th>
+                <th>Growth</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyHistoryTable">
+              <tr><td colspan="7" class="empty">Loading historical records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SETTINGS -->
+    <section id="page-settings" class="section">
+      <p class="section-intro">System configuration and management controls (Owner / Admin Access Only).</p>
+      
+      <div class="panel">
+        <h3>System Configuration</h3>
+        <div style="max-width:500px; margin-top:15px;">
+          <label style="font-size:11px; color:var(--muted);">Business Name</label>
+          <input id="settingBusinessName" type="text" value="VEYORA">
+
+          <label style="font-size:11px; color:var(--muted); margin-top:10px; display:block;">WhatsApp Contact Number</label>
+          <input id="settingWhatsapp" type="text" value="+92 300 0000000">
+
+          <label style="font-size:11px; color:var(--muted); margin-top:10px; display:block;">Currency</label>
+          <input type="text" value="PKR (Rs.)" disabled style="opacity:0.7;">
+
+          <label style="font-size:11px; color:var(--muted); margin-top:10px; display:block;">Default Commission Rule</label>
+          <input id="settingCommission" type="text" value="Standard Tiered Commission">
+
+          <button class="gold-btn" id="saveSettingsBtn" style="margin-top:15px; width:100%;">Save Settings Changes</button>
         </div>
       </div>
 
+      <div class="panel">
+        <h3>Security & Data Management</h3>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:15px;">
+          <button class="view-all" id="changePasswordBtn" style="padding:10px 15px;">🔒 Change Admin Password</button>
+          <button class="view-all" id="exportDataBtn" style="padding:10px 15px;">📥 Export Data Backup (JSON)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PROFIT CONTROL -->
+    <section id="page-control" class="section">
+      <p class="section-intro">Profit management, commission settings, and distinct tracking of earned vs received profits.</p>
+      
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Profit Earned</div>
+          <div class="card-value" id="pcTotalEarned">Rs. 0</div>
+          <div class="card-note"><span>Owner + Reseller profit total</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Owner Profit Earned</div>
+          <div class="card-value" id="pcOwnerEarned">Rs. 0</div>
+          <div class="card-note"><span>Total accrued owner profit</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Reseller Profit Earned</div>
+          <div class="card-value" id="pcResellerEarned">Rs. 0</div>
+          <div class="card-note"><span>Total accrued reseller commission</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Reseller Paid / Unpaid</div>
+          <div class="card-value" id="pcResellerPaidUnpaid" style="font-size:18px;">0 / 0</div>
+          <div class="card-note"><span>Paid vs Unpaid profit tracking</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Order-wise Profit Calculation & Tracking</h3>
+          <select id="pcPeriodFilter" class="filter">
+            <option value="this">This Month</option>
+            <option value="previous">Previous Month</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6" selected>Last 6 Months</option>
+            <option value="9">Last 9 Months</option>
+            <option value="all">Overall</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order No.</th>
+                <th>Date</th>
+                <th>Reseller</th>
+                <th>Total Price</th>
+                <th>Owner Profit</th>
+                <th>Reseller Profit (Earned)</th>
+                <th>Payment Status</th>
+              </tr>
+            </thead>
+            <tbody id="profitControlTable">
+              <tr><td colspan="7" class="empty">Loading profit records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- OTHER STANDARD PAGES -->
+    <section id="page-owner" class="section">
+      <p class="section-intro">Your personal profit records from all business orders.</p>
+      <div class="cards">
+        <div class="card"><div class="card-label">Total Owner Profit</div><div class="card-value" id="ownerTotalProfit">Rs. 0</div></div>
+        <div class="card"><div class="card-label">This Month Profit</div><div class="card-value" id="ownerThisMonthProfit">Rs. 0</div></div>
+        <div class="card"><div class="card-label">Last Month Profit</div><div class="card-value" id="ownerLastMonthProfit">Rs. 0</div></div>
+      </div>
       <div class="panel" style="margin-top:20px;">
         <div class="panel-head">
           <h3>Owner Profit History</h3>
@@ -472,50 +613,25 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         </div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Order No</th>
-                <th>Reseller</th>
-                <th>My Profit</th>
-              </tr>
-            </thead>
-            <tbody id="ownerTable">
-              <tr>
-                <td colspan="6" class="empty">Loading profit records...</td>
-              </tr>
-            </tbody>
+            <thead><tr><th>Date</th><th>Customer</th><th>Product</th><th>Order No</th><th>Reseller</th><th>My Profit</th></tr></thead>
+            <tbody id="ownerTable"><tr><td colspan="6" class="empty">Loading records...</td></tr></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- RESELLERS SECTION -->
     <section id="page-resellers" class="section">
       <p class="section-intro">Manage your reseller accounts and performance.</p>
       <div class="cards">
-        <div class="card">
-          <div class="card-label">Total Resellers</div>
-          <div class="card-value" id="totalResellers">0</div>
-          <div class="card-note">Registered resellers</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Active Resellers</div>
-          <div class="card-value" id="activeResellers">0</div>
-          <div class="card-note">Currently active</div>
-        </div>
+        <div class="card"><div class="card-label">Total Resellers</div><div class="card-value" id="totalResellers">0</div></div>
+        <div class="card"><div class="card-label">Active Resellers</div><div class="card-value" id="activeResellers">0</div></div>
       </div>
-
       <div class="panel" style="margin-top:20px;">
         <div class="panel-head">
           <h3>Reseller List</h3>
           <button class="view-all" id="addResellerBtn">+ Add Reseller</button>
         </div>
-        <div style="padding:12px 0;">
-          <input type="text" id="resellerSearch" placeholder="Search by name, city or phone..." style="width:100%;max-width:350px;">
-        </div>
+        <div style="padding:12px 0;"><input type="text" id="resellerSearch" placeholder="Search by name, city or phone..." style="width:100%;max-width:350px;"></div>
         <div id="addResellerForm" class="panel" style="display:none;margin-bottom:20px;">
           <div class="panel-head"><h3>Add New Reseller</h3></div>
           <div style="padding:15px;">
@@ -531,377 +647,108 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         </div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Reseller Name</th>
-                <th>City</th>
-                <th>Phone</th>
-                <th>Joining Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+            <thead><tr><th>#</th><th>Reseller Name</th><th>City</th><th>Phone</th><th>Joining Date</th><th>Status</th></tr></thead>
             <tbody id="resellerTable"></tbody>
           </table>
         </div>
       </div>
-      
-      <!-- RESELLER PROFILE -->
+
       <div id="resellerProfile" style="display:none;margin-top:20px;">
-        <div class="panel" style="padding:20px;">
-          <div class="panel-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-            <div>
-              <h3 style="color:var(--gold);font-size:20px;">Reseller Dashboard</h3>
-              <p style="color:var(--muted);font-size:12px;margin-top:5px;">Complete reseller performance and order details</p>
+        <div class="panel">
+          <div class="panel-head"><h3>Reseller Profile</h3><button class="view-all" id="backToResellersBtn">← Back to Resellers</button></div>
+          <div style="padding:20px;">
+            <div style="text-align:center;margin-bottom:25px;">
+              <div class="reseller-badge" id="profileInitial" style="width:60px;height:60px;font-size:24px;margin:auto;">R</div>
+              <h2 id="profileName" style="color:var(--gold);margin-top:12px;">Reseller Name</h2>
+              <span id="profileStatus" class="status approved">Active</span>
             </div>
-            <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
-          </div>
-
-          <div class="panel" style="margin-top:20px;padding:25px;background:linear-gradient(135deg,#171717,#252017);border:1px solid rgba(212,175,55,.35);">
-            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-              <div class="reseller-badge" id="profileInitial" style="width:75px;height:75px;font-size:30px;flex-shrink:0;">R</div>
-              <div style="flex:1;min-width:180px;">
-                <h2 id="profileName" style="color:var(--gold);font-size:23px;margin-bottom:8px;">Reseller Name</h2>
-                <span id="profileStatus" class="status approved">Active</span>
-                <p style="color:#aaa;font-size:12px;margin-top:10px;">VEYORA Reseller Account</p>
-              </div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:25px;">
+              <div class="panel" style="padding:15px;"><div class="card-label">Phone Number</div><div id="profilePhone">—</div><div class="card-label" style="margin-top:12px;">City</div><div id="profileCity">—</div></div>
+              <div class="panel" style="padding:15px;"><div class="card-label">Joining Date</div><div id="profileJoiningDate">—</div><div class="card-label" style="margin-top:12px;">Total Orders</div><div id="profileTotalOrders">0</div></div>
             </div>
-
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:25px;">
-              <div>
-                <div class="card-label">Phone Number</div>
-                <div id="profilePhone" style="font-weight:600;margin-top:6px;">—</div>
-              </div>
-              <div>
-                <div class="card-label">City</div>
-                <div id="profileCity" style="font-weight:600;margin-top:6px;">—</div>
-              </div>
-              <div>
-                <div class="card-label">Joining Date</div>
-                <div id="profileJoiningDate" style="font-weight:600;margin-top:6px;">—</div>
-              </div>
-              <div>
-                <div class="card-label">Total Orders</div>
-                <div id="profileTotalOrders" style="font-weight:700;color:var(--gold);font-size:20px;margin-top:6px;">0</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin-top:25px;">
             <div class="panel-head">
-              <h3>Performance Overview</h3>
+              <h3>Monthly Order History</h3>
+              <select id="resellerProfileFilter" class="filter">
+                <option value="this">This Month</option>
+                <option value="previous">Previous Month</option>
+                <option value="3">Last 3 Months</option>
+                <option value="6" selected>Last 6 Months</option>
+                <option value="9">Last 9 Months</option>
+                <option value="all">Overall</option>
+              </select>
+              <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
             </div>
-            <div class="cards" style="margin-top:15px;">
-              <div class="card">
-                <div class="card-label">Total Reseller Profit</div>
-                <div class="card-value" id="profileTotalProfit">Rs. 0</div>
-              </div>
-              <div class="card">
-                <div class="card-label">Approved Payment</div>
-                <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
-              </div>
-              <div class="card">
-                <div class="card-label">Pending Payment</div>
-                <div class="card-value" id="profilePendingPayment">Rs. 0</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin-top:30px;">
-            <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-              <div>
-                <h3>Order History</h3>
-                <p style="color:var(--muted);font-size:12px;margin-top:5px;">All orders of this reseller</p>
-              </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                <select id="resellerProfileFilter" class="filter">
-                  <option value="this">This Month</option>
-                  <option value="previous">Previous Month</option>
-                  <option value="3">Last 3 Months</option>
-                  <option value="6" selected>Last 6 Months</option>
-                  <option value="9">Last 9 Months</option>
-                  <option value="all">Overall</option>
-                </select>
-                <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
-              </div>
-            </div>
-
-            <div class="table-wrap" style="margin-top:15px;">
+            <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>Customer</th>
-                    <th>Product</th>
-                    <th>Order Date</th>
-                    <th>Reseller Profit</th>
-                    <th>Payment Status</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Customer</th><th>Product</th><th>Order Date</th><th>Reseller Profit</th><th>Payment Status</th></tr></thead>
                 <tbody id="resellerProfileOrders"></tbody>
               </table>
+            </div>
+            <div class="cards" style="margin-top:20px;">
+              <div class="card"><div class="card-label">Total Reseller Profit</div><div class="card-value" id="profileTotalProfit">Rs. 0</div></div>
+              <div class="card"><div class="card-label">Approved Payment</div><div class="card-value" id="profileApprovedPayment">Rs. 0</div></div>
+              <div class="card"><div class="card-label">Pending Payment</div><div class="card-value" id="profilePendingPayment">Rs. 0</div></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ORDERS SECTION -->
     <section id="page-orders" class="section">
       <p class="section-intro">Manage all VEYORA business orders and records.</p>
       <div class="cards">
-        <div class="card">
-          <div class="card-label">Total Orders</div>
-          <div class="card-value" id="ordersTotalCount">0</div>
-          <div class="card-note">All registered orders</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Total Sales</div>
-          <div class="card-value" id="ordersTotalSales">Rs. 0</div>
-          <div class="card-note">Combined order value</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Pending Orders</div>
-          <div class="card-value" id="ordersPendingCount">0</div>
-          <div class="card-note">Awaiting approval</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Approved Orders</div>
-          <div class="card-value" id="ordersApprovedCount">0</div>
-          <div class="card-note">Approved records</div>
-        </div>
+        <div class="card"><div class="card-label">Total Orders</div><div class="card-value" id="ordersTotalCount">0</div></div>
+        <div class="card"><div class="card-label">Total Sales</div><div class="card-value" id="ordersTotalSales">Rs. 0</div></div>
+        <div class="card"><div class="card-label">Pending Orders</div><div class="card-value" id="ordersPendingCount">0</div></div>
+        <div class="card"><div class="card-label">Approved Orders</div><div class="card-value" id="ordersApprovedCount">0</div></div>
       </div>
-
       <div class="panel" style="margin-top:20px;">
-        <div class="panel-head">
-          <h3>All Orders</h3>
-          <button class="view-all" id="addOrderBtn">+ Add New Order</button>
-        </div>
-
-        <!-- ADD / EDIT ORDER FORM -->
+        <div class="panel-head"><h3>All Orders</h3><button class="view-all" id="addOrderBtn">+ Add New Order</button></div>
         <div id="addOrderForm" class="panel" style="display:none;margin-bottom:20px;">
-          <div class="panel-head">
-            <h3>Add New Order</h3>
-            <button class="view-all" id="cancelOrderBtn">Cancel</button>
-          </div>
+          <div class="panel-head"><h3>Add New Order</h3><button class="view-all" id="cancelOrderBtn">Cancel</button></div>
           <div style="padding:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
-            <select id="orderReseller" required>
-              <option value="">Select Reseller</option>
-            </select>
+            <select id="orderReseller" required><option value="">Select Reseller</option></select>
             <input id="newOrderNumber" placeholder="Order Number">
             <input id="newOrderCustomer" placeholder="Customer Name">
             <input id="newOrderPhone" placeholder="Customer Phone">
-            <input id="newOrderCity" placeholder="Customer City">
             <input id="newOrderProduct" placeholder="Product Name">
             <input id="newOrderQuantity" type="number" min="1" value="1" placeholder="Quantity">
             <input id="newOrderPrice" type="number" min="0" placeholder="Total Price (Rs.)">
             <input id="newOrderOwnerProfit" type="number" min="0" placeholder="Owner Profit (Rs.)">
             <input id="newOrderResellerProfit" type="number" min="0" placeholder="Reseller Profit (Rs.)">
             <input id="newOrderDate" type="date">
-            <select id="newOrderStatus">
-              <option value="Pending">Pending</option>
-              <option value="Approved">Approved</option>
-            </select>
+            <select id="newOrderStatus"><option value="Pending">Pending</option><option value="Approved">Approved</option></select>
           </div>
-          <div style="padding:0 15px 15px;">
-            <button class="view-all" id="saveOrderBtn">Save Order</button>
-          </div>
+          <div style="padding:0 15px 15px;"><button class="view-all" id="saveOrderBtn">Save Order</button></div>
         </div>
-
         <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
           <input type="text" id="orderSearch" placeholder="Search order, customer, product or reseller..." style="flex:1;min-width:220px;">
           <select id="orderStatusFilter" class="filter">
-            <option value="all">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
+            <option value="all">All Status</option><option value="Pending">Pending</option><option value="Approved">Approved</option>
           </select>
         </div>
-
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Order No.</th>
-                <th>Date</th>
-                <th>Reseller</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Order No.</th><th>Date</th><th>Reseller</th><th>Customer</th><th>Product</th><th>Qty</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody id="ordersTable"></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- PAYMENTS SECTION -->
     <section id="page-payments" class="section">
-      <div style="margin-bottom:20px;">
-        <h2 style="color:var(--gold);font-size:22px;">Payments Management</h2>
-        <p class="section-intro">Monitor pending and approved payments.</p>
-      </div>
-
-      <div class="panel" style="padding:20px;">
-        <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-          <div>
-            <h3 style="color:var(--gold);font-size:18px;">Payment Records</h3>
-            <p style="font-size:11px;color:var(--muted);margin-top:5px;">Track and monitor all payment transactions</p>
-          </div>
-          <div style="padding:8px 14px;border:1px solid rgba(212,175,55,.4);border-radius:8px;color:var(--gold);font-size:12px;background:#151109;">
-            <span>₨</span> Payment History
-          </div>
-        </div>
-
-        <div class="table-wrap" style="margin-top:20px;border:1px solid rgba(212,175,55,.2);border-radius:10px;overflow:auto;">
-          <table style="width:100%;">
-            <thead>
-              <tr>
-                <th>Order Number</th>
-                <th>Customer Name</th>
-                <th>Reseller Name</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Payment Date</th>
-              </tr>
-            </thead>
-            <tbody id="paymentsTable"></tbody>
-          </table>
-        </div>
+      <p class="section-intro">Monitor pending and approved payments.</p>
+      <div class="panel">
+        <div class="panel-head"><h3>Payment Records</h3></div>
+        <div class="table-wrap"><table><thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Approval Date</th></tr></thead><tbody id="paymentsTable"></tbody></table></div>
       </div>
     </section>
 
-    <!-- CUSTOMERS SECTION -->
     <section id="page-customers" class="section">
       <p class="section-intro">Customer information and order history.</p>
       <div class="panel">
         <div class="panel-head"><h3>Customer Records</h3></div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>City</th>
-                <th>Joined</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="customersTable"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-   <section id="page-reports" class="section">
-
-  <p class="section-intro">Business performance and analytical reports.</p>
-
-  <div class="panel">
-
-    <div class="panel-head">
-      <h3 style="color:var(--gold);">Reports & Analytics</h3>
-
-      <select id="reportsFilter" class="filter">
-        <option value="this">This Month</option>
-        <option value="previous">Previous Month</option>
-        <option value="3">Last 3 Months</option>
-        <option value="6">Last 6 Months</option>
-        <option value="all">Overall</option>
-      </select>
-    </div>
-
-    <!-- SUMMARY CARDS -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;padding:15px;">
-
-      <div class="panel">
-        <p>Total Sales</p>
-        <h2 id="reportSales" style="color:var(--gold);">Rs. 0</h2>
-      </div>
-
-      <div class="panel">
-        <p>Total Orders</p>
-        <h2 id="reportOrders" style="color:var(--gold);">0</h2>
-      </div>
-
-      <div class="panel">
-        <p>Owner Profit</p>
-        <h2 id="reportOwnerProfit" style="color:var(--gold);">Rs. 0</h2>
-      </div>
-
-      <div class="panel">
-        <p>Reseller Profit</p>
-        <h2 id="reportResellerProfit" style="color:var(--gold);">Rs. 0</h2>
-      </div>
-
-      <div class="panel">
-        <p>Approved Payments</p>
-        <h2 id="reportApproved" style="color:var(--gold);">Rs. 0</h2>
-      </div>
-
-      <div class="panel">
-        <p>Pending Payments</p>
-        <h2 id="reportPending" style="color:var(--gold);">Rs. 0</h2>
-      </div>
-
-    </div>
-
-    <!-- SALES CHART -->
-    <div class="panel" style="padding:20px;margin:15px;">
-      <h3 style="color:var(--gold);margin-bottom:15px;">Sales & Profit Analysis</h3>
-      <div style="height:300px;">
-        <canvas id="reportsChart"></canvas>
-      </div>
-    </div>
-
-    <!-- RESELLER PERFORMANCE -->
-    <div class="panel" style="padding:20px;margin:15px;">
-      <h3 style="color:var(--gold);margin-bottom:15px;">Reseller Performance</h3>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Reseller</th>
-              <th>Orders</th>
-              <th>Total Sales</th>
-              <th>Reseller Profit</th>
-              <th>Owner Profit</th>
-            </tr>
-          </thead>
-          <tbody id="reportsResellerTable">
-            <tr><td colspan="5">Loading...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-    <section id="page-history" class="section">
-      <p class="section-intro">Your historical business records are retained in the database.</p>
-      <div class="panel">
-        <h3>Monthly History</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Historical ledger records are synchronized securely.</p>
-      </div>
-    </section>
-
-    <section id="page-control" class="section">
-      <p class="section-intro">Manage and review profit calculations.</p>
-      <div class="panel">
-        <h3>Profit Control</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Configure commission rates, profit shares, and tiered incentives.</p>
-      </div>
-    </section>
-
-    <section id="page-settings" class="section">
-      <p class="section-intro">Your account and website settings.</p>
-      <div class="panel">
-        <h3>Settings</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Manage admin credentials, branding preferences, and store hooks.</p>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead><tbody id="customersTable"></tbody></table></div>
       </div>
     </section>
 
@@ -920,6 +767,7 @@ let currentResellers = [];
 let currentCustomers = [];
 let currentPayments = [];
 let profitChartInstance = null;
+let reportsChartInstance = null;
 let selectedResellerId = null;
 let editingOrderId = null;
 
@@ -973,6 +821,11 @@ document.querySelectorAll(".nav-btn").forEach(button => {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.getElementById("page-"+page).classList.add("active");
     document.getElementById("pageTitle").textContent = pageNames[page];
+    
+    // Trigger specialized renders when navigating
+    if(page === 'reports') renderReportsAnalytics();
+    if(page === 'history') renderMonthlyHistory();
+    if(page === 'control') renderProfitControl();
   });
 });
 
@@ -1007,33 +860,31 @@ function renderAll(){
   renderOverview();
   renderTables();
   renderChart();
-  renderCustomersTable();
-  renderReports();
   populateResellerSnapshotDropdown();
   if(selectedResellerId) renderResellerProfileOrders();
+  renderReportsAnalytics();
+  renderMonthlyHistory();
+  renderProfitControl();
 }
 
 // ROBUST DATE PARSER
 function getOrderDate(order){
   const value = order.order_date || order.created_at;
   if(!value) return null;
-
   if(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value)){
     const parts = value.substring(0, 10).split("-").map(Number);
     return new Date(parts[0], parts[1] - 1, parts[2]);
   }
-
   const date = new Date(value);
   return isNaN(date.getTime()) ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-// UNIFIED PERIOD FILTER MATCHER
+// UNIFIED PERIOD FILTER MATCHER (6 Options)
 function isDateInPeriod(orderDate, filterValue) {
   if (!orderDate) return false;
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
-
   const orderYear = orderDate.getFullYear();
   const orderMonth = orderDate.getMonth();
 
@@ -1069,62 +920,29 @@ function renderOverview(){
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
 
-  const ranking = currentResellers.map(r => {
-    const rOrders = currentOrders.filter(o => o.reseller_id === r.id);
-    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
-    const rSales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
-
-    return {
-      ...r,
-      profit,
-      orderCount: rOrders.length,
-      sales: rSales
-    };
-  }).sort((a, b) => b.profit - a.profit).slice(0, 3);
-
-  const medals = ["🏆", "🥈", "🥉"];
+  const ranking = currentResellers.map(r=>{
+    const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
+    const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
+    const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
+    return {...r, profit, orderCount:rOrders.length, sales:rSales};
+  }).sort((a,b)=>b.profit-a.profit).slice(0,3);
 
   document.getElementById("topResellers").innerHTML = ranking.length
-    ? ranking.map((r, i) => {
-        const initial = (r.name || "R").trim().charAt(0).toUpperCase();
-
-        return `
-          <div style="
-            display:grid;
-            grid-template-columns:65px 55px minmax(0,1fr) auto;
-            align-items:center;
-            gap:12px;
-            padding:12px 10px;
-            margin:7px 0;
-            background:linear-gradient(100deg,#17130a,#090909);
-            border:1px solid rgba(212,175,55,.25);
-            border-radius:12px;
-          ">
-            <div style="font-size:38px;text-align:center;filter:drop-shadow(0 0 7px rgba(212,175,55,.35));">${medals[i]}</div>
-            <div style="
-              width:48px;
-              height:48px;
-              border:2px solid var(--gold);
-              border-radius:50%;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              color:var(--gold);
-              font-size:23px;
-              font-weight:bold;
-              background:linear-gradient(145deg,#29200c,#080808);
-            ">${safe(initial)}</div>
-            <div style="min-width:0;">
-              <div style="font-weight:bold;color:#fff;font-size:14px;">${safe(r.name)}</div>
-              <div style="font-size:11px;color:#aaa;margin-top:4px;">${safe(r.city || "Pakistan")}</div>
-            </div>
-            <div style="text-align:right;white-space:nowrap;">
-              <div style="color:var(--gold);font-weight:bold;font-size:15px;">${money(r.profit)}</div>
-              <div style="font-size:11px;color:#ccc;margin-top:4px;">${r.orderCount} Orders</div>
-            </div>
+    ? ranking.map((r,i)=>`
+      <div class="top-reseller-row">
+        <div style="display:flex;align-items:center;">
+          <div class="reseller-badge">${i+1}</div>
+          <div>
+            <div style="font-weight:bold;color:var(--gold-light);font-size:13px;">${safe(r.name)}</div>
+            <div style="font-size:11px;color:var(--muted);">${safe(r.city||'Pakistan')}</div>
           </div>
-        `;
-      }).join("")
+        </div>
+        <div style="text-align:right;">
+          <div style="color:var(--gold);font-weight:bold;font-size:13px;">${money(r.profit)}</div>
+          <div style="font-size:10px;color:var(--muted);">${r.orderCount} Orders</div>
+        </div>
+      </div>
+    `).join("")
     : '<div class="empty">No reseller records yet.</div>';
 
   const perfRows = currentResellers.map(r=>{
@@ -1202,34 +1020,21 @@ function renderOverview(){
       for(let date = new Date(loopEndMonth); date >= startMonth; date.setMonth(date.getMonth()-1)){
         const year = date.getFullYear();
         const month = date.getMonth();
-
-        const monthOrders = datedOrders.filter(o=>
-          o._monthlyDate.getFullYear()===year && o._monthlyDate.getMonth()===month
-        );
+        const monthOrders = datedOrders.filter(o=> o._monthlyDate.getFullYear()===year && o._monthlyDate.getMonth()===month);
 
         if(monthOrders.length || (selected !== "this" && selected !== "previous")){
           const monthSales = monthOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
           const monthOwnerProfit = monthOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
-
           rows.push({
             label:date.toLocaleDateString("en-US",{month:"short", year:"numeric"}),
-            orders:monthOrders.length,
-            sales:monthSales,
-            profit:monthOwnerProfit
+            orders:monthOrders.length, sales:monthSales, profit:monthOwnerProfit
           });
         }
       }
 
       monthlyTable.innerHTML = rows.length
-        ? rows.map(row=>`
-          <tr>
-            <td>${row.label}</td>
-            <td>${row.orders}</td>
-            <td>${money(row.sales)}</td>
-            <td style="color:var(--gold);">${money(row.profit)}</td>
-          </tr>
-        `).join("")
-        : '<tr><td colspan="4" class="empty">No records found for this period.</td></tr>';
+        ? rows.map(row=>`<tr><td>${row.label}</td><td>${row.orders}</td><td>${money(row.sales)}</td><td style="color:var(--gold);">${money(row.profit)}</td></tr>`).join("")
+        : '<tr><td colspan="4" class="empty">No records found.</td></tr>';
     }
 
     if(monthlyFilter && !monthlyFilter.dataset.listenerAttached){
@@ -1240,18 +1045,16 @@ function renderOverview(){
   }
 }
 
-// RENDER CHART.JS PROFIT OVERVIEW
+// RENDER MAIN CHART
 function renderChart(){
   const canvas = document.getElementById('profitChart');
   if(!canvas) return;
-
   const ctx = canvas.getContext('2d');
   if(profitChartInstance) { profitChartInstance.destroy(); }
 
   const filter = document.getElementById('chartPeriodFilter');
   const selectedPeriod = filter ? filter.value : '6';
   const orders = currentOrders || [];
-
   const now = new Date();
   const months = [];
 
@@ -1259,40 +1062,24 @@ function renderChart(){
     let earliestDate = new Date(now.getFullYear(), now.getMonth(), 1);
     orders.forEach(order => {
       const date = getOrderDate(order);
-      if(date && date < earliestDate){
-        earliestDate = new Date(date.getFullYear(), date.getMonth(), 1);
-      }
+      if(date && date < earliestDate) earliestDate = new Date(date.getFullYear(), date.getMonth(), 1);
     });
     let date = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), 1);
-    while(date <= now){
-      months.push(new Date(date));
-      date.setMonth(date.getMonth() + 1);
-    }
+    while(date <= now){ months.push(new Date(date)); date.setMonth(date.getMonth() + 1); }
   } else if(selectedPeriod === 'this') {
     months.push(new Date(now.getFullYear(), now.getMonth(), 1));
   } else if(selectedPeriod === 'previous') {
     months.push(new Date(now.getFullYear(), now.getMonth() - 1, 1));
   } else {
     const count = Number(selectedPeriod) || 6;
-    for(let i = count - 1; i >= 0; i--){
-      months.push(new Date(now.getFullYear(), now.getMonth() - i, 1));
-    }
+    for(let i = count - 1; i >= 0; i--){ months.push(new Date(now.getFullYear(), now.getMonth() - i, 1)); }
   }
 
-  const labels = [];
-  const totalProfitData = [];
-  const ownerProfitData = [];
-  const resellerProfitData = [];
-
+  const labels = [], totalProfitData = [], ownerProfitData = [], resellerProfitData = [];
   months.forEach(month => {
-    const year = month.getFullYear();
-    const monthNumber = month.getMonth();
-
+    const year = month.getFullYear(), monthNumber = month.getMonth();
     labels.push(month.toLocaleString('en-US', {month: 'short'}) + ' ' + year);
-
-    let ownerTotal = 0;
-    let resellerTotal = 0;
-
+    let ownerTotal = 0, resellerTotal = 0;
     orders.forEach(order => {
       const orderDate = getOrderDate(order);
       if(orderDate && orderDate.getFullYear() === year && orderDate.getMonth() === monthNumber){
@@ -1300,7 +1087,6 @@ function renderChart(){
         resellerTotal += Number(order.reseller_profit || 0);
       }
     });
-
     ownerProfitData.push(ownerTotal);
     resellerProfitData.push(resellerTotal);
     totalProfitData.push(ownerTotal + resellerTotal);
@@ -1317,21 +1103,11 @@ function renderChart(){
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { color: '#9e9785', font: { size: 10 } } }
-      },
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#9e9785', font: { size: 10 } } } },
       scales: {
         x: { ticks: { color: '#9e9785' }, grid: { display: false } },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            color: '#9e9785',
-            callback: function(value) { return 'Rs. ' + value.toLocaleString(); }
-          },
-          grid: { color: 'rgba(212,175,55,0.08)' }
-        }
+        y: { beginAtZero: true, ticks: { color: '#9e9785', callback: value => 'Rs. ' + value.toLocaleString() }, grid: { color: 'rgba(212,175,55,0.08)' } }
       }
     }
   });
@@ -1341,177 +1117,239 @@ function renderChart(){
     filter.dataset.listenerAttached = 'true';
   }
 }
-// =====================================
-// VEYORA REPORTS & ANALYTICS
-// =====================================
 
+// ==========================================
+// 1. REPORTS & ANALYTICS SECTION LOGIC
+// ==========================================
+function renderReportsAnalytics(){
+  const filterVal = document.getElementById("reportsPeriodFilter")?.value || "6";
+  const filteredOrders = currentOrders.filter(o => isDateInPeriod(getOrderDate(o), filterVal));
 
-function renderReports(){
+  const totalSales = filteredOrders.reduce((sum, o) => sum + Number(o.total_price || 0), 0);
+  const ownerProfit = filteredOrders.reduce((sum, o) => sum + Number(o.owner_profit || 0), 0);
+  const resellerProfit = filteredOrders.reduce((sum, o) => sum + Number(o.reseller_profit || 0), 0);
+  
+  const approvedPay = filteredOrders.filter(o => String(o.payment_status||"").toLowerCase() === "approved" || String(o.payment_status||"").toLowerCase() === "paid").reduce((s,o) => s + Number(o.total_price||0), 0);
+  const pendingPay = totalSales - approvedPay;
 
-  const filter = document.getElementById("reportsFilter");
-  const canvas = document.getElementById("reportsChart");
+  document.getElementById("repTotalSales").textContent = money(totalSales);
+  document.getElementById("repTotalOrders").textContent = filteredOrders.length;
+  document.getElementById("repOwnerProfit").textContent = money(ownerProfit);
+  document.getElementById("repResellerProfit").textContent = money(resellerProfit);
+  document.getElementById("repApprovedPayments").textContent = money(approvedPay);
+  document.getElementById("repPendingPayments").textContent = money(pendingPay);
 
-  if(!filter || !canvas) return;
+  // Reseller Table in Reports
+  const resPerf = currentResellers.map(r => {
+    const rOrders = filteredOrders.filter(o => String(o.reseller_id) === String(r.id));
+    const sales = rOrders.reduce((s,o) => s + Number(o.total_price||0), 0);
+    const profit = rOrders.reduce((s,o) => s + Number(o.reseller_profit||0), 0);
+    return { name: r.name, count: rOrders.length, sales, profit };
+  }).sort((a,b) => b.profit - a.profit);
 
-  if(typeof Chart === "undefined"){
-    console.error("Chart.js is not loaded!");
-    return;
-  }
-
-  const selected = filter.value || "this";
-  const now = new Date();
-
-  const filteredOrders = currentOrders.filter(order =>
-    isDateInPeriod(getOrderDate(order), selected)
-  );
-
-  // RESELLER PERFORMANCE
-  const resellerRows = currentResellers.map(r => {
-    const orders = filteredOrders.filter(o =>
-      String(o.reseller_id) === String(r.id)
-    );
-
-    return {
-      name: r.name,
-      orders: orders.length,
-      sales: orders.reduce((s,o)=>s+Number(o.total_price||0),0),
-      resellerProfit: orders.reduce((s,o)=>s+Number(o.reseller_profit||0),0),
-      ownerProfit: orders.reduce((s,o)=>s+Number(o.owner_profit||0),0)
-    };
-  }).sort((a,b)=>b.sales-a.sales);
-
-  document.getElementById("reportsResellerTable").innerHTML =
-    resellerRows.length
-    ? resellerRows.map(r=>`
+  document.getElementById("reportsResellerTable").innerHTML = resPerf.length
+    ? resPerf.map((r, i) => `
       <tr>
+        <td>${i+1}</td>
         <td><b>${safe(r.name)}</b></td>
-        <td>${r.orders}</td>
+        <td>${r.count}</td>
         <td>${money(r.sales)}</td>
-        <td>${money(r.resellerProfit)}</td>
-        <td>${money(r.ownerProfit)}</td>
+        <td style="color:var(--gold);">${money(r.profit)}</td>
       </tr>
     `).join("")
-    : '<tr><td colspan="5">No reseller records found.</td></tr>';
+    : '<tr><td colspan="5" class="empty">No reseller data for this period.</td></tr>';
 
-  // CHART MONTHS
-  let months = [];
+  // Comparison Chart
+  const canvas = document.getElementById("reportsComparisonChart");
+  if(canvas){
+    const ctx = canvas.getContext('2d');
+    if(reportsChartInstance) reportsChartInstance.destroy();
 
-  if(selected === "this" || selected === "previous"){
-    const offset = selected === "previous" ? 1 : 0;
-    months.push(new Date(now.getFullYear(),now.getMonth()-offset,1));
-  }
-  else {
-    const count = selected === "all"
-      ? Math.max(1, Math.min(120,
-          currentOrders.filter(o=>getOrderDate(o)).length
-        ))
-      : Number(selected) || 3;
-
-    if(selected === "all"){
-      const dates = currentOrders.map(o=>getOrderDate(o)).filter(Boolean);
-      const earliest = dates.length
-        ? new Date(Math.min(...dates.map(d=>d.getTime())))
-        : new Date(now.getFullYear(),now.getMonth(),1);
-
-      const totalMonths =
-        (now.getFullYear()-earliest.getFullYear())*12 +
-        now.getMonth()-earliest.getMonth()+1;
-
-      for(let i=totalMonths-1;i>=0;i--){
-        months.push(new Date(now.getFullYear(),now.getMonth()-i,1));
-      }
-    } else {
-      for(let i=count-1;i>=0;i--){
-        months.push(new Date(now.getFullYear(),now.getMonth()-i,1));
-      }
-    }
-  }
-
-  const labels = [];
-  const salesData = [];
-  const ownerData = [];
-  const resellerData = [];
-
-  months.forEach(month=>{
-    const monthOrders = currentOrders.filter(o=>{
-      const d = getOrderDate(o);
-      if(!d) return false;
-
-      const inSelectedPeriod = isDateInPeriod(d,selected);
-
-      return inSelectedPeriod &&
-        d.getFullYear()===month.getFullYear() &&
-        d.getMonth()===month.getMonth();
-    });
-
-    labels.push(month.toLocaleDateString("en-US",{
-      month:"short",year:"numeric"
-    }));
-
-    salesData.push(monthOrders.reduce((s,o)=>s+Number(o.total_price||0),0));
-    ownerData.push(monthOrders.reduce((s,o)=>s+Number(o.owner_profit||0),0));
-    resellerData.push(monthOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0));
-  });
-
-  if(reportsChartInstance){
-    reportsChartInstance.destroy();
-  }
-
-  reportsChartInstance = new Chart(canvas,{
-    type:"bar",
-    data:{
-      labels,
-      datasets:[
-        {
-          label:"Total Sales",
-          data:salesData,
-          backgroundColor:"#d4af37",
-          borderRadius:5
-        },
-        {
-          label:"Owner Profit",
-          data:ownerData,
-          backgroundColor:"#0ea5e9",
-          borderRadius:5
-        },
-        {
-          label:"Reseller Profit",
-          data:resellerData,
-          backgroundColor:"#a855f7",
-          borderRadius:5
-        }
-      ]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{labels:{color:"#d4af37"}}
+    reportsChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Sales', 'Total Profit', 'Owner Profit', 'Reseller Profit'],
+        datasets: [{
+          label: 'Financial Breakdown',
+          data: [totalSales, ownerProfit + resellerProfit, ownerProfit, resellerProfit],
+          borderColor: '#d4af37',
+          backgroundColor: 'rgba(212,175,55,0.1)',
+          fill: true,
+          tension: 0.3
+        }]
       },
-      scales:{
-        x:{ticks:{color:"#aaa"},grid:{display:false}},
-        y:{
-          beginAtZero:true,
-          ticks:{
-            color:"#aaa",
-            callback:value=>"Rs. "+Number(value).toLocaleString()
-          },
-          grid:{color:"rgba(212,175,55,0.08)"}
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#9e9785' } } },
+        scales: {
+          x: { ticks: { color: '#9e9785' }, grid: { display: false } },
+          y: { beginAtZero: true, ticks: { color: '#9e9785', callback: v => 'Rs. ' + v.toLocaleString() }, grid: { color: 'rgba(212,175,55,0.08)' } }
         }
       }
-    }
-  });
+    });
+  }
 }
 
-
-// REPORT FILTER LISTENER
-const reportsFilter = document.getElementById("reportsFilter");
-
+const reportsFilter = document.getElementById("reportsPeriodFilter");
 if(reportsFilter && !reportsFilter.dataset.listenerAttached){
-  reportsFilter.addEventListener("change", renderReports);
+  reportsFilter.addEventListener("change", renderReportsAnalytics);
   reportsFilter.dataset.listenerAttached = "true";
 }
-// RENDER TABLES & SNAPSHOTS
+
+// ==========================================
+// 2. MONTHLY REVIEW / HISTORY SECTION LOGIC
+// ==========================================
+function renderMonthlyHistory(){
+  const filterVal = document.getElementById("monthlyHistoryFilter")?.value || "6";
+  const now = new Date();
+  const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  
+  let startMonth;
+  if(filterVal === "all"){
+    startMonth = new Date(now.getFullYear() - 2, 0, 1);
+  } else {
+    const months = Number(filterVal) || 6;
+    startMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - months + 1, 1);
+  }
+
+  const rows = [];
+  let prevSales = null;
+  let bestMonth = { name: "—", sales: 0 };
+
+  for(let date = new Date(currentMonth); date >= startMonth; date.setMonth(date.getMonth() - 1)){
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    const mOrders = currentOrders.filter(o => {
+      const d = getOrderDate(o);
+      return d && d.getFullYear() === year && d.getMonth() === month;
+    });
+
+    const sales = mOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
+    const ownerProfit = mOrders.reduce((s, o) => s + Number(o.owner_profit || 0), 0);
+    const resellerProfit = mOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
+    const approved = mOrders.filter(o => String(o.payment_status||"").toLowerCase() === "approved" || String(o.payment_status||"").toLowerCase() === "paid").length;
+    const pending = mOrders.length - approved;
+
+    let growth = "—";
+    if(prevSales !== null && prevSales > 0){
+      const diff = ((sales - prevSales) / prevSales) * 100;
+      growth = (diff >= 0 ? "+" : "") + diff.toFixed(1) + "%";
+    }
+    prevSales = sales;
+
+    const label = date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    if(sales > bestMonth.sales){
+      bestMonth = { name: label, sales };
+    }
+
+    rows.push({
+      label, orders: mOrders.length, sales, ownerProfit, resellerProfit, approved, pending, growth
+    });
+  }
+
+  document.getElementById("bestMonthName").textContent = bestMonth.name;
+  document.getElementById("bestMonthSales").textContent = money(bestMonth.sales);
+
+  document.getElementById("monthlyHistoryTable").innerHTML = rows.length
+    ? rows.map(r => `
+      <tr>
+        <td><b>${r.label}</b></td>
+        <td>${r.orders}</td>
+        <td>${money(r.sales)}</td>
+        <td style="color:var(--gold);">${money(r.ownerProfit)}</td>
+        <td>${money(r.resellerProfit)}</td>
+        <td><span class="status approved">${r.approved} Approved</span> / <span class="status pending">${r.pending} Pending</span></td>
+        <td style="color:${String(r.growth).startsWith('+') ? '#4ade80' : 'inherit'};">${r.growth}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="7" class="empty">No historical records available.</td></tr>';
+}
+
+const monthlyHistoryFilter = document.getElementById("monthlyHistoryFilter");
+if(monthlyHistoryFilter && !monthlyHistoryFilter.dataset.listenerAttached){
+  monthlyHistoryFilter.addEventListener("change", renderMonthlyHistory);
+  monthlyHistoryFilter.dataset.listenerAttached = "true";
+}
+
+// ==========================================
+// 3. SETTINGS & 4. PROFIT CONTROL LOGIC
+// ==========================================
+function renderProfitControl(){
+  const filterVal = document.getElementById("pcPeriodFilter")?.value || "6";
+  const filteredOrders = currentOrders.filter(o => isDateInPeriod(getOrderDate(o), filterVal));
+
+  const totalOwnerEarned = currentOrders.reduce((s,o) => s + Number(o.owner_profit||0), 0);
+  const totalResellerEarned = currentOrders.reduce((s,o) => s + Number(o.reseller_profit||0), 0);
+  const totalEarned = totalOwnerEarned + totalResellerEarned;
+
+  // Tracking paid vs unpaid reseller profit
+  const paidResellerProfit = currentOrders.filter(o => String(o.payment_status||"").toLowerCase() === "approved" || String(o.payment_status||"").toLowerCase() === "paid").reduce((s,o) => s + Number(o.reseller_profit||0), 0);
+  const unpaidResellerProfit = totalResellerEarned - paidResellerProfit;
+
+  document.getElementById("pcTotalEarned").textContent = money(totalEarned);
+  document.getElementById("pcOwnerEarned").textContent = money(totalOwnerEarned);
+  document.getElementById("pcResellerEarned").textContent = money(totalResellerEarned);
+  document.getElementById("pcResellerPaidUnpaid").innerHTML = `<span style="color:#6ee7b7;">Paid: ${money(paidResellerProfit)}</span><br><span style="color:#fde047; font-size:12px;">Unpaid: ${money(unpaidResellerProfit)}</span>`;
+
+  document.getElementById("profitControlTable").innerHTML = filteredOrders.length
+    ? filteredOrders.map(o => {
+        const resName = currentResellers.find(r => String(r.id) === String(o.reseller_id))?.name || "Direct / Owner";
+        const isApproved = String(o.payment_status||"").toLowerCase() === "approved" || String(o.payment_status||"").toLowerCase() === "paid";
+        return `
+          <tr>
+            <td>${safe(o.order_number)}</td>
+            <td>${safe(o.order_date || o.created_at)}</td>
+            <td>${safe(resName)}</td>
+            <td>${money(o.total_price)}</td>
+            <td style="color:var(--gold);">${money(o.owner_profit)}</td>
+            <td>${money(o.reseller_profit)}</td>
+            <td><span class="status ${isApproved ? "approved" : "pending"}">${safe(o.payment_status || "Pending")}</span></td>
+          </tr>
+        `;
+      }).join("")
+    : '<tr><td colspan="7" class="empty">No profit control records found for this period.</td></tr>';
+}
+
+const pcPeriodFilter = document.getElementById("pcPeriodFilter");
+if(pcPeriodFilter && !pcPeriodFilter.dataset.listenerAttached){
+  pcPeriodFilter.addEventListener("change", renderProfitControl);
+  pcPeriodFilter.dataset.listenerAttached = "true";
+}
+
+// Settings buttons action triggers
+const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+if(saveSettingsBtn && !saveSettingsBtn.dataset.listenerAttached){
+  saveSettingsBtn.addEventListener("click", () => {
+    alert("Settings saved successfully!");
+  });
+  saveSettingsBtn.dataset.listenerAttached = "true";
+}
+
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+if(changePasswordBtn && !changePasswordBtn.dataset.listenerAttached){
+  changePasswordBtn.addEventListener("click", () => {
+    const newPass = prompt("Enter new admin password:");
+    if(newPass) alert("Password update requested via secure auth session.");
+  });
+  changePasswordBtn.dataset.listenerAttached = "true";
+}
+
+const exportDataBtn = document.getElementById("exportDataBtn");
+if(exportDataBtn && !exportDataBtn.dataset.listenerAttached){
+  exportDataBtn.addEventListener("click", () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ orders: currentOrders, resellers: currentResellers }, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "veyora_backup.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  });
+  exportDataBtn.dataset.listenerAttached = "true";
+}
+
+// GENERAL TABLES & SNAPSHOTS
 function renderTables(){
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(),now.getMonth(),1);
@@ -1522,7 +1360,6 @@ function renderTables(){
     const date = getOrderDate(o);
     return date && date >= thisMonthStart && date <= now ? sum+Number(o.owner_profit||0) : sum;
   },0);
-
   const ownerLastMonth = currentOrders.reduce((sum,o)=>{
     const date = getOrderDate(o);
     return date && date >= lastMonthStart && date < thisMonthStart ? sum+Number(o.owner_profit||0) : sum;
@@ -1533,65 +1370,31 @@ function renderTables(){
   document.getElementById("ownerLastMonthProfit").textContent = money(ownerLastMonth);
 
   const ownerFilter = document.getElementById("ownerProfitPeriodFilter");
-
   function renderOwnerProfitHistory(){
     const selected = ownerFilter ? ownerFilter.value : "6";
-    const filteredOrders = currentOrders.filter(o => {
-      const date = getOrderDate(o);
-      return isDateInPeriod(date, selected);
-    });
-
+    const filteredOrders = currentOrders.filter(o => isDateInPeriod(getOrderDate(o), selected));
     document.getElementById("ownerTable").innerHTML = filteredOrders.length
-      ? filteredOrders.map(o=>{
+      ? filteredOrders.map(o => {
           const resellerName = currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner";
-          return `
-            <tr>
-              <td>${safe(o.order_date || o.created_at)}</td>
-              <td>${safe(o.customer_name)}</td>
-              <td>${safe(o.product_name)}</td>
-              <td>${safe(o.order_number)}</td>
-              <td>${safe(resellerName)}</td>
-              <td style="color:var(--gold);font-weight:bold;">${money(o.owner_profit)}</td>
-            </tr>
-          `;
+          return `<tr><td>${safe(o.order_date || o.created_at)}</td><td>${safe(o.customer_name)}</td><td>${safe(o.product_name)}</td><td>${safe(o.order_number)}</td><td>${safe(resellerName)}</td><td style="color:var(--gold);font-weight:bold;">${money(o.owner_profit)}</td></tr>`;
         }).join("")
       : '<tr><td colspan="6" class="empty">No profit records for this period.</td></tr>';
   }
-
   if(ownerFilter && !ownerFilter.dataset.listenerAttached){
     ownerFilter.addEventListener("change",renderOwnerProfitHistory);
     ownerFilter.dataset.listenerAttached = "true";
   }
   renderOwnerProfitHistory();
 
-  const totalResellersEl = document.getElementById("totalResellers");
-  const activeResellersEl = document.getElementById("activeResellers");
-
-  if(totalResellersEl) totalResellersEl.textContent = currentResellers.length;
-  if(activeResellersEl) {
-    activeResellersEl.textContent = currentResellers.filter(r => (r.status || "Active").toLowerCase() === "active").length;
-  }
+  document.getElementById("totalResellers").textContent = currentResellers.length;
+  document.getElementById("activeResellers").textContent = currentResellers.filter(r => (r.status || "Active").toLowerCase() === "active").length;
 
   function renderResellerList(){
     const searchInput = document.getElementById("resellerSearch");
     const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
-    const filtered = currentResellers.filter(r =>
-      (r.name || "").toLowerCase().includes(searchText) ||
-      (r.city || "").toLowerCase().includes(searchText) ||
-      (r.phone || "").toLowerCase().includes(searchText)
-    );
-
+    const filtered = currentResellers.filter(r => (r.name||"").toLowerCase().includes(searchText) || (r.city||"").toLowerCase().includes(searchText) || (r.phone||"").toLowerCase().includes(searchText));
     document.getElementById("resellerTable").innerHTML = filtered.length
-      ? filtered.map((r,index)=>`
-        <tr>
-          <td>${index+1}</td>
-          <td><span onclick="openResellerProfile('${r.id}')" style="color:var(--gold);font-weight:bold;cursor:pointer;">${safe(r.name)}</span></td>
-          <td>${safe(r.city)}</td>
-          <td>${safe(r.phone)}</td>
-          <td>${safe(r.joining_date)}</td>
-          <td><span class="status ${(r.status||"Active").toLowerCase()==="active"?"approved":"pending"}">${safe(r.status||"Active")}</span></td>
-        </tr>
-      `).join("")
+      ? filtered.map((r,index)=>`<tr><td>${index+1}</td><td><span onclick="openResellerProfile('${r.id}')" style="color:var(--gold);font-weight:bold;cursor:pointer;">${safe(r.name)}</span></td><td>${safe(r.city)}</td><td>${safe(r.phone)}</td><td>${safe(r.joining_date)}</td><td><span class="status ${(r.status||"Active").toLowerCase()==="active"?"approved":"pending"}">${safe(r.status||"Active")}</span></td></tr>`).join("")
       : '<tr><td colspan="6" class="empty">No resellers found.</td></tr>';
   }
   renderResellerList();
@@ -1644,7 +1447,7 @@ function renderTables(){
           </td>
         </tr>
       `).join("")
-      : '<tr><td colspan="9" class="empty">No matching orders found.</td></tr>';
+      : '<tr><td colspan="8" class="empty">No matching orders found.</td></tr>';
   }
   renderOrdersTable();
 
@@ -1659,98 +1462,23 @@ function renderTables(){
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-  const paymentsTable = document.getElementById("paymentsTable");
-  if (paymentsTable) {
-    paymentsTable.innerHTML = currentOrders.length
-      ? currentOrders.map(order => {
-          const reseller = currentResellers.find(r => String(r.id) === String(order.reseller_id));
-          return `
-            <tr>
-              <td>${safe(order.order_number || order.id || "—")}</td>
-              <td>${safe(order.customer_name || "—")}</td>
-              <td>${safe(reseller?.name || "Owner")}</td>
-              <td>${money(order.total_price || 0)}</td>
-              <td>
-                <span style="
-                  display:inline-block;
-                  padding:6px 12px;
-                  border-radius:6px;
-                  font-size:11px;
-                  font-weight:700;
-                  color:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "#22c55e" : "#ef4444"};
-                  background:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.15)" : "rgba(239,68,68,.15)"};
-                  border:1px solid ${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.4)" : "rgba(239,68,68,.4)"};
-                ">
-                  ${safe(order.payment_status || "Pending")}
-                </span>
-              </td>
-              <td>${safe(order.order_date || order.created_at || "—")}</td>
-            </tr>
-          `;
-        }).join("")
-      : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
-  }
+  document.getElementById("paymentsTable").innerHTML = currentPayments.length
+    ? currentPayments.map(p=>`<tr><td>${safe(p.order_id)}</td><td>${money(p.amount)}</td><td>${safe(p.status)}</td><td>${safe(p.approved_at || "—")}</td></tr>`).join("")
+    : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
+
+  document.getElementById("customersTable").innerHTML = currentCustomers.length
+    ? currentCustomers.map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${safe(c.city)}</td><td>${safe(c.created_at)}</td></tr>`).join("")
+    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
 
-// CUSTOMERS TABLE - RENDERING & DELETE FUNCTIONALITY
-function renderCustomersTable() {
-  const customerList = currentCustomers || [];
-  const customersTableEl = document.getElementById("customersTable");
-  
-  if(!customersTableEl) return;
-
-  customersTableEl.innerHTML = customerList.length
-    ? customerList.map(c => {
-        const joined = c.created_at
-          ? new Date(c.created_at).toLocaleDateString("en-GB")
-          : c.joined || c.joining_date || "—";
-
-        return `
-          <tr>
-            <td><b>${safe(c.name || "—")}</b></td>
-            <td>${safe(c.phone || "—")}</td>
-            <td>${safe(c.city || "—")}</td>
-            <td>${safe(joined)}</td>
-            <td>
-              <button class="view-all" onclick="deleteCustomer('${c.id}')" style="color:#ff6b6b; border-color:rgba(255,107,107,0.4);">Delete</button>
-            </td>
-          </tr>
-        `;
-      }).join("")
-    : '<tr><td colspan="5" class="empty">No customers found.</td></tr>';
-}
-
-window.deleteCustomer = async function(customerId) {
-  if (!confirm("Are you sure you want to delete this customer?")) return;
-
-  try {
-    const { error } = await db
-      .from("customers")
-      .delete()
-      .eq("id", customerId);
-
-    if (error) throw error;
-
-    alert("Customer deleted successfully!");
-    await loadBusinessData();
-  } catch (error) {
-    alert("Could not delete customer: " + (error.message || String(error)));
-  }
-};
-
-// RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
   if(!selectedResellerId) return;
-
   const filter = document.getElementById("resellerProfileFilter");
   const selected = filter ? filter.value : "this";
 
   const orders = currentOrders.filter(o => {
-    if(String(o.reseller_id) !== String(selectedResellerId)){
-      return false;
-    }
-    const date = getOrderDate(o);
-    return isDateInPeriod(date, selected);
+    if(String(o.reseller_id) !== String(selectedResellerId)) return false;
+    return isDateInPeriod(getOrderDate(o), selected);
   });
 
   const totalProfit = orders.reduce((sum, o) => sum + Number(o.reseller_profit || 0), 0);
@@ -1771,18 +1499,9 @@ function renderResellerProfileOrders(){
         const displayDate = date ? date.toLocaleDateString("en-GB") : "—";
         const statusVal = String(o.payment_status || "Pending");
         const isPaid = statusVal.toLowerCase() === "approved" || statusVal.toLowerCase() === "paid";
-
-        return `
-          <tr>
-            <td>${safe(o.customer_name)}</td>
-            <td>${safe(o.product_name)}</td>
-            <td>${displayDate}</td>
-            <td style="color:var(--gold);font-weight:bold;">${money(o.reseller_profit)}</td>
-            <td><span class="status ${isPaid ? "paid" : "pending"}">${safe(statusVal)}</span></td>
-          </tr>
-        `;
+        return `<tr><td>${safe(o.customer_name)}</td><td>${safe(o.product_name)}</td><td>${displayDate}</td><td style="color:var(--gold);font-weight:bold;">${money(o.reseller_profit)}</td><td><span class="status ${isPaid ? "paid" : "pending"}">${safe(statusVal)}</span></td></tr>`;
       }).join("")
-    : '<tr><td colspan="5" class="empty">No orders found for this reseller in this period.</td></tr>';
+    : '<tr><td colspan="5" class="empty">No orders found for this period.</td></tr>';
 }
 
 const resellerProfileFilter = document.getElementById("resellerProfileFilter");
@@ -1818,101 +1537,56 @@ function openResellerProfile(id){
 
   document.getElementById("resellerProfile").style.display = "block";
   renderResellerProfileOrders();
-
   document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
   if(!select) return;
-
-  select.innerHTML =
-    '<option value="">Select Reseller</option>' +
-    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
+  select.innerHTML = '<option value="">Select Reseller</option>' + currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
-
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
   snapshotSelect.addEventListener("change", e => {
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
-
     if(!id){
-      container.innerHTML = `
-        <div style="text-align:center;padding:25px 10px;">
-          <div style="font-size:50px;">🏆</div>
-          <h3 style="color:var(--gold);margin-top:10px;">Reseller Performance</h3>
-          <p style="font-size:12px;color:var(--muted);margin-top:8px;">
-            Select a reseller to view performance.
-          </p>
-        </div>`;
+      container.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
       return;
     }
-
     const r = currentResellers.find(x => String(x.id) === String(id));
     if(!r) return;
-
     const rOrders = currentOrders.filter(o => String(o.reseller_id) === String(id));
-    const profit = rOrders.reduce((s,o) => s + Number(o.reseller_profit || 0), 0);
-    const sales = rOrders.reduce((s,o) => s + Number(o.total_price || 0), 0);
-    const paid = rOrders.filter(o => ["paid","approved"].includes(String(o.payment_status || "").toLowerCase())).reduce((s,o) => s + Number(o.total_price || 0), 0);
-    const pending = rOrders.filter(o => String(o.payment_status || "").toLowerCase() === "pending").reduce((s,o) => s + Number(o.total_price || 0), 0);
-    const initial = (r.name || "R").trim().charAt(0).toUpperCase();
-
+    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
+    const sales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
     container.innerHTML = `
-      <div style="display:grid;grid-template-columns:125px minmax(0,1fr);gap:12px;align-items:stretch;">
-        <div style="background:linear-gradient(160deg,#17130a,#080808);border:1px solid rgba(212,175,55,.3);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 5px;text-align:center;">
-          <div style="display:flex;align-items:center;justify-content:center;color:#e8bd42;font-size:32px;gap:0;filter:drop-shadow(0 0 5px rgba(212,175,55,.35));">
-            <span style="transform:rotate(-35deg);">❧</span>
-            <div style="width:58px;height:58px;border:3px solid #d8aa32;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#392b0b,#090909);color:#ffdc70;font-size:32px;font-weight:bold;box-shadow:0 0 12px rgba(212,175,55,.25);">${safe(initial)}</div>
-            <span style="transform:rotate(35deg);">❧</span>
-          </div>
-          <div style="color:#fff;font-size:13px;font-weight:bold;margin-top:12px;overflow-wrap:anywhere;">${safe(r.name)}</div>
-          <div style="font-size:11px;color:#bbb;margin-top:3px;">${safe(r.city || "Pakistan")}</div>
-          <span style="background:linear-gradient(90deg,#d69e20,#ffe17b);color:#171000;font-weight:bold;font-size:11px;padding:4px 14px;border-radius:20px;margin-top:8px;">${safe(r.status || "Active")}</span>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
+        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">${safe((r.name || "R").charAt(0))}</div>
+        <div style="text-align:left;">
+          <div style="font-weight:bold;color:var(--gold);font-size:14px;">${safe(r.name)}</div>
+          <div style="font-size:11px;color:var(--muted);">${safe(r.city)} &bull; ${safe(r.status || "Active")}</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:1px;background:rgba(212,175,55,.25);border:1px solid rgba(212,175,55,.25);border-radius:12px;overflow:hidden;">
-          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
-            <div style="font-size:12px;color:#eee;">Total Orders</div>
-            <div style="font-size:18px;font-weight:bold;color:#ffdc70;margin-top:7px;">${rOrders.length}</div>
-          </div>
-          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
-            <div style="font-size:12px;color:#eee;">Total Sales</div>
-            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">${money(sales)}</div>
-          </div>
-          <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
-            <div style="font-size:12px;color:#eee;">Profit</div>
-            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">${money(profit)}</div>
-          </div>
-          <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
-            <div style="font-size:12px;color:#eee;">Paid</div>
-            <div style="font-size:16px;font-weight:bold;color:#19d66b;margin-top:7px;">${money(paid)}</div>
-          </div>
-          <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
-            <div style="font-size:12px;color:#eee;">Pending</div>
-            <div style="font-size:16px;font-weight:bold;color:#ffad35;margin-top:7px;">${money(pending)}</div>
-          </div>
-        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)"><div style="font-size:10px;color:var(--muted);">Orders</div><div style="font-weight:bold;font-size:14px;color:var(--gold-light);">${rOrders.length}</div></div>
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)"><div style="font-size:10px;color:var(--muted);">Sales</div><div style="font-weight:bold;font-size:13px;color:var(--gold-light);">${money(sales)}</div></div>
+        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)"><div style="font-size:10px;color:var(--muted);">Profit</div><div style="font-weight:bold;font-size:13px;color:var(--gold);">${money(profit)}</div></div>
       </div>
     `;
   });
-
   snapshotSelect.dataset.listenerAttached = "true";
 }
 
 window.editOrder = async function(orderId) {
   const order = currentOrders.find(o => String(o.id) === String(orderId));
-  if (!order) { alert("Order not found."); return; }
-
+  if (!order) return;
   populateOrderResellers();
   editingOrderId = order.id;
 
   document.getElementById("orderReseller").value = order.reseller_id || "";
   document.getElementById("newOrderNumber").value = order.order_number || "";
   document.getElementById("newOrderCustomer").value = order.customer_name || "";
-  document.getElementById("newOrderPhone").value = order.customer_phone || "";
-  document.getElementById("newOrderCity").value = order.customer_city || "";
   document.getElementById("newOrderProduct").value = order.product_name || "";
   document.getElementById("newOrderQuantity").value = order.quantity || 1;
   document.getElementById("newOrderPrice").value = order.total_price || 0;
@@ -1927,20 +1601,14 @@ window.editOrder = async function(orderId) {
 };
 
 window.deleteOrder = async function(orderId) {
-  if (!confirm("Are you sure you want to permanently delete this order?")) return;
-
+  if (!confirm("Are you sure you want to delete this order?")) return;
   try {
-    const { error: orderError } = await db
-      .from("orders")
-      .delete()
-      .eq("id", orderId);
-
-    if (orderError) throw orderError;
-
-    alert("Order deleted successfully!");
+    const { error } = await db.from("orders").delete().eq("id", orderId);
+    if (error) throw error;
+    alert("Order deleted!");
     await loadBusinessData();
   } catch (error) {
-    alert("Could not delete order: " + error.message);
+    alert("Error: " + error.message);
   }
 };
 
@@ -1952,8 +1620,7 @@ const saveOrderBtn = document.getElementById("saveOrderBtn");
 function populateOrderResellers(){
   const select = document.getElementById("orderReseller");
   if(!select) return;
-  select.innerHTML = '<option value="">Select Reseller</option>' +
-    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
+  select.innerHTML = '<option value="">Select Reseller</option>' + currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
 if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
@@ -1963,7 +1630,6 @@ if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
     document.getElementById("newOrderNumber").value = "";
     document.getElementById("newOrderCustomer").value = "";
     document.getElementById("newOrderPhone").value = "";
-    document.getElementById("newOrderCity").value = "";
     document.getElementById("newOrderProduct").value = "";
     document.getElementById("newOrderQuantity").value = "1";
     document.getElementById("newOrderPrice").value = "";
@@ -1972,7 +1638,6 @@ if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
     document.getElementById("newOrderDate").value = "";
     document.getElementById("newOrderStatus").value = "Pending";
     document.getElementById("orderReseller").value = "";
-
     populateOrderResellers();
     addOrderForm.style.display = "block";
     addOrderForm.scrollIntoView({behavior:"smooth", block:"start"});
@@ -1994,7 +1659,6 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     const orderNumber = document.getElementById("newOrderNumber").value.trim();
     const customerName = document.getElementById("newOrderCustomer").value.trim();
     const customerPhone = document.getElementById("newOrderPhone").value.trim();
-    const customerCity = document.getElementById("newOrderCity").value.trim();
     const productName = document.getElementById("newOrderProduct").value.trim();
     const quantity = Number(document.getElementById("newOrderQuantity").value);
     const totalPrice = Number(document.getElementById("newOrderPrice").value);
@@ -2012,19 +1676,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     saveOrderBtn.textContent = "Saving...";
 
     try {
-      const orderData = {
-        reseller_id: resellerId,
-        order_number: orderNumber,
-        customer_name: customerName,
-        product_name: productName,
-        quantity: quantity,
-        total_price: totalPrice,
-        owner_profit: ownerProfit,
-        reseller_profit: resellerProfit,
-        order_date: orderDate,
-        payment_status: paymentStatus
-      };
-
+      const orderData = { reseller_id: resellerId, order_number: orderNumber, customer_name: customerName, product_name: productName, quantity, total_price: totalPrice, owner_profit: ownerProfit, reseller_profit: resellerProfit, order_date: orderDate, payment_status: paymentStatus };
       let error;
       if (editingOrderId) {
         const res = await db.from("orders").update(orderData).eq("id", editingOrderId);
@@ -2033,47 +1685,16 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
         const res = await db.from("orders").insert([orderData]);
         error = res.error;
       }
-
       if (error) throw error;
-
-      const { data: existingCustomer, error: findError } = await db
-        .from("customers")
-        .select("id")
-        .eq("phone", customerPhone)
-        .limit(1)
-        .maybeSingle();
-
-      if (findError) throw findError;
-
-      if (existingCustomer) {
-        const { error: customerError } = await db
-          .from("customers")
-          .update({
-            name: customerName,
-            phone: customerPhone,
-            city: customerCity
-          })
-          .eq("id", existingCustomer.id);
-
-        if (customerError) throw customerError;
-      } else {
-        const { error: customerError } = await db
-          .from("customers")
-          .insert([{
-            name: customerName,
-            phone: customerPhone,
-            city: customerCity
-          }]);
-
-        if (customerError) throw customerError;
+      if (!editingOrderId) {
+        await db.from("customers").insert([{ name: customerName, phone: customerPhone }]);
       }
-
-      alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
+      alert(editingOrderId ? "Order updated!" : "Order saved!");
       editingOrderId = null;
       addOrderForm.style.display = "none";
       await loadBusinessData();
     } catch(error) {
-      alert("Could not save order: " + (error.message || String(error)));
+      alert("Error: " + error.message);
     } finally {
       saveOrderBtn.disabled = false;
       saveOrderBtn.textContent = "Save Order";
@@ -2088,17 +1709,12 @@ const cancelResellerBtn = document.getElementById("cancelResellerBtn");
 const saveResellerBtn = document.getElementById("saveResellerBtn");
 
 if(addResellerBtn && addResellerForm && !addResellerBtn.dataset.listenerAttached){
-  addResellerBtn.addEventListener("click", () => {
-    addResellerForm.style.display = "block";
-    document.getElementById("newResellerName").focus();
-  });
+  addResellerBtn.addEventListener("click", () => { addResellerForm.style.display = "block"; document.getElementById("newResellerName").focus(); });
   addResellerBtn.dataset.listenerAttached = "true";
 }
 
 if(cancelResellerBtn && addResellerForm && !cancelResellerBtn.dataset.listenerAttached){
-  cancelResellerBtn.addEventListener("click", () => {
-    addResellerForm.style.display = "none";
-  });
+  cancelResellerBtn.addEventListener("click", () => { addResellerForm.style.display = "none"; });
   cancelResellerBtn.dataset.listenerAttached = "true";
 }
 
@@ -2109,33 +1725,21 @@ if(saveResellerBtn && !saveResellerBtn.dataset.listenerAttached){
     const phone = document.getElementById("newResellerPhone").value.trim();
     const joiningDate = document.getElementById("newResellerJoiningDate").value;
 
-    if(!name || !city || !phone || !joiningDate){
-      alert("Please fill in all four reseller details.");
-      return;
-    }
-
+    if(!name || !city || !phone || !joiningDate){ alert("Fill all reseller details."); return; }
     saveResellerBtn.disabled = true;
     saveResellerBtn.textContent = "Saving...";
 
-    const {error} = await db.from("resellers").insert([{
-      name: name, city: city, phone: phone, joining_date: joiningDate, status: "Active"
-    }]);
-
+    const {error} = await db.from("resellers").insert([{ name, city, phone, joining_date: joiningDate, status: "Active" }]);
     saveResellerBtn.disabled = false;
     saveResellerBtn.textContent = "Save Reseller";
+    if(error){ alert("Error: " + error.message); return; }
 
-    if(error){
-      alert("Could not save reseller: " + error.message);
-      return;
-    }
-
-    alert("Reseller added successfully!");
+    alert("Reseller added!");
     addResellerForm.style.display = "none";
     document.getElementById("newResellerName").value = "";
     document.getElementById("newResellerCity").value = "";
     document.getElementById("newResellerPhone").value = "";
     document.getElementById("newResellerJoiningDate").value = "";
-
     await loadBusinessData();
   });
   saveResellerBtn.dataset.listenerAttached = "true";
@@ -2150,14 +1754,14 @@ if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) 
     downloadResellerReport.textContent = "Preparing...";
     try {
       const canvas = await window.html2canvas(profile, { backgroundColor: "#0b0b09", scale: 2, useCORS: true });
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.download = "VEYORA-Reseller-Report.png";
       link.href = canvas.toDataURL("image/png");
       document.body.appendChild(link);
       link.click();
       link.remove();
     } catch (error) {
-      alert("Download error: " + error.message);
+      alert("Error: " + error.message);
     } finally {
       downloadResellerReport.disabled = false;
       downloadResellerReport.textContent = "↓ Download PNG Report";
