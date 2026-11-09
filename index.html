@@ -795,13 +795,91 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       </div>
     </section>
 
-    <section id="page-reports" class="section">
-      <p class="section-intro">Business performance and analytical reports.</p>
+   <section id="page-reports" class="section">
+
+  <p class="section-intro">Business performance and analytical reports.</p>
+
+  <div class="panel">
+
+    <div class="panel-head">
+      <h3 style="color:var(--gold);">Reports & Analytics</h3>
+
+      <select id="reportsFilter" class="filter">
+        <option value="this">This Month</option>
+        <option value="previous">Previous Month</option>
+        <option value="3">Last 3 Months</option>
+        <option value="6">Last 6 Months</option>
+        <option value="all">Overall</option>
+      </select>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;padding:15px;">
+
       <div class="panel">
-        <h3>Reports & Analytics</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Comprehensive sales, profits, and traffic reports are available through live synchronized database queries.</p>
+        <p>Total Sales</p>
+        <h2 id="reportSales" style="color:var(--gold);">Rs. 0</h2>
       </div>
-    </section>
+
+      <div class="panel">
+        <p>Total Orders</p>
+        <h2 id="reportOrders" style="color:var(--gold);">0</h2>
+      </div>
+
+      <div class="panel">
+        <p>Owner Profit</p>
+        <h2 id="reportOwnerProfit" style="color:var(--gold);">Rs. 0</h2>
+      </div>
+
+      <div class="panel">
+        <p>Reseller Profit</p>
+        <h2 id="reportResellerProfit" style="color:var(--gold);">Rs. 0</h2>
+      </div>
+
+      <div class="panel">
+        <p>Approved Payments</p>
+        <h2 id="reportApproved" style="color:var(--gold);">Rs. 0</h2>
+      </div>
+
+      <div class="panel">
+        <p>Pending Payments</p>
+        <h2 id="reportPending" style="color:var(--gold);">Rs. 0</h2>
+      </div>
+
+    </div>
+
+    <!-- SALES CHART -->
+    <div class="panel" style="padding:20px;margin:15px;">
+      <h3 style="color:var(--gold);margin-bottom:15px;">Sales & Profit Analysis</h3>
+      <div style="height:300px;">
+        <canvas id="reportsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- RESELLER PERFORMANCE -->
+    <div class="panel" style="padding:20px;margin:15px;">
+      <h3 style="color:var(--gold);margin-bottom:15px;">Reseller Performance</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Reseller</th>
+              <th>Orders</th>
+              <th>Total Sales</th>
+              <th>Reseller Profit</th>
+              <th>Owner Profit</th>
+            </tr>
+          </thead>
+          <tbody id="reportsResellerTable">
+            <tr><td colspan="5">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
 
     <section id="page-history" class="section">
       <p class="section-intro">Your historical business records are retained in the database.</p>
