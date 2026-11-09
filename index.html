@@ -2994,5 +2994,14 @@ renderAll = function(){
   renderProfitControl();
 };
 </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("VEYORA App Ready"))
+      .catch(error => console.error("Service Worker Error:", error));
+  });
+}
+</script>
 </body>
 </html>
