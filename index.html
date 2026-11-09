@@ -578,6 +578,119 @@ th{
   font-size:12px;
   margin-top:3px;
 }
+  /* PREMIUM RESELLER SNAPSHOT */
+
+.snapshot-empty{
+  text-align:center;
+  padding:25px 10px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.snapshot-profile{
+  text-align:center;
+  padding:15px 10px 20px;
+  border-bottom:1px solid rgba(212,175,55,.2);
+  margin-bottom:15px;
+}
+
+.snapshot-avatar{
+  width:75px;
+  height:75px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  border:3px solid #d4af37;
+  background:radial-gradient(circle,#493714,#090806);
+  color:#ffd700;
+  font-size:32px;
+  font-weight:bold;
+  box-shadow:0 0 20px rgba(212,175,55,.25);
+}
+
+.snapshot-name{
+  color:var(--gold-light);
+  font-size:17px;
+  font-weight:bold;
+}
+
+.snapshot-location{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.snapshot-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:9px;
+  padding:5px 13px;
+  border:1px solid rgba(46,204,113,.3);
+  border-radius:20px;
+  color:#55d98b;
+  background:rgba(46,204,113,.07);
+  font-size:11px;
+}
+
+.snapshot-status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#2ecc71;
+}
+
+.snapshot-stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.snapshot-stat{
+  background:linear-gradient(145deg,#15130e,#090909);
+  border:1px solid rgba(212,175,55,.2);
+  border-radius:11px;
+  padding:13px 8px;
+  text-align:center;
+  min-width:0;
+  transition:.2s;
+}
+
+.snapshot-stat:hover{
+  border-color:var(--gold);
+  transform:translateY(-2px);
+}
+
+.snapshot-stat-icon{
+  font-size:19px;
+  margin-bottom:5px;
+}
+
+.snapshot-stat-label{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.6px;
+  margin-bottom:6px;
+}
+
+.snapshot-stat-value{
+  color:var(--gold-light);
+  font-size:14px;
+  font-weight:bold;
+  overflow-wrap:anywhere;
+}
+
+.snapshot-stat-value.gold-value{
+  color:#ffd700;
+}
+
+@media(max-width:500px){
+  .snapshot-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
 </style>
 </head>
 
@@ -2143,29 +2256,41 @@ function openResellerProfile(id){
   });
 }
 
-// SNAPSHOT DROPDOWN
+// PREMIUM RESELLER DETAILS SNAPSHOT
+
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
   if(!select) return;
+
+  const previousValue = select.value;
 
   select.innerHTML =
     '<option value="">Select Reseller</option>'+
     currentResellers.map(r=>
       `<option value="${safe(r.id)}">${safe(r.name)}</option>`
     ).join("");
+
+  if(currentResellers.some(r=>String(r.id)===String(previousValue))){
+    select.value = previousValue;
+  }
 }
 
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
 
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
+
   snapshotSelect.addEventListener("change",e=>{
+
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
 
+    if(!container) return;
+
     if(!id){
       container.innerHTML = `
-        <div style="font-size:12px;color:var(--muted);padding:10px;">
-          Choose a reseller above to view performance analytics.
+        <div class="snapshot-empty">
+          <div style="font-size:32px;">👤</div>
+          <div>Select a reseller to view performance details</div>
         </div>
       `;
       return;
@@ -2186,45 +2311,73 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
       (s,o)=>s+Number(o.total_price||0),0
     );
 
+    const paid = rOrders.reduce(
+      (s,o)=>s+Number(o.reseller_paid||0),0
+    );
+
+    const pending = profit-paid;
+
     container.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
-        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">
-          ${safe((r.name||"R").charAt(0))}
+
+      <div class="snapshot-profile">
+
+        <div class="snapshot-avatar">
+          ${safe((r.name||"R").charAt(0).toUpperCase())}
         </div>
 
-        <div style="text-align:left;">
-          <div style="font-weight:bold;color:var(--gold);font-size:14px;">
-            ${safe(r.name)}
-          </div>
-
-          <div style="font-size:11px;color:var(--muted);">
-            ${safe(r.city)} &bull; ${safe(r.status||"Active")}
-          </div>
+        <div class="snapshot-name">
+          ${safe(r.name)}
         </div>
+
+        <div class="snapshot-location">
+          ${safe(r.city||"Pakistan")}
+        </div>
+
+        <div class="snapshot-status">
+          <span class="snapshot-status-dot"></span>
+          ${safe(r.status||"Active")}
+        </div>
+
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Orders</div>
-          <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">${rOrders.length}</div>
+      <div class="snapshot-stats">
+
+        <div class="snapshot-stat">
+          <div class="snapshot-stat-icon">📦</div>
+          <div class="snapshot-stat-label">TOTAL ORDERS</div>
+          <div class="snapshot-stat-value">${rOrders.length}</div>
         </div>
 
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Sales</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">${money(sales)}</div>
+        <div class="snapshot-stat">
+          <div class="snapshot-stat-icon">💰</div>
+          <div class="snapshot-stat-label">TOTAL SALES</div>
+          <div class="snapshot-stat-value">${money(sales)}</div>
         </div>
 
-        <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
-          <div style="font-size:10px;color:var(--muted);">Profit</div>
-          <div style="font-weight:bold;font-size:13px;color:var(--gold);">${money(profit)}</div>
+        <div class="snapshot-stat">
+          <div class="snapshot-stat-icon">🏆</div>
+          <div class="snapshot-stat-label">TOTAL PROFIT</div>
+          <div class="snapshot-stat-value gold-value">${money(profit)}</div>
         </div>
+
+        <div class="snapshot-stat">
+          <div class="snapshot-stat-icon">✅</div>
+          <div class="snapshot-stat-label">PAID PROFIT</div>
+          <div class="snapshot-stat-value">${money(paid)}</div>
+        </div>
+
+        <div class="snapshot-stat">
+          <div class="snapshot-stat-icon">⏳</div>
+          <div class="snapshot-stat-label">PENDING PROFIT</div>
+          <div class="snapshot-stat-value">${money(pending)}</div>
+        </div>
+
       </div>
     `;
   });
 
   snapshotSelect.dataset.listenerAttached = "true";
 }
-
 // EDIT ORDER
 window.editOrder = async function(orderId){
   const order = currentOrders.find(o=>String(o.id)===String(orderId));
