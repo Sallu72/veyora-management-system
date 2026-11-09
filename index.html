@@ -177,31 +177,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 .logout{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-border);padding:10px;border-radius:8px; font-weight:600; font-size:12px}
 .logout:hover{background:rgba(212,175,55,0.1)}
 
-/* Top Resellers List UI */
-.top-reseller-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(212,175,55,0.1);
-}
-.top-reseller-row:last-child { border-bottom: none; }
-.reseller-badge {
-  width: 28px; height: 28px; border-radius: 50%; background: rgba(212,175,55,0.15);
-  border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center;
-  color: var(--gold); font-weight: bold; font-size: 12px; margin-right: 10px;
-}
-
-@media(max-width:1000px){
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid-two, .grid-two-even{grid-template-columns:1fr}
-}
-@media(max-width:650px){
-  #app{display:block}
-  .sidebar{width:100%;padding:12px;display:block;border-right:0;border-bottom:1px solid var(--gold-border);}
-  .main{padding:15px}
-  .cards{grid-template-columns:1fr}
-}
 .view-all {
   background: #0b0b0b;
   color: #f5f0e6;
@@ -331,7 +306,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
       <!-- CHART & TOP RESELLERS ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
-        <!-- Profit Overview Chart -->
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Profit Overview</h3>
@@ -349,7 +323,6 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
           </div>
         </div>
 
-        <!-- Top 3 Resellers Panel -->
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Top 3 Resellers</h3>
@@ -443,28 +416,25 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
           </div>
         </div>
 
-        
-<div class="panel" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
+        <div class="panel" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
+          <div class="panel-head">
+            <h3>Reseller Details Snapshot</h3>
+            <select id="snapshotResellerSelect" class="filter" style="min-width:110px;padding:6px;">
+              <option value="">Select Reseller</option>
+            </select>
+          </div>
 
-  <div class="panel-head">
-    <h3>Reseller Details Snapshot</h3>
-    <select id="snapshotResellerSelect" class="filter" style="min-width:110px;padding:6px;">
-      <option value="">Select Reseller</option>
-    </select>
-  </div>
-
-  <div id="resellerSnapshotContent" style="padding:15px 0;">
-    <div style="text-align:center;padding:25px 10px;">
-      <div style="font-size:55px;">🏆</div>
-      <h3 style="color:var(--gold);margin-top:10px;">Reseller Performance</h3>
-      <p style="font-size:12px;color:var(--muted);margin-top:8px;">
-        Select a reseller to view their complete performance.
-      </p>
-    </div>
-  </div>
-
-</div>
-
+          <div id="resellerSnapshotContent" style="padding:15px 0;">
+            <div style="text-align:center;padding:25px 10px;">
+              <div style="font-size:55px;">🏆</div>
+              <h3 style="color:var(--gold);margin-top:10px;">Reseller Performance</h3>
+              <p style="font-size:12px;color:var(--muted);margin-top:8px;">
+                Select a reseller to view their complete performance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- OWNER PROFIT SECTION -->
@@ -575,120 +545,105 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
           </table>
         </div>
       </div>
-
       
-<!-- RESELLER PROFILE -->
-<div id="resellerProfile" style="display:none;margin-top:20px;">
+      <!-- RESELLER PROFILE -->
+      <div id="resellerProfile" style="display:none;margin-top:20px;">
+        <div class="panel" style="padding:20px;">
+          <div class="panel-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+            <div>
+              <h3 style="color:var(--gold);font-size:20px;">Reseller Dashboard</h3>
+              <p style="color:var(--muted);font-size:12px;margin-top:5px;">Complete reseller performance and order details</p>
+            </div>
+            <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
+          </div>
 
-  <div class="panel" style="padding:20px;">
+          <div class="panel" style="margin-top:20px;padding:25px;background:linear-gradient(135deg,#171717,#252017);border:1px solid rgba(212,175,55,.35);">
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+              <div class="reseller-badge" id="profileInitial" style="width:75px;height:75px;font-size:30px;flex-shrink:0;">R</div>
+              <div style="flex:1;min-width:180px;">
+                <h2 id="profileName" style="color:var(--gold);font-size:23px;margin-bottom:8px;">Reseller Name</h2>
+                <span id="profileStatus" class="status approved">Active</span>
+                <p style="color:#aaa;font-size:12px;margin-top:10px;">VEYORA Reseller Account</p>
+              </div>
+            </div>
 
-    <!-- Header -->
-    <div class="panel-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-      <div>
-        <h3 style="color:var(--gold);font-size:20px;">Reseller Dashboard</h3>
-        <p style="color:var(--muted);font-size:12px;margin-top:5px;">Complete reseller performance and order details</p>
-      </div>
-      <button class="view-all" id="backToResellersBtn">← Back to Resellers</button>
-    </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:25px;">
+              <div>
+                <div class="card-label">Phone Number</div>
+                <div id="profilePhone" style="font-weight:600;margin-top:6px;">—</div>
+              </div>
+              <div>
+                <div class="card-label">City</div>
+                <div id="profileCity" style="font-weight:600;margin-top:6px;">—</div>
+              </div>
+              <div>
+                <div class="card-label">Joining Date</div>
+                <div id="profileJoiningDate" style="font-weight:600;margin-top:6px;">—</div>
+              </div>
+              <div>
+                <div class="card-label">Total Orders</div>
+                <div id="profileTotalOrders" style="font-weight:700;color:var(--gold);font-size:20px;margin-top:6px;">0</div>
+              </div>
+            </div>
+          </div>
 
-    <!-- Profile Header -->
-    <div class="panel" style="margin-top:20px;padding:25px;background:linear-gradient(135deg,#171717,#252017);border:1px solid rgba(212,175,55,.35);">
-      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-        <div class="reseller-badge" id="profileInitial"
-          style="width:75px;height:75px;font-size:30px;flex-shrink:0;">R</div>
+          <div style="margin-top:25px;">
+            <div class="panel-head">
+              <h3>Performance Overview</h3>
+            </div>
+            <div class="cards" style="margin-top:15px;">
+              <div class="card">
+                <div class="card-label">Total Reseller Profit</div>
+                <div class="card-value" id="profileTotalProfit">Rs. 0</div>
+              </div>
+              <div class="card">
+                <div class="card-label">Approved Payment</div>
+                <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
+              </div>
+              <div class="card">
+                <div class="card-label">Pending Payment</div>
+                <div class="card-value" id="profilePendingPayment">Rs. 0</div>
+              </div>
+            </div>
+          </div>
 
-        <div style="flex:1;min-width:180px;">
-          <h2 id="profileName" style="color:var(--gold);font-size:23px;margin-bottom:8px;">Reseller Name</h2>
-          <span id="profileStatus" class="status approved">Active</span>
-          <p style="color:#aaa;font-size:12px;margin-top:10px;">VEYORA Reseller Account</p>
+          <div style="margin-top:30px;">
+            <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h3>Order History</h3>
+                <p style="color:var(--muted);font-size:12px;margin-top:5px;">All orders of this reseller</p>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <select id="resellerProfileFilter" class="filter">
+                  <option value="this">This Month</option>
+                  <option value="previous">Previous Month</option>
+                  <option value="3">Last 3 Months</option>
+                  <option value="6" selected>Last 6 Months</option>
+                  <option value="9">Last 9 Months</option>
+                  <option value="all">Overall</option>
+                </select>
+                <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
+              </div>
+            </div>
+
+            <div class="table-wrap" style="margin-top:15px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Order Date</th>
+                    <th>Reseller Profit</th>
+                    <th>Payment Status</th>
+                  </tr>
+                </thead>
+                <tbody id="resellerProfileOrders"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:25px;">
-        <div>
-          <div class="card-label">Phone Number</div>
-          <div id="profilePhone" style="font-weight:600;margin-top:6px;">—</div>
-        </div>
-        <div>
-          <div class="card-label">City</div>
-          <div id="profileCity" style="font-weight:600;margin-top:6px;">—</div>
-        </div>
-        <div>
-          <div class="card-label">Joining Date</div>
-          <div id="profileJoiningDate" style="font-weight:600;margin-top:6px;">—</div>
-        </div>
-        <div>
-          <div class="card-label">Total Orders</div>
-          <div id="profileTotalOrders" style="font-weight:700;color:var(--gold);font-size:20px;margin-top:6px;">0</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Financial Overview -->
-    <div style="margin-top:25px;">
-      <div class="panel-head">
-        <h3>Performance Overview</h3>
-      </div>
-
-      <div class="cards" style="margin-top:15px;">
-        <div class="card">
-          <div class="card-label">Total Reseller Profit</div>
-          <div class="card-value" id="profileTotalProfit">Rs. 0</div>
-        </div>
-
-        <div class="card">
-          <div class="card-label">Approved Payment</div>
-          <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
-        </div>
-
-        <div class="card">
-          <div class="card-label">Pending Payment</div>
-          <div class="card-value" id="profilePendingPayment">Rs. 0</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order History -->
-    <div style="margin-top:30px;">
-      <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <h3>Order History</h3>
-          <p style="color:var(--muted);font-size:12px;margin-top:5px;">All orders of this reseller</p>
-        </div>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <select id="resellerProfileFilter" class="filter">
-            <option value="this">This Month</option>
-            <option value="previous">Previous Month</option>
-            <option value="3">Last 3 Months</option>
-            <option value="6" selected>Last 6 Months</option>
-            <option value="9">Last 9 Months</option>
-            <option value="all">Overall</option>
-          </select>
-
-          <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
-        </div>
-      </div>
-
-      <div class="table-wrap" style="margin-top:15px;">
-        <table>
-          <thead>
-            <tr>
-              <th>Customer</th>
-              <th>Product</th>
-              <th>Order Date</th>
-              <th>Reseller Profit</th>
-              <th>Payment Status</th>
-            </tr>
-          </thead>
-          <tbody id="resellerProfileOrders"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-</div>
-</section>
+    </section>
 
     <!-- ORDERS SECTION -->
     <section id="page-orders" class="section">
@@ -782,59 +737,41 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       </div>
     </section>
 
-    
-
-<!-- PAYMENTS SECTION -->
-<section id="page-payments" class="section">
-
-  <div style="margin-bottom:20px;">
-    <h2 style="color:var(--gold);font-size:22px;">Payments Management</h2>
-    <p class="section-intro">Monitor pending and approved payments.</p>
-  </div>
-
-  <div class="panel" style="padding:20px;">
-
-    <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <h3 style="color:var(--gold);font-size:18px;">Payment Records</h3>
-        <p style="font-size:11px;color:var(--muted);margin-top:5px;">
-          Track and monitor all payment transactions
-        </p>
+    <!-- PAYMENTS SECTION -->
+    <section id="page-payments" class="section">
+      <div style="margin-bottom:20px;">
+        <h2 style="color:var(--gold);font-size:22px;">Payments Management</h2>
+        <p class="section-intro">Monitor pending and approved payments.</p>
       </div>
 
-      <div style="
-        padding:8px 14px;
-        border:1px solid rgba(212,175,55,.4);
-        border-radius:8px;
-        color:var(--gold);
-        font-size:12px;
-        background:#151109;
-      ">
-        <span>₨</span> Payment History
+      <div class="panel" style="padding:20px;">
+        <div class="panel-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h3 style="color:var(--gold);font-size:18px;">Payment Records</h3>
+            <p style="font-size:11px;color:var(--muted);margin-top:5px;">Track and monitor all payment transactions</p>
+          </div>
+          <div style="padding:8px 14px;border:1px solid rgba(212,175,55,.4);border-radius:8px;color:var(--gold);font-size:12px;background:#151109;">
+            <span>₨</span> Payment History
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-top:20px;border:1px solid rgba(212,175,55,.2);border-radius:10px;overflow:auto;">
+          <table style="width:100%;">
+            <thead>
+              <tr>
+                <th>Order Number</th>
+                <th>Customer Name</th>
+                <th>Reseller Name</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Payment Date</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTable"></tbody>
+          </table>
+        </div>
       </div>
-    </div>
-
-    <div class="table-wrap" style="margin-top:20px;border:1px solid rgba(212,175,55,.2);border-radius:10px;overflow:auto;">
-      <table style="width:100%;">
-        <thead>
-          <tr>
-            <th>Order Number</th>
-            <th>Customer Name</th>
-            <th>Reseller Name</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Payment Date</th>
-          </tr>
-        </thead>
-
-        <tbody id="paymentsTable"></tbody>
-      </table>
-    </div>
-
-  </div>
-</section>
-
-
+    </section>
 
     <!-- CUSTOMERS SECTION -->
     <section id="page-customers" class="section">
@@ -843,7 +780,15 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         <div class="panel-head"><h3>Customer Records</h3></div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
             <tbody id="customersTable"></tbody>
           </table>
         </div>
@@ -984,11 +929,12 @@ function renderAll(){
   renderOverview();
   renderTables();
   renderChart();
+  renderCustomersTable();
   populateResellerSnapshotDropdown();
   if(selectedResellerId) renderResellerProfileOrders();
 }
 
-// ROBUST DATE PARSER (order_date fallback to created_at & timezone fix)
+// ROBUST DATE PARSER
 function getOrderDate(order){
   const value = order.order_date || order.created_at;
   if(!value) return null;
@@ -1002,7 +948,7 @@ function getOrderDate(order){
   return isNaN(date.getTime()) ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-// UNIFIED PERIOD FILTER MATCHER (6 Options)
+// UNIFIED PERIOD FILTER MATCHER
 function isDateInPeriod(orderDate, filterValue) {
   if (!orderDate) return false;
   const now = new Date();
@@ -1044,85 +990,64 @@ function renderOverview(){
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
 
-  
-// Top 3 Resellers Ranking
-const ranking = currentResellers.map(r => {
-  const rOrders = currentOrders.filter(o => o.reseller_id === r.id);
-  const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
-  const rSales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
+  const ranking = currentResellers.map(r => {
+    const rOrders = currentOrders.filter(o => o.reseller_id === r.id);
+    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
+    const rSales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
 
-  return {
-    ...r,
-    profit,
-    orderCount: rOrders.length,
-    sales: rSales
-  };
-}).sort((a, b) => b.profit - a.profit).slice(0, 3);
+    return {
+      ...r,
+      profit,
+      orderCount: rOrders.length,
+      sales: rSales
+    };
+  }).sort((a, b) => b.profit - a.profit).slice(0, 3);
 
-const medals = ["🏆", "🥈", "🥉"];
+  const medals = ["🏆", "🥈", "🥉"];
 
-document.getElementById("topResellers").innerHTML = ranking.length
-  ? ranking.map((r, i) => {
-      const initial = (r.name || "R").trim().charAt(0).toUpperCase();
+  document.getElementById("topResellers").innerHTML = ranking.length
+    ? ranking.map((r, i) => {
+        const initial = (r.name || "R").trim().charAt(0).toUpperCase();
 
-      return `
-        <div style="
-          display:grid;
-          grid-template-columns:65px 55px minmax(0,1fr) auto;
-          align-items:center;
-          gap:12px;
-          padding:12px 10px;
-          margin:7px 0;
-          background:linear-gradient(100deg,#17130a,#090909);
-          border:1px solid rgba(212,175,55,.25);
-          border-radius:12px;
-        ">
-
+        return `
           <div style="
-            font-size:38px;
-            text-align:center;
-            filter:drop-shadow(0 0 7px rgba(212,175,55,.35));
-          ">${medals[i]}</div>
-
-          <div style="
-            width:48px;
-            height:48px;
-            border:2px solid var(--gold);
-            border-radius:50%;
-            display:flex;
+            display:grid;
+            grid-template-columns:65px 55px minmax(0,1fr) auto;
             align-items:center;
-            justify-content:center;
-            color:var(--gold);
-            font-size:23px;
-            font-weight:bold;
-            background:linear-gradient(145deg,#29200c,#080808);
-          ">${safe(initial)}</div>
-
-          <div style="min-width:0;">
-            <div style="font-weight:bold;color:#fff;font-size:14px;">
-              ${safe(r.name)}
+            gap:12px;
+            padding:12px 10px;
+            margin:7px 0;
+            background:linear-gradient(100deg,#17130a,#090909);
+            border:1px solid rgba(212,175,55,.25);
+            border-radius:12px;
+          ">
+            <div style="font-size:38px;text-align:center;filter:drop-shadow(0 0 7px rgba(212,175,55,.35));">${medals[i]}</div>
+            <div style="
+              width:48px;
+              height:48px;
+              border:2px solid var(--gold);
+              border-radius:50%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              color:var(--gold);
+              font-size:23px;
+              font-weight:bold;
+              background:linear-gradient(145deg,#29200c,#080808);
+            ">${safe(initial)}</div>
+            <div style="min-width:0;">
+              <div style="font-weight:bold;color:#fff;font-size:14px;">${safe(r.name)}</div>
+              <div style="font-size:11px;color:#aaa;margin-top:4px;">${safe(r.city || "Pakistan")}</div>
             </div>
-            <div style="font-size:11px;color:#aaa;margin-top:4px;">
-              ${safe(r.city || "Pakistan")}
+            <div style="text-align:right;white-space:nowrap;">
+              <div style="color:var(--gold);font-weight:bold;font-size:15px;">${money(r.profit)}</div>
+              <div style="font-size:11px;color:#ccc;margin-top:4px;">${r.orderCount} Orders</div>
             </div>
           </div>
+        `;
+      }).join("")
+    : '<div class="empty">No reseller records yet.</div>';
 
-          <div style="text-align:right;white-space:nowrap;">
-            <div style="color:var(--gold);font-weight:bold;font-size:15px;">
-              ${money(r.profit)}
-            </div>
-            <div style="font-size:11px;color:#ccc;margin-top:4px;">
-              ${r.orderCount} Orders
-            </div>
-          </div>
-
-        </div>
-      `;
-    }).join("")
-  : '<div class="empty">No reseller records yet.</div>';
-
-
-  // Reseller Performance Table
   const perfRows = currentResellers.map(r=>{
     const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
     const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
@@ -1144,7 +1069,6 @@ document.getElementById("topResellers").innerHTML = ranking.length
     `).join("")
     : '<tr><td colspan="7" class="empty">No performance records found.</td></tr>';
 
-  // Recent Orders Table
   const recent = currentOrders.slice(0,4);
   document.getElementById("recentOrdersTable").innerHTML = recent.length
     ? recent.map((o,i)=>`
@@ -1159,7 +1083,6 @@ document.getElementById("topResellers").innerHTML = ranking.length
     `).join("")
     : '<tr><td colspan="6" class="empty">No orders recorded yet.</td></tr>';
 
-  // Monthly Summary
   const monthlyFilter = document.getElementById("monthlySummaryPeriodFilter");
   const monthlyTable = document.getElementById("monthlySummaryTable");
 
@@ -1361,7 +1284,6 @@ function renderTables(){
   document.getElementById("ownerThisMonthProfit").textContent = money(ownerThisMonth);
   document.getElementById("ownerLastMonthProfit").textContent = money(ownerLastMonth);
 
-  // OWNER PROFIT HISTORY
   const ownerFilter = document.getElementById("ownerProfitPeriodFilter");
 
   function renderOwnerProfitHistory(){
@@ -1394,7 +1316,6 @@ function renderTables(){
   }
   renderOwnerProfitHistory();
 
-  // RESELLER SUMMARY
   const totalResellersEl = document.getElementById("totalResellers");
   const activeResellersEl = document.getElementById("activeResellers");
 
@@ -1433,7 +1354,6 @@ function renderTables(){
     resellerSearch.dataset.listenerAttached = "true";
   }
 
-  // ORDERS TABLE
   function renderOrdersTable(){
     const searchInput = document.getElementById("orderSearch");
     const statusFilter = document.getElementById("orderStatusFilter");
@@ -1476,7 +1396,7 @@ function renderTables(){
           </td>
         </tr>
       `).join("")
-      : '<tr><td colspan="8" class="empty">No matching orders found.</td></tr>';
+      : '<tr><td colspan="9" class="empty">No matching orders found.</td></tr>';
   }
   renderOrdersTable();
 
@@ -1491,58 +1411,47 @@ function renderTables(){
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-  
-
-// PAYMENTS & CUSTOMERS
-
-
-// PAYMENT HISTORY - SHOW ALL ORDERS
-const paymentsTable = document.getElementById("paymentsTable");
-
-if (paymentsTable) {
-  paymentsTable.innerHTML = currentOrders.length
-    ? currentOrders.map(order => {
-
-        const reseller = currentResellers.find(r =>
-          String(r.id) === String(order.reseller_id)
-        );
-
-        return `
-          <tr>
-            <td>${safe(order.order_number || order.id || "—")}</td>
-            <td>${safe(order.customer_name || "—")}</td>
-            <td>${safe(reseller?.name || "Owner")}</td>
-            <td>${money(order.total_price || 0)}</td>
-            <td>
-  <span style="
-    display:inline-block;
-    padding:6px 12px;
-    border-radius:6px;
-    font-size:11px;
-    font-weight:700;
-    color:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "#22c55e" : "#ef4444"};
-    background:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.15)" : "rgba(239,68,68,.15)"};
-    border:1px solid ${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.4)" : "rgba(239,68,68,.4)"};
-  ">
-    ${safe(order.payment_status || "Pending")}
-  </span>
-</td>
-            <td>${safe(order.order_date || order.created_at || "—")}</td>
-          </tr>
-        `;
-
-      }).join("")
-    : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
+  const paymentsTable = document.getElementById("paymentsTable");
+  if (paymentsTable) {
+    paymentsTable.innerHTML = currentOrders.length
+      ? currentOrders.map(order => {
+          const reseller = currentResellers.find(r => String(r.id) === String(order.reseller_id));
+          return `
+            <tr>
+              <td>${safe(order.order_number || order.id || "—")}</td>
+              <td>${safe(order.customer_name || "—")}</td>
+              <td>${safe(reseller?.name || "Owner")}</td>
+              <td>${money(order.total_price || 0)}</td>
+              <td>
+                <span style="
+                  display:inline-block;
+                  padding:6px 12px;
+                  border-radius:6px;
+                  font-size:11px;
+                  font-weight:700;
+                  color:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "#22c55e" : "#ef4444"};
+                  background:${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.15)" : "rgba(239,68,68,.15)"};
+                  border:1px solid ${(order.payment_status || "Pending").toLowerCase() === "approved" ? "rgba(34,197,94,.4)" : "rgba(239,68,68,.4)"};
+                ">
+                  ${safe(order.payment_status || "Pending")}
+                </span>
+              </td>
+              <td>${safe(order.order_date || order.created_at || "—")}</td>
+            </tr>
+          `;
+        }).join("")
+      : '<tr><td colspan="6" class="empty">No payments.</td></tr>';
+  }
 }
 
+// CUSTOMERS TABLE - RENDERING & DELETE FUNCTIONALITY
+function renderCustomersTable() {
+  const customerList = currentCustomers || [];
+  const customersTableEl = document.getElementById("customersTable");
+  
+  if(!customersTableEl) return;
 
-
-// CUSTOMERS TABLE - ONLY ACTUAL CUSTOMER RECORDS
-
-const customerList = currentCustomers || [];
-
-document.getElementById("customersTable").innerHTML =
-  customerList.length
+  customersTableEl.innerHTML = customerList.length
     ? customerList.map(c => {
         const joined = c.created_at
           ? new Date(c.created_at).toLocaleDateString("en-GB")
@@ -1554,10 +1463,33 @@ document.getElementById("customersTable").innerHTML =
             <td>${safe(c.phone || "—")}</td>
             <td>${safe(c.city || "—")}</td>
             <td>${safe(joined)}</td>
+            <td>
+              <button class="view-all" onclick="deleteCustomer('${c.id}')" style="color:#ff6b6b; border-color:rgba(255,107,107,0.4);">Delete</button>
+            </td>
           </tr>
         `;
       }).join("")
-    : '<tr><td colspan="4" class="empty">No customers found.</td></tr>';}
+    : '<tr><td colspan="5" class="empty">No customers found.</td></tr>';
+}
+
+window.deleteCustomer = async function(customerId) {
+  if (!confirm("Are you sure you want to delete this customer?")) return;
+
+  try {
+    const { error } = await db
+      .from("customers")
+      .delete()
+      .eq("id", customerId);
+
+    if (error) throw error;
+
+    alert("Customer deleted successfully!");
+    await loadBusinessData();
+  } catch (error) {
+    alert("Could not delete customer: " + (error.message || String(error)));
+  }
+};
+
 // RESELLER PROFILE ORDER HISTORY
 function renderResellerProfileOrders(){
   if(!selectedResellerId) return;
@@ -1620,7 +1552,6 @@ if(backBtn && !backBtn.dataset.listenerAttached){
   backBtn.dataset.listenerAttached = "true";
 }
 
-// OPEN RESELLER PROFILE
 function openResellerProfile(id){
   selectedResellerId = id;
   const reseller = currentResellers.find(r => String(r.id) === String(id));
@@ -1643,7 +1574,6 @@ function openResellerProfile(id){
   document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// SNAPSHOT DROPDOWN
 function populateResellerSnapshotDropdown(){
   const select = document.getElementById("snapshotResellerSelect");
   if(!select) return;
@@ -1653,14 +1583,10 @@ function populateResellerSnapshotDropdown(){
     currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
 }
 
-
-// RESELLER DETAILS SNAPSHOT
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
 
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
-
   snapshotSelect.addEventListener("change", e => {
-
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
 
@@ -1679,151 +1605,47 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
     const r = currentResellers.find(x => String(x.id) === String(id));
     if(!r) return;
 
-    const rOrders = currentOrders.filter(
-      o => String(o.reseller_id) === String(id)
-    );
-
-    const profit = rOrders.reduce(
-      (s,o) => s + Number(o.reseller_profit || 0), 0
-    );
-
-    const sales = rOrders.reduce(
-      (s,o) => s + Number(o.total_price || 0), 0
-    );
-
-    const paid = rOrders
-      .filter(o => ["paid","approved"].includes(
-        String(o.payment_status || "").toLowerCase()
-      ))
-      .reduce((s,o) => s + Number(o.total_price || 0), 0);
-
-    const pending = rOrders
-      .filter(o => String(o.payment_status || "").toLowerCase() === "pending")
-      .reduce((s,o) => s + Number(o.total_price || 0), 0);
-
+    const rOrders = currentOrders.filter(o => String(o.reseller_id) === String(id));
+    const profit = rOrders.reduce((s,o) => s + Number(o.reseller_profit || 0), 0);
+    const sales = rOrders.reduce((s,o) => s + Number(o.total_price || 0), 0);
+    const paid = rOrders.filter(o => ["paid","approved"].includes(String(o.payment_status || "").toLowerCase())).reduce((s,o) => s + Number(o.total_price || 0), 0);
+    const pending = rOrders.filter(o => String(o.payment_status || "").toLowerCase() === "pending").reduce((s,o) => s + Number(o.total_price || 0), 0);
     const initial = (r.name || "R").trim().charAt(0).toUpperCase();
 
     container.innerHTML = `
-      <div style="
-        display:grid;
-        grid-template-columns:125px minmax(0,1fr);
-        gap:12px;
-        align-items:stretch;
-      ">
-
-        <!-- GOLDEN RESELLER BADGE -->
-        <div style="
-          background:linear-gradient(160deg,#17130a,#080808);
-          border:1px solid rgba(212,175,55,.3);
-          border-radius:12px;
-          display:flex;
-          flex-direction:column;
-          align-items:center;
-          justify-content:center;
-          padding:12px 5px;
-          text-align:center;
-        ">
-
-          <div style="
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:#e8bd42;
-            font-size:32px;
-            gap:0;
-            filter:drop-shadow(0 0 5px rgba(212,175,55,.35));
-          ">
+      <div style="display:grid;grid-template-columns:125px minmax(0,1fr);gap:12px;align-items:stretch;">
+        <div style="background:linear-gradient(160deg,#17130a,#080808);border:1px solid rgba(212,175,55,.3);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 5px;text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;color:#e8bd42;font-size:32px;gap:0;filter:drop-shadow(0 0 5px rgba(212,175,55,.35));">
             <span style="transform:rotate(-35deg);">❧</span>
-            <div style="
-              width:58px;
-              height:58px;
-              border:3px solid #d8aa32;
-              border-radius:50%;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              background:linear-gradient(145deg,#392b0b,#090909);
-              color:#ffdc70;
-              font-size:32px;
-              font-weight:bold;
-              box-shadow:0 0 12px rgba(212,175,55,.25);
-            ">${safe(initial)}</div>
+            <div style="width:58px;height:58px;border:3px solid #d8aa32;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#392b0b,#090909);color:#ffdc70;font-size:32px;font-weight:bold;box-shadow:0 0 12px rgba(212,175,55,.25);">${safe(initial)}</div>
             <span style="transform:rotate(35deg);">❧</span>
           </div>
-
-          <div style="
-            color:#fff;
-            font-size:13px;
-            font-weight:bold;
-            margin-top:12px;
-            overflow-wrap:anywhere;
-          ">${safe(r.name)}</div>
-
-          <div style="font-size:11px;color:#bbb;margin-top:3px;">
-            ${safe(r.city || "Pakistan")}
-          </div>
-
-          <span style="
-            background:linear-gradient(90deg,#d69e20,#ffe17b);
-            color:#171000;
-            font-weight:bold;
-            font-size:11px;
-            padding:4px 14px;
-            border-radius:20px;
-            margin-top:8px;
-          ">${safe(r.status || "Active")}</span>
-
+          <div style="color:#fff;font-size:13px;font-weight:bold;margin-top:12px;overflow-wrap:anywhere;">${safe(r.name)}</div>
+          <div style="font-size:11px;color:#bbb;margin-top:3px;">${safe(r.city || "Pakistan")}</div>
+          <span style="background:linear-gradient(90deg,#d69e20,#ffe17b);color:#171000;font-weight:bold;font-size:11px;padding:4px 14px;border-radius:20px;margin-top:8px;">${safe(r.status || "Active")}</span>
         </div>
-
-        <!-- RESELLER STATISTICS -->
-        <div style="
-          display:grid;
-          grid-template-columns:repeat(6,minmax(0,1fr));
-          grid-template-rows:1fr 1fr;
-          gap:1px;
-          background:rgba(212,175,55,.25);
-          border:1px solid rgba(212,175,55,.25);
-          border-radius:12px;
-          overflow:hidden;
-        ">
-
+        <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:1px;background:rgba(212,175,55,.25);border:1px solid rgba(212,175,55,.25);border-radius:12px;overflow:hidden;">
           <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
             <div style="font-size:12px;color:#eee;">Total Orders</div>
-            <div style="font-size:18px;font-weight:bold;color:#ffdc70;margin-top:7px;">
-              ${rOrders.length}
-            </div>
+            <div style="font-size:18px;font-weight:bold;color:#ffdc70;margin-top:7px;">${rOrders.length}</div>
           </div>
-
           <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
             <div style="font-size:12px;color:#eee;">Total Sales</div>
-            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">
-              ${money(sales)}
-            </div>
+            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">${money(sales)}</div>
           </div>
-
           <div style="grid-column:span 2;background:#0b0d11;padding:13px 4px;text-align:center;">
             <div style="font-size:12px;color:#eee;">Profit</div>
-            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">
-              ${money(profit)}
-            </div>
+            <div style="font-size:15px;font-weight:bold;color:#ffdc70;margin-top:7px;">${money(profit)}</div>
           </div>
-
           <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
             <div style="font-size:12px;color:#eee;">Paid</div>
-            <div style="font-size:16px;font-weight:bold;color:#19d66b;margin-top:7px;">
-              ${money(paid)}
-            </div>
+            <div style="font-size:16px;font-weight:bold;color:#19d66b;margin-top:7px;">${money(paid)}</div>
           </div>
-
           <div style="grid-column:span 3;background:#0b0d11;padding:13px 4px;text-align:center;">
             <div style="font-size:12px;color:#eee;">Pending</div>
-            <div style="font-size:16px;font-weight:bold;color:#ffad35;margin-top:7px;">
-              ${money(pending)}
-            </div>
+            <div style="font-size:16px;font-weight:bold;color:#ffad35;margin-top:7px;">${money(pending)}</div>
           </div>
-
         </div>
-
       </div>
     `;
   });
@@ -1831,7 +1653,6 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
   snapshotSelect.dataset.listenerAttached = "true";
 }
 
-// EDIT AND DELETE ORDERS
 window.editOrder = async function(orderId) {
   const order = currentOrders.find(o => String(o.id) === String(orderId));
   if (!order) { alert("Order not found."); return; }
@@ -1843,7 +1664,7 @@ window.editOrder = async function(orderId) {
   document.getElementById("newOrderNumber").value = order.order_number || "";
   document.getElementById("newOrderCustomer").value = order.customer_name || "";
   document.getElementById("newOrderPhone").value = order.customer_phone || "";
-document.getElementById("newOrderCity").value = order.customer_city || "";
+  document.getElementById("newOrderCity").value = order.customer_city || "";
   document.getElementById("newOrderProduct").value = order.product_name || "";
   document.getElementById("newOrderQuantity").value = order.quantity || 1;
   document.getElementById("newOrderPrice").value = order.total_price || 0;
@@ -1857,25 +1678,10 @@ document.getElementById("newOrderCity").value = order.customer_city || "";
   document.getElementById("addOrderForm").scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-// DELETE ORDER AND CUSTOMER RECORD
 window.deleteOrder = async function(orderId) {
   if (!confirm("Are you sure you want to permanently delete this order?")) return;
 
   try {
-    // Find selected order
-    const order = currentOrders.find(
-      o => String(o.id) === String(orderId)
-    );
-
-    if (!order) {
-      alert("Order not found.");
-      return;
-    }
-
-    const customerName = order.customer_name;
-    const customerPhone = order.customer_phone || order.phone;
-
-    // Delete order
     const { error: orderError } = await db
       .from("orders")
       .delete()
@@ -1883,35 +1689,8 @@ window.deleteOrder = async function(orderId) {
 
     if (orderError) throw orderError;
 
-    // Check remaining orders of this customer
-    const { data: remainingOrders, error: checkError } = await db
-      .from("orders")
-      .select("id")
-      .eq("customer_name", customerName);
-
-    if (checkError) throw checkError;
-
-    // Delete customer only when no orders remain
-    if (!remainingOrders || remainingOrders.length === 0) {
-
-      let customerQuery = db
-        .from("customers")
-        .delete()
-        .eq("name", customerName);
-
-      if (customerPhone) {
-        customerQuery = customerQuery.eq("phone", customerPhone);
-      }
-
-      const { error: customerError } = await customerQuery;
-
-      if (customerError) throw customerError;
-    }
-
     alert("Order deleted successfully!");
-
     await loadBusinessData();
-
   } catch (error) {
     alert("Could not delete order: " + error.message);
   }
@@ -2009,38 +1788,37 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
 
       if (error) throw error;
 
-      // SAVE OR UPDATE CUSTOMER RECORD
-const { data: existingCustomer, error: findError } = await db
-  .from("customers")
-  .select("id")
-  .eq("phone", customerPhone)
-  .limit(1)
-  .maybeSingle();
+      const { data: existingCustomer, error: findError } = await db
+        .from("customers")
+        .select("id")
+        .eq("phone", customerPhone)
+        .limit(1)
+        .maybeSingle();
 
-if (findError) throw findError;
+      if (findError) throw findError;
 
-if (existingCustomer) {
-  const { error: customerError } = await db
-    .from("customers")
-    .update({
-      name: customerName,
-      phone: customerPhone,
-      city: customerCity
-    })
-    .eq("id", existingCustomer.id);
+      if (existingCustomer) {
+        const { error: customerError } = await db
+          .from("customers")
+          .update({
+            name: customerName,
+            phone: customerPhone,
+            city: customerCity
+          })
+          .eq("id", existingCustomer.id);
 
-  if (customerError) throw customerError;
-} else {
-  const { error: customerError } = await db
-    .from("customers")
-    .insert([{
-      name: customerName,
-      phone: customerPhone,
-      city: customerCity
-    }]);
+        if (customerError) throw customerError;
+      } else {
+        const { error: customerError } = await db
+          .from("customers")
+          .insert([{
+            name: customerName,
+            phone: customerPhone,
+            city: customerCity
+          }]);
 
-  if (customerError) throw customerError;
-}
+        if (customerError) throw customerError;
+      }
 
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
       editingOrderId = null;
@@ -2056,7 +1834,6 @@ if (existingCustomer) {
   saveOrderBtn.dataset.listenerAttached = "true";
 }
 
-// RESELLERS MANAGEMENT
 const addResellerBtn = document.getElementById("addResellerBtn");
 const addResellerForm = document.getElementById("addResellerForm");
 const cancelResellerBtn = document.getElementById("cancelResellerBtn");
@@ -2116,7 +1893,6 @@ if(saveResellerBtn && !saveResellerBtn.dataset.listenerAttached){
   saveResellerBtn.dataset.listenerAttached = "true";
 }
 
-// DOWNLOAD PNG REPORT
 const downloadResellerReport = document.getElementById("downloadResellerReport");
 if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) {
   downloadResellerReport.addEventListener("click", async () => {
