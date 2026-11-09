@@ -678,10 +678,14 @@ th{
   overflow:hidden;
 }
 
-.snapshot-top-stats,
-.snapshot-bottom-stats{
+.snapshot-top-stats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.snapshot-bottom-stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
 }
 
 .snapshot-top-stats{
@@ -2455,12 +2459,7 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
               <strong>${money(pending)}</strong>
             </div>
 
-            <div class="snapshot-view">
-              <button type="button"
-                onclick="if(typeof openResellerDetails==='function') openResellerDetails('${safe(r.id)}')">
-                View Details →
-              </button>
-            </div>
+           
 
           </div>
 
