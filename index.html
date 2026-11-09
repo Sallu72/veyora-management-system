@@ -6,9 +6,9 @@
 <title>VEYORA | Business Management System</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Chart.js for graphs -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <style>
 :root {
   --black: #0b0b09;
@@ -18,205 +18,437 @@
   --gold-border: rgba(212, 175, 55, 0.35);
   --muted: #9e9785;
 }
+
 *{box-sizing:border-box}
+
 body{
-  margin:0; background:var(--black); color:var(--gold-light);
+  margin:0;
+  background:var(--black);
+  color:var(--gold-light);
   font-family:Arial,Helvetica,sans-serif;
 }
+
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
 
 /* LOGIN */
 #loginScreen{
-  min-height:100vh;display:flex;align-items:center;
-  justify-content:center;padding:20px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
   background:radial-gradient(circle at top,#2c2613,#0b0b09 65%);
 }
+
 .login-card{
-  width:100%;max-width:410px;padding:38px 28px;
-  background:var(--panel);border:1px solid var(--gold-border);
-  border-radius:20px;text-align:center;
+  width:100%;
+  max-width:410px;
+  padding:38px 28px;
+  background:var(--panel);
+  border:1px solid var(--gold-border);
+  border-radius:20px;
+  text-align:center;
   box-shadow:0 20px 70px #000a;
 }
+
 .brand{
-  color:var(--gold);font-size:34px;font-weight:800;
-  letter-spacing:5px;margin-bottom:5px;
+  color:var(--gold);
+  font-size:34px;
+  font-weight:800;
+  letter-spacing:5px;
+  margin-bottom:5px;
 }
-.brand-sub{color:var(--muted);font-size:11px;letter-spacing:4px}
-.login-card h2{margin:30px 0 8px; color:var(--gold-light)}
-.login-card p{color:var(--muted);font-size:13px;margin-bottom:25px}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:4px;
+}
+
+.login-card h2{
+  margin:30px 0 8px;
+  color:var(--gold-light);
+}
+
+.login-card p{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:25px;
+}
 
 /* GENERAL */
 input,select{
-  width:100%;padding:13px;margin:7px 0;
-  background:#0b0b09;color:var(--gold-light);
-  border:1px solid var(--gold-border);border-radius:9px;
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  background:#0b0b09;
+  color:var(--gold-light);
+  border:1px solid var(--gold-border);
+  border-radius:9px;
   outline:none;
 }
-input:focus,select:focus{border-color:var(--gold)}
-.gold-btn{
-  background:linear-gradient(135deg, #d4af37, #aa8c2c); color:#111;border:0;
-  border-radius:9px;padding:12px 20px;font-weight:700;
-  box-shadow: 0 4px 15px rgba(212,175,55,0.2);
+
+input:focus,select:focus{
+  border-color:var(--gold);
 }
+
+.gold-btn{
+  background:linear-gradient(135deg, #d4af37, #aa8c2c);
+  color:#111;
+  border:0;
+  border-radius:9px;
+  padding:12px 20px;
+  font-weight:700;
+  box-shadow:0 4px 15px rgba(212,175,55,0.2);
+}
+
 .gold-btn:hover{filter:brightness(1.1)}
-.message{font-size:13px;color:var(--gold);margin-top:12px}
+
+.message{
+  font-size:13px;
+  color:var(--gold);
+  margin-top:12px;
+}
 
 /* APP */
-#app{display:flex;min-height:100vh}
-.sidebar{
-  width:260px;flex-shrink:0;background:#0d0d0a;
-  border-right:1px solid var(--gold-border);
-  padding:25px 15px;display:flex;flex-direction:column;
-  position: relative;
-  background-image: linear-gradient(to bottom, rgba(13,13,10,0.95), rgba(13,13,10,0.98)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="%23d4af37"/></svg>');
+#app{
+  display:flex;
+  min-height:100vh;
 }
-.sidebar-brand{text-align:center;padding:8px 0 20px; border-bottom:1px solid var(--gold-border); margin-bottom: 15px;}
+
+.sidebar{
+  width:260px;
+  flex-shrink:0;
+  background:#0d0d0a;
+  border-right:1px solid var(--gold-border);
+  padding:25px 15px;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  background-image:linear-gradient(to bottom,rgba(13,13,10,0.95),rgba(13,13,10,0.98)),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="%23d4af37"/></svg>');
+}
+
+.sidebar-brand{
+  text-align:center;
+  padding:8px 0 20px;
+  border-bottom:1px solid var(--gold-border);
+  margin-bottom:15px;
+}
+
 .sidebar-brand .brand{font-size:22px}
+
 .nav-label{
-  color:#817b6b;font-size:9px;letter-spacing:2px;
+  color:#817b6b;
+  font-size:9px;
+  letter-spacing:2px;
   padding:8px 12px 4px;
 }
+
 .nav-btn{
-  width:100%;text-align:left;padding:11px 12px;
-  color:#c5bea9;background:transparent;border:0;
-  border-radius:8px;margin:2px 0;font-size:12px; font-weight: 500;
-  transition: all 0.2s ease;
+  width:100%;
+  text-align:left;
+  padding:11px 12px;
+  color:#c5bea9;
+  background:transparent;
+  border:0;
+  border-radius:8px;
+  margin:2px 0;
+  font-size:12px;
+  font-weight:500;
+  transition:all 0.2s ease;
 }
+
 .nav-btn:hover,.nav-btn.active{
-  background:linear-gradient(90deg, rgba(212,175,55,0.18), transparent);
+  background:linear-gradient(90deg,rgba(212,175,55,0.18),transparent);
   color:var(--gold);
-  border-left: 3px solid var(--gold);
+  border-left:3px solid var(--gold);
 }
-.sidebar-bottom{margin-top:auto;padding-top:15px; border-top: 1px solid var(--gold-border);}
-.main{flex:1;min-width:0;padding:25px 30px; background: radial-gradient(circle at 50% 0%, #181712 0%, #0b0b09 70%);}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding-top:15px;
+  border-top:1px solid var(--gold-border);
+}
+
+.main{
+  flex:1;
+  min-width:0;
+  padding:25px 30px;
+  background:radial-gradient(circle at 50% 0%,#181712 0%,#0b0b09 70%);
+}
 
 .topbar{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:15px;margin-bottom:24px;
-  border-bottom: 1px solid var(--gold-border);
-  padding-bottom: 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:24px;
+  border-bottom:1px solid var(--gold-border);
+  padding-bottom:15px;
 }
-.topbar h1{font-size:22px;margin:0; color:var(--gold-light)}
-.owner-label{color:var(--gold);font-size:11px;letter-spacing: 1px; font-weight:bold;}
 
-.top-banner {
-  background: linear-gradient(90deg, #181610, #221f15, #181610);
-  border: 1px solid var(--gold-border);
-  border-radius: 12px;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 22px;
-  font-size: 13px;
-  color: var(--gold);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+.topbar h1{
+  font-size:22px;
+  margin:0;
+  color:var(--gold-light);
+}
+
+.owner-label{
+  color:var(--gold);
+  font-size:11px;
+  letter-spacing:1px;
+  font-weight:bold;
+}
+
+.top-banner{
+  background:linear-gradient(90deg,#181610,#221f15,#181610);
+  border:1px solid var(--gold-border);
+  border-radius:12px;
+  padding:12px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+  font-size:13px;
+  color:var(--gold);
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
 }
 
 .section{display:none}
 .section.active{display:block}
-.section-intro{color:var(--muted);font-size:12px;margin:4px 0 20px}
 
-/* CARDS LUXURY DESIGN */
+.section-intro{
+  color:var(--muted);
+  font-size:12px;
+  margin:4px 0 20px;
+}
+
+/* CARDS */
 .cards{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:16px;margin:0 0 22px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+  margin:0 0 22px;
 }
+
 .card{
-  background: linear-gradient(145deg, #181713, #11110e);
-  border: 1px solid var(--gold-border);
-  border-radius: 14px;
-  padding: 18px;
-  position: relative;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transition: transform .2s ease;
+  background:linear-gradient(145deg,#181713,#11110e);
+  border:1px solid var(--gold-border);
+  border-radius:14px;
+  padding:18px;
+  position:relative;
+  box-shadow:0 6px 20px rgba(0,0,0,0.3);
+  transition:transform .2s ease;
 }
-.card:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-.card-label {color: var(--muted); font-size: 11px; font-weight:600; text-transform: uppercase; letter-spacing: 0.5px;}
-.card-value {font-size: 24px; font-weight: 800; color: var(--gold); margin-top: 10px;}
-.card-note {font-size: 11px; color: #7d7767; margin-top: 6px; display:flex; justify-content:space-between; align-items:center;}
-.positive {color: #4ade80; font-weight: 600;}
 
-/* PANELS & GRIDS */
+.card:hover{
+  border-color:var(--gold);
+  transform:translateY(-2px);
+}
+
+.card-label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+.card-value{
+  font-size:24px;
+  font-weight:800;
+  color:var(--gold);
+  margin-top:10px;
+}
+
+.card-note{
+  font-size:11px;
+  color:#7d7767;
+  margin-top:6px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.positive{
+  color:#4ade80;
+  font-weight:600;
+}
+
+/* PANELS */
 .panel{
-  background: var(--panel);
-  border: 1px solid var(--gold-border);
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  background:var(--panel);
+  border:1px solid var(--gold-border);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.25);
 }
-.panel-head{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;flex-wrap:wrap;margin-bottom:15px;
-}
-.panel h3{margin:0;font-size:15px; color: var(--gold-light); font-weight: 600;}
-.filter{width:auto;min-width:140px;margin:0;padding:8px 12px; font-size:12px;}
 
-.grid-two{display:grid;grid-template-columns: 1.3fr 0.9fr;gap:18px}
-.grid-two-even{display:grid;grid-template-columns: 1fr 1fr;gap:18px}
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+
+.panel h3{
+  margin:0;
+  font-size:15px;
+  color:var(--gold-light);
+  font-weight:600;
+}
+
+.filter{
+  width:auto;
+  min-width:140px;
+  margin:0;
+  padding:8px 12px;
+  font-size:12px;
+}
+
+.grid-two{
+  display:grid;
+  grid-template-columns:1.3fr 0.9fr;
+  gap:18px;
+}
+
+.grid-two-even{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
 
 .gold-text{color:var(--gold)}
 .muted{color:var(--muted)}
 
-table{width:100%;border-collapse:collapse;min-width:550px}
-th,td{text-align:left;padding:11px 10px;border-bottom:1px solid rgba(212,175,55,0.12);font-size:12px}
-th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:550px;
+}
+
+th,td{
+  text-align:left;
+  padding:11px 10px;
+  border-bottom:1px solid rgba(212,175,55,0.12);
+  font-size:12px;
+}
+
+th{
+  color:var(--gold);
+  font-weight:600;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
 .table-wrap{overflow-x:auto}
-.empty{padding:25px;text-align:center;color:var(--muted);font-size:13px}
 
-.status{display:inline-block;padding:4px 10px;border-radius:20px;font-size:10px; font-weight:600}
-.status.approved, .status.paid{background:rgba(23,61,53,0.8);color:#6ee7b7; border:1px solid rgba(110,231,183,0.3)}
-.status.pending{background:rgba(73,57,29,0.8);color:#fde047; border:1px solid rgba(253,224,71,0.3)}
+.empty{
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
 
-.logout{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-border);padding:10px;border-radius:8px; font-weight:600; font-size:12px}
+.status{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:600;
+}
+
+.status.approved,.status.paid{
+  background:rgba(23,61,53,0.8);
+  color:#6ee7b7;
+  border:1px solid rgba(110,231,183,0.3);
+}
+
+.status.pending{
+  background:rgba(73,57,29,0.8);
+  color:#fde047;
+  border:1px solid rgba(253,224,71,0.3);
+}
+
+.logout{
+  width:100%;
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold-border);
+  padding:10px;
+  border-radius:8px;
+  font-weight:600;
+  font-size:12px;
+}
+
 .logout:hover{background:rgba(212,175,55,0.1)}
 
-/* Top Resellers List UI */
-.top-reseller-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(212,175,55,0.1);
+/* TOP RESELLERS */
+.top-reseller-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid rgba(212,175,55,0.1);
 }
-.top-reseller-row:last-child { border-bottom: none; }
-.reseller-badge {
-  width: 28px; height: 28px; border-radius: 50%; background: rgba(212,175,55,0.15);
-  border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center;
-  color: var(--gold); font-weight: bold; font-size: 12px; margin-right: 10px;
+
+.top-reseller-row:last-child{border-bottom:none}
+
+.reseller-badge{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:rgba(212,175,55,0.15);
+  border:1px solid var(--gold);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:12px;
+  margin-right:10px;
 }
 
 @media(max-width:1000px){
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid-two, .grid-two-even{grid-template-columns:1fr}
+  .grid-two,.grid-two-even{grid-template-columns:1fr}
 }
+
 @media(max-width:650px){
   #app{display:block}
-  .sidebar{width:100%;padding:12px;display:block;border-right:0;border-bottom:1px solid var(--gold-border);}
+  .sidebar{
+    width:100%;
+    padding:12px;
+    display:block;
+    border-right:0;
+    border-bottom:1px solid var(--gold-border);
+  }
   .main{padding:15px}
   .cards{grid-template-columns:1fr}
 }
-.view-all {
-  background: #0b0b0b;
-  color: #f5f0e6;
-  border: 1px solid rgba(212, 175, 55, 0.55);
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 11px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: 0.3s ease;
+
+.view-all{
+  background:#0b0b0b;
+  color:#f5f0e6;
+  border:1px solid rgba(212,175,55,0.55);
+  border-radius:5px;
+  padding:5px 10px;
+  font-size:11px;
+  font-weight:400;
+  cursor:pointer;
+  transition:0.3s ease;
 }
-.view-all:hover {
-  background: #17130a;
-  border-color: #d4af37;
-  color: #d4af37;
+
+.view-all:hover{
+  background:#17130a;
+  border-color:#d4af37;
+  color:#d4af37;
 }
 </style>
 </head>
@@ -230,6 +462,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <div class="brand-sub">BUSINESS MANAGEMENT</div>
     <h2>Owner Login</h2>
     <p>Secure access to your private business dashboard.</p>
+
     <form id="loginForm">
       <input id="email" type="email" placeholder="Owner email" required>
       <input id="password" type="password" placeholder="Password" required>
@@ -237,6 +470,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         Login to Dashboard
       </button>
     </form>
+
     <div id="loginMessage" class="message"></div>
   </div>
 </div>
@@ -251,6 +485,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     </div>
 
     <div class="nav-label">MAIN MENU</div>
+
     <div class="nav-list">
       <button class="nav-btn active" data-page="dashboard">▦ Dashboard</button>
       <button class="nav-btn" data-page="owner">◆ Owner Profit</button>
@@ -270,18 +505,19 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
   </aside>
 
   <main class="main">
+
     <div class="topbar">
       <div>
         <div class="owner-label">PRIVATE OWNER PANEL</div>
         <h1 id="pageTitle">Business Overview</h1>
       </div>
-      <div style="display:flex; align-items:center; gap:15px;">
-        <span style="font-size:12px; color:var(--muted);" id="currentDateBadge">November 2026</span>
-        <button class="gold-btn" id="mobileLogout" style="padding:8px 14px; font-size:11px;">Logout</button>
+
+      <div style="display:flex;align-items:center;gap:15px;">
+        <span style="font-size:12px;color:var(--muted);" id="currentDateBadge">November 2026</span>
+        <button class="gold-btn" id="mobileLogout" style="padding:8px 14px;font-size:11px;">Logout</button>
       </div>
     </div>
 
-    <!-- TOP BANNER -->
     <div class="top-banner">
       <span>✨ Welcome back, Administrator. Your business is growing rapidly.</span>
       <span style="font-weight:bold;">System Online ✓</span>
@@ -289,9 +525,9 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
     <!-- DASHBOARD -->
     <section id="page-dashboard" class="section active">
-      
-      <!-- MAIN KPI CARDS -->
+
       <div class="cards">
+
         <div class="card">
           <div class="card-label">Total Profit</div>
           <div class="card-value" id="totalProfit">Rs. 0</div>
@@ -327,14 +563,15 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <span id="totalSalesGrowth">—</span>
           </div>
         </div>
+
       </div>
 
-      <!-- CHART & TOP RESELLERS ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
-        <!-- Profit Overview Chart -->
+
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Profit Overview</h3>
+
             <select id="chartPeriodFilter" class="filter">
               <option value="this">This Month</option>
               <option value="previous">Previous Month</option>
@@ -344,28 +581,31 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
               <option value="all">Overall</option>
             </select>
           </div>
-          <div style="position: relative; height:210px; width:100%;">
+
+          <div style="position:relative;height:210px;width:100%;">
             <canvas id="profitChart"></canvas>
           </div>
         </div>
 
-        <!-- Top 3 Resellers Panel -->
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Top 3 Resellers</h3>
             <button class="view-all" data-page="resellers">View All →</button>
           </div>
+
           <div id="topResellers" class="empty">No reseller records yet.</div>
         </div>
+
       </div>
 
-      <!-- RESELLER PERFORMANCE & MONTHLY SUMMARY ROW -->
       <div class="grid-two" style="margin-bottom:20px;">
+
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Reseller Performance</h3>
             <button class="view-all" data-page="resellers">View All →</button>
           </div>
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -387,6 +627,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Monthly Summary</h3>
+
             <div style="display:flex;align-items:center;gap:8px;">
               <select id="monthlySummaryPeriodFilter" class="filter">
                 <option value="this">This Month</option>
@@ -396,9 +637,11 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                 <option value="9">Last 9 Months</option>
                 <option value="all">Overall</option>
               </select>
+
               <button class="view-all" data-page="history">View All →</button>
             </div>
           </div>
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -409,6 +652,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                   <th>Owner Profit</th>
                 </tr>
               </thead>
+
               <tbody id="monthlySummaryTable">
                 <tr>
                   <td colspan="4" class="empty">Loading actual business records...</td>
@@ -417,15 +661,17 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             </table>
           </div>
         </div>
+
       </div>
 
-      <!-- RECENT ORDERS & DETAILED VIEW ROW -->
       <div class="grid-two">
+
         <div class="panel" style="margin-bottom:0;">
           <div class="panel-head">
             <h3>Recent Orders</h3>
             <button class="view-all" data-page="orders">View All →</button>
           </div>
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -443,35 +689,42 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
           </div>
         </div>
 
-        <div class="panel" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
+        <div class="panel" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
           <div class="panel-head">
             <h3>Reseller Details Snapshot</h3>
-            <select id="snapshotResellerSelect" class="filter" style="min-width:110px; padding:6px;">
+
+            <select id="snapshotResellerSelect" class="filter" style="min-width:110px;padding:6px;">
               <option value="">Select Reseller</option>
             </select>
           </div>
-          <div id="resellerSnapshotContent" style="text-align:center; padding:15px 0;">
-            <div style="font-size:13px; color:var(--muted);">Choose a reseller above to view performance analytics.</div>
+
+          <div id="resellerSnapshotContent" style="text-align:center;padding:15px 0;">
+            <div style="font-size:13px;color:var(--muted);">
+              Choose a reseller above to view performance analytics.
+            </div>
           </div>
         </div>
+
       </div>
 
     </section>
-
-    <!-- OWNER PROFIT SECTION -->
+        <!-- OWNER PROFIT SECTION -->
     <section id="page-owner" class="section">
       <p class="section-intro">Your personal profit records from all business orders.</p>
+
       <div class="cards">
         <div class="card">
           <div class="card-label">Total Owner Profit</div>
           <div class="card-value" id="ownerTotalProfit">Rs. 0</div>
           <div class="card-note">All-time earnings</div>
         </div>
+
         <div class="card">
           <div class="card-label">This Month Profit</div>
           <div class="card-value" id="ownerThisMonthProfit">Rs. 0</div>
           <div class="card-note">Current month earnings</div>
         </div>
+
         <div class="card">
           <div class="card-label">Last Month Profit</div>
           <div class="card-value" id="ownerLastMonthProfit">Rs. 0</div>
@@ -482,6 +735,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
       <div class="panel" style="margin-top:20px;">
         <div class="panel-head">
           <h3>Owner Profit History</h3>
+
           <select id="ownerProfitPeriodFilter" class="filter">
             <option value="this">This Month</option>
             <option value="previous">Previous Month</option>
@@ -491,6 +745,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <option value="all">Overall</option>
           </select>
         </div>
+
         <div class="table-wrap">
           <table>
             <thead>
@@ -516,12 +771,14 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <!-- RESELLERS SECTION -->
     <section id="page-resellers" class="section">
       <p class="section-intro">Manage your reseller accounts and performance.</p>
+
       <div class="cards">
         <div class="card">
           <div class="card-label">Total Resellers</div>
           <div class="card-value" id="totalResellers">0</div>
           <div class="card-note">Registered resellers</div>
         </div>
+
         <div class="card">
           <div class="card-label">Active Resellers</div>
           <div class="card-value" id="activeResellers">0</div>
@@ -534,22 +791,29 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
           <h3>Reseller List</h3>
           <button class="view-all" id="addResellerBtn">+ Add Reseller</button>
         </div>
+
         <div style="padding:12px 0;">
           <input type="text" id="resellerSearch" placeholder="Search by name, city or phone..." style="width:100%;max-width:350px;">
         </div>
+
         <div id="addResellerForm" class="panel" style="display:none;margin-bottom:20px;">
-          <div class="panel-head"><h3>Add New Reseller</h3></div>
+          <div class="panel-head">
+            <h3>Add New Reseller</h3>
+          </div>
+
           <div style="padding:15px;">
             <input id="newResellerName" placeholder="Reseller Name">
             <input id="newResellerCity" placeholder="City">
             <input id="newResellerPhone" placeholder="Phone Number">
             <input id="newResellerJoiningDate" type="date">
+
             <div style="margin-top:15px;display:flex;gap:10px;">
               <button class="view-all" id="saveResellerBtn">Save Reseller</button>
               <button class="view-all" id="cancelResellerBtn">Cancel</button>
             </div>
           </div>
         </div>
+
         <div class="table-wrap">
           <table>
             <thead>
@@ -586,12 +850,15 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
               <div class="panel" style="padding:15px;">
                 <div class="card-label">Phone Number</div>
                 <div id="profilePhone">—</div>
+
                 <div class="card-label" style="margin-top:12px;">City</div>
                 <div id="profileCity">—</div>
               </div>
+
               <div class="panel" style="padding:15px;">
                 <div class="card-label">Joining Date</div>
                 <div id="profileJoiningDate">—</div>
+
                 <div class="card-label" style="margin-top:12px;">Total Orders</div>
                 <div id="profileTotalOrders">0</div>
               </div>
@@ -599,6 +866,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
             <div class="panel-head">
               <h3>Monthly Order History</h3>
+
               <select id="resellerProfileFilter" class="filter">
                 <option value="this">This Month</option>
                 <option value="previous">Previous Month</option>
@@ -607,6 +875,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                 <option value="9">Last 9 Months</option>
                 <option value="all">Overall</option>
               </select>
+
               <button class="view-all" id="downloadResellerReport">↓ Download PNG Report</button>
             </div>
 
@@ -630,10 +899,12 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
                 <div class="card-label">Total Reseller Profit</div>
                 <div class="card-value" id="profileTotalProfit">Rs. 0</div>
               </div>
+
               <div class="card">
                 <div class="card-label">Approved Payment</div>
                 <div class="card-value" id="profileApprovedPayment">Rs. 0</div>
               </div>
+
               <div class="card">
                 <div class="card-label">Pending Payment</div>
                 <div class="card-value" id="profilePendingPayment">Rs. 0</div>
@@ -647,22 +918,26 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <!-- ORDERS SECTION -->
     <section id="page-orders" class="section">
       <p class="section-intro">Manage all VEYORA business orders and records.</p>
+
       <div class="cards">
         <div class="card">
           <div class="card-label">Total Orders</div>
           <div class="card-value" id="ordersTotalCount">0</div>
           <div class="card-note">All registered orders</div>
         </div>
+
         <div class="card">
           <div class="card-label">Total Sales</div>
           <div class="card-value" id="ordersTotalSales">Rs. 0</div>
           <div class="card-note">Combined order value</div>
         </div>
+
         <div class="card">
           <div class="card-label">Pending Orders</div>
           <div class="card-value" id="ordersPendingCount">0</div>
           <div class="card-note">Awaiting approval</div>
         </div>
+
         <div class="card">
           <div class="card-label">Approved Orders</div>
           <div class="card-value" id="ordersApprovedCount">0</div>
@@ -682,10 +957,12 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <h3>Add New Order</h3>
             <button class="view-all" id="cancelOrderBtn">Cancel</button>
           </div>
+
           <div style="padding:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
             <select id="orderReseller" required>
               <option value="">Select Reseller</option>
             </select>
+
             <input id="newOrderNumber" placeholder="Order Number">
             <input id="newOrderCustomer" placeholder="Customer Name">
             <input id="newOrderPhone" placeholder="Customer Phone">
@@ -695,11 +972,13 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
             <input id="newOrderOwnerProfit" type="number" min="0" placeholder="Owner Profit (Rs.)">
             <input id="newOrderResellerProfit" type="number" min="0" placeholder="Reseller Profit (Rs.)">
             <input id="newOrderDate" type="date">
+
             <select id="newOrderStatus">
               <option value="Pending">Pending</option>
               <option value="Approved">Approved</option>
             </select>
           </div>
+
           <div style="padding:0 15px 15px;">
             <button class="view-all" id="saveOrderBtn">Save Order</button>
           </div>
@@ -707,6 +986,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;padding:15px 0;">
           <input type="text" id="orderSearch" placeholder="Search order, customer, product or reseller..." style="flex:1;min-width:220px;">
+
           <select id="orderStatusFilter" class="filter">
             <option value="all">All Status</option>
             <option value="Pending">Pending</option>
@@ -738,11 +1018,22 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <!-- PAYMENTS SECTION -->
     <section id="page-payments" class="section">
       <p class="section-intro">Monitor pending and approved payments.</p>
+
       <div class="panel">
-        <div class="panel-head"><h3>Payment Records</h3></div>
+        <div class="panel-head">
+          <h3>Payment Records</h3>
+        </div>
+
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Order</th><th>Amount</th><th>Status</th><th>Approval Date</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Approval Date</th>
+              </tr>
+            </thead>
             <tbody id="paymentsTable"></tbody>
           </table>
         </div>
@@ -752,46 +1043,73 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
     <!-- CUSTOMERS SECTION -->
     <section id="page-customers" class="section">
       <p class="section-intro">Customer information and order history.</p>
+
       <div class="panel">
-        <div class="panel-head"><h3>Customer Records</h3></div>
+        <div class="panel-head">
+          <h3>Customer Records</h3>
+        </div>
+
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Joined</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
             <tbody id="customersTable"></tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- REPORTS & ANALYTICS -->
     <section id="page-reports" class="section">
       <p class="section-intro">Business performance and analytical reports.</p>
+
       <div class="panel">
         <h3>Reports & Analytics</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Comprehensive sales, profits, and traffic reports are available through live synchronized database queries.</p>
+        <p class="notice" style="color:var(--muted);font-size:13px;padding:15px;background:#0b0b09;border-radius:8px;">
+          Reports section will be connected to live business records.
+        </p>
       </div>
     </section>
 
+    <!-- MONTHLY HISTORY -->
     <section id="page-history" class="section">
       <p class="section-intro">Your historical business records are retained in the database.</p>
+
       <div class="panel">
         <h3>Monthly History</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Historical ledger records are synchronized securely.</p>
+        <p class="notice" style="color:var(--muted);font-size:13px;padding:15px;background:#0b0b09;border-radius:8px;">
+          Historical ledger records are synchronized securely.
+        </p>
       </div>
     </section>
 
+    <!-- PROFIT CONTROL -->
     <section id="page-control" class="section">
       <p class="section-intro">Manage and review profit calculations.</p>
+
       <div class="panel">
         <h3>Profit Control</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Configure commission rates, profit shares, and tiered incentives.</p>
+        <p class="notice" style="color:var(--muted);font-size:13px;padding:15px;background:#0b0b09;border-radius:8px;">
+          Configure commission rates, profit shares, and tiered incentives.
+        </p>
       </div>
     </section>
 
+    <!-- SETTINGS -->
     <section id="page-settings" class="section">
       <p class="section-intro">Your account and website settings.</p>
+
       <div class="panel">
         <h3>Settings</h3>
-        <p class="notice" style="color:var(--muted); font-size:13px; padding:15px; background:#0b0b09; border-radius:8px;">Manage admin credentials, branding preferences, and store hooks.</p>
+        <p class="notice" style="color:var(--muted);font-size:13px;padding:15px;background:#0b0b09;border-radius:8px;">
+          Manage admin credentials, branding preferences, and store settings.
+        </p>
       </div>
     </section>
 
@@ -799,6 +1117,7 @@ th{color:var(--gold);font-weight:600; font-size:11px; text-transform:uppercase; 
 </div>
 
 <script>
+
 // SUPABASE CONFIGURATION
 const SUPABASE_URL = "https://toyuqugrwqmftepxofrh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_64g--TQc1SzsmyiuNC-GVg_fR_AozlJ";
@@ -814,29 +1133,60 @@ let selectedResellerId = null;
 let editingOrderId = null;
 
 const money = value => "Rs. " + Number(value || 0).toLocaleString("en-PK");
+
 const safe = value => String(value ?? "").replace(/[&<>"']/g, char => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
 })[char]);
 
-function showMessage(msg){ document.getElementById("loginMessage").textContent = msg; }
-function showApp(){ document.getElementById("loginScreen").classList.add("hidden"); document.getElementById("app").classList.remove("hidden"); }
-function showLogin(){ document.getElementById("app").classList.add("hidden"); document.getElementById("loginScreen").classList.remove("hidden"); }
+function showMessage(msg){
+  document.getElementById("loginMessage").textContent = msg;
+}
 
-async function verifyOwner(user) {
-  const { data, error } = await db.from("owners").select("user_id").eq("user_id", user.id).maybeSingle();
-  if (error || !data) return false;
+function showApp(){
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+}
+
+function showLogin(){
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
+
+async function verifyOwner(user){
+  const {data,error} = await db.from("owners")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(error || !data) return false;
   return true;
 }
 
-document.getElementById("loginForm").addEventListener("submit", async e => {
+document.getElementById("loginForm").addEventListener("submit",async e=>{
   e.preventDefault();
+
   showMessage("Checking your account...");
+
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const { data, error } = await db.auth.signInWithPassword({email, password});
-  if (error) { showMessage(error.message); return; }
-  if (await verifyOwner(data.user)) { showApp(); await loadBusinessData(); }
-  else { showMessage("Unauthorized: Owner record not found."); }
+
+  const {data,error} = await db.auth.signInWithPassword({email,password});
+
+  if(error){
+    showMessage(error.message);
+    return;
+  }
+
+  if(await verifyOwner(data.user)){
+    showApp();
+    await loadBusinessData();
+  }else{
+    showMessage("Unauthorized: Owner record not found.");
+  }
 });
 
 async function logout(){
@@ -845,29 +1195,40 @@ async function logout(){
   document.getElementById("loginForm").reset();
   showMessage("You have logged out.");
 }
-document.getElementById("logoutBtn").addEventListener("click", logout);
-document.getElementById("mobileLogout").addEventListener("click", logout);
+
+document.getElementById("logoutBtn").addEventListener("click",logout);
+document.getElementById("mobileLogout").addEventListener("click",logout);
 
 // NAVIGATION
 const pageNames = {
-  dashboard:"Business Overview", owner:"Owner Profit Details", resellers:"Resellers",
-  orders:"Orders", payments:"Payments", customers:"Customer Records",
-  reports:"Reports & Analytics", history:"Monthly History", control:"Profit Control", settings:"Settings"
+  dashboard:"Business Overview",
+  owner:"Owner Profit Details",
+  resellers:"Resellers",
+  orders:"Orders",
+  payments:"Payments",
+  customers:"Customer Records",
+  reports:"Reports & Analytics",
+  history:"Monthly History",
+  control:"Profit Control",
+  settings:"Settings"
 };
 
-document.querySelectorAll(".nav-btn").forEach(button => {
-  button.addEventListener("click", () => {
+document.querySelectorAll(".nav-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
     const page = button.dataset.page;
-    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+
+    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
     button.classList.add("active");
-    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+
     document.getElementById("page-"+page).classList.add("active");
     document.getElementById("pageTitle").textContent = pageNames[page];
   });
 });
 
-document.querySelectorAll(".view-all[data-page]").forEach(btn => {
-  btn.addEventListener("click", () => {
+document.querySelectorAll(".view-all[data-page]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
     const targetPage = btn.dataset.page;
     const navBtn = document.querySelector(`.nav-btn[data-page="${targetPage}"]`);
     if(navBtn) navBtn.click();
@@ -883,7 +1244,12 @@ async function loadBusinessData(){
     db.from("payments").select("*").order("created_at",{ascending:false})
   ]);
 
-  for(const r of results){ if(r.error) { alert("DB Error: "+r.error.message); return; } }
+  for(const r of results){
+    if(r.error){
+      alert("DB Error: "+r.error.message);
+      return;
+    }
+  }
 
   currentOrders = results[0].data || [];
   currentResellers = results[1].data || [];
@@ -898,26 +1264,30 @@ function renderAll(){
   renderTables();
   renderChart();
   populateResellerSnapshotDropdown();
+
   if(selectedResellerId) renderResellerProfileOrders();
 }
 
-// ROBUST DATE PARSER (order_date fallback to created_at & timezone fix)
+// ROBUST DATE PARSER
 function getOrderDate(order){
   const value = order.order_date || order.created_at;
   if(!value) return null;
 
-  if(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value)){
-    const parts = value.substring(0, 10).split("-").map(Number);
-    return new Date(parts[0], parts[1] - 1, parts[2]);
+  if(typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)){
+    const parts = value.substring(0,10).split("-").map(Number);
+    return new Date(parts[0],parts[1]-1,parts[2]);
   }
 
   const date = new Date(value);
-  return isNaN(date.getTime()) ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return isNaN(date.getTime())
+    ? null
+    : new Date(date.getFullYear(),date.getMonth(),date.getDate());
 }
 
-// UNIFIED PERIOD FILTER MATCHER (6 Options)
-function isDateInPeriod(orderDate, filterValue) {
-  if (!orderDate) return false;
+// UNIFIED PERIOD FILTER MATCHER
+function isDateInPeriod(orderDate,filterValue){
+  if(!orderDate) return false;
+
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
@@ -925,24 +1295,28 @@ function isDateInPeriod(orderDate, filterValue) {
   const orderYear = orderDate.getFullYear();
   const orderMonth = orderDate.getMonth();
 
-  if (filterValue === "this") {
+  if(filterValue === "this"){
     return orderYear === currentYear && orderMonth === currentMonth;
   }
-  if (filterValue === "previous") {
-    const prevDate = new Date(currentYear, currentMonth - 1, 1);
+
+  if(filterValue === "previous"){
+    const prevDate = new Date(currentYear,currentMonth-1,1);
     return orderYear === prevDate.getFullYear() && orderMonth === prevDate.getMonth();
   }
-  if (filterValue === "3" || filterValue === "6" || filterValue === "9") {
+
+  if(filterValue === "3" || filterValue === "6" || filterValue === "9"){
     const monthsCount = Number(filterValue);
-    const startDate = new Date(currentYear, currentMonth - (monthsCount - 1), 1);
-    const orderYM = orderYear * 12 + orderMonth;
-    const startYM = startDate.getFullYear() * 12 + startDate.getMonth();
-    const currentYM = currentYear * 12 + currentMonth;
+    const startDate = new Date(currentYear,currentMonth-(monthsCount-1),1);
+
+    const orderYM = orderYear*12+orderMonth;
+    const startYM = startDate.getFullYear()*12+startDate.getMonth();
+    const currentYM = currentYear*12+currentMonth;
+
     return orderYM >= startYM && orderYM <= currentYM;
   }
-  if (filterValue === "all") {
-    return true;
-  }
+
+  if(filterValue === "all") return true;
+
   return true;
 }
 
@@ -952,7 +1326,7 @@ function renderOverview(){
   const reseller = currentOrders.reduce((sum,o)=>sum+Number(o.reseller_profit||0),0);
   const sales = currentOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
 
-  document.getElementById("totalProfit").textContent = money(owner + reseller);
+  document.getElementById("totalProfit").textContent = money(owner+reseller);
   document.getElementById("ownerProfit").textContent = money(owner);
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
@@ -962,7 +1336,8 @@ function renderOverview(){
     const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
     const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
     const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
-    return {...r, profit, orderCount:rOrders.length, sales:rSales};
+
+    return {...r,profit,orderCount:rOrders.length,sales:rSales};
   }).sort((a,b)=>b.profit-a.profit).slice(0,3);
 
   document.getElementById("topResellers").innerHTML = ranking.length
@@ -972,9 +1347,10 @@ function renderOverview(){
           <div class="reseller-badge">${i+1}</div>
           <div>
             <div style="font-weight:bold;color:var(--gold-light);font-size:13px;">${safe(r.name)}</div>
-            <div style="font-size:11px;color:var(--muted);">${safe(r.city||'Pakistan')}</div>
+            <div style="font-size:11px;color:var(--muted);">${safe(r.city||"Pakistan")}</div>
           </div>
         </div>
+
         <div style="text-align:right;">
           <div style="color:var(--gold);font-weight:bold;font-size:13px;">${money(r.profit)}</div>
           <div style="font-size:10px;color:var(--muted);">${r.orderCount} Orders</div>
@@ -988,10 +1364,10 @@ function renderOverview(){
     const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
     const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
     const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
+
     return {...r,profit,orderCount:rOrders.length,sales:rSales};
   }).sort((a,b)=>b.profit-a.profit);
-
-  document.getElementById("resellerPerformanceTable").innerHTML = perfRows.length
+    document.getElementById("resellerPerformanceTable").innerHTML = perfRows.length
     ? perfRows.map((r,i)=>`
       <tr>
         <td>${i+1}</td>
@@ -1005,8 +1381,9 @@ function renderOverview(){
     `).join("")
     : '<tr><td colspan="7" class="empty">No performance records found.</td></tr>';
 
-  // Recent Orders Table
+  // RECENT ORDERS
   const recent = currentOrders.slice(0,4);
+
   document.getElementById("recentOrdersTable").innerHTML = recent.length
     ? recent.map((o,i)=>`
       <tr>
@@ -1015,12 +1392,16 @@ function renderOverview(){
         <td>${safe(currentResellers.find(r=>r.id===o.reseller_id)?.name||"Direct")}</td>
         <td>${safe(o.product_name)}</td>
         <td>${money(o.total_price)}</td>
-        <td><span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">${safe(o.payment_status||"Paid")}</span></td>
+        <td>
+          <span class="status ${o.payment_status==="Approved"||o.payment_status==="Paid"?"paid":"pending"}">
+            ${safe(o.payment_status||"Paid")}
+          </span>
+        </td>
       </tr>
     `).join("")
     : '<tr><td colspan="6" class="empty">No orders recorded yet.</td></tr>';
 
-  // Monthly Summary
+  // MONTHLY SUMMARY
   const monthlyFilter = document.getElementById("monthlySummaryPeriodFilter");
   const monthlyTable = document.getElementById("monthlySummaryTable");
 
@@ -1036,42 +1417,49 @@ function renderOverview(){
       }).filter(Boolean);
 
       let startMonth;
+
       if(selected === "all"){
         if(datedOrders.length){
-          const earliest = datedOrders.reduce((min,o)=> o._monthlyDate < min ? o._monthlyDate : min, datedOrders[0]._monthlyDate);
+          const earliest = datedOrders.reduce(
+            (min,o)=>o._monthlyDate < min ? o._monthlyDate : min,
+            datedOrders[0]._monthlyDate
+          );
+
           startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
-        } else {
+        }else{
           startMonth = currentMonth;
         }
-      } else if(selected === "this") {
+      }else if(selected === "this"){
         startMonth = currentMonth;
-      } else if(selected === "previous") {
-        startMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
-      } else {
-        const months = Math.max(1, Number(selected) || 6);
-        startMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - months + 1, 1);
+      }else if(selected === "previous"){
+        startMonth = new Date(currentMonth.getFullYear(),currentMonth.getMonth()-1,1);
+      }else{
+        const months = Math.max(1,Number(selected)||6);
+        startMonth = new Date(currentMonth.getFullYear(),currentMonth.getMonth()-months+1,1);
       }
 
       const rows = [];
       let loopEndMonth = currentMonth;
-      if (selected === "previous") {
-        loopEndMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+
+      if(selected === "previous"){
+        loopEndMonth = new Date(currentMonth.getFullYear(),currentMonth.getMonth()-1,1);
       }
 
-      for(let date = new Date(loopEndMonth); date >= startMonth; date.setMonth(date.getMonth()-1)){
+      for(let date=new Date(loopEndMonth);date>=startMonth;date.setMonth(date.getMonth()-1)){
         const year = date.getFullYear();
         const month = date.getMonth();
 
         const monthOrders = datedOrders.filter(o=>
-          o._monthlyDate.getFullYear()===year && o._monthlyDate.getMonth()===month
+          o._monthlyDate.getFullYear()===year &&
+          o._monthlyDate.getMonth()===month
         );
 
-        if(monthOrders.length || (selected !== "this" && selected !== "previous")){
+        if(monthOrders.length || (selected!=="this" && selected!=="previous")){
           const monthSales = monthOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
           const monthOwnerProfit = monthOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
 
           rows.push({
-            label:date.toLocaleDateString("en-US",{month:"short", year:"numeric"}),
+            label:date.toLocaleDateString("en-US",{month:"short",year:"numeric"}),
             orders:monthOrders.length,
             sales:monthSales,
             profit:monthOwnerProfit
@@ -1095,46 +1483,54 @@ function renderOverview(){
       monthlyFilter.addEventListener("change",renderMonthlyRows);
       monthlyFilter.dataset.listenerAttached = "true";
     }
+
     renderMonthlyRows();
   }
 }
 
-// RENDER CHART.JS PROFIT OVERVIEW
+// RENDER PROFIT CHART
 function renderChart(){
-  const canvas = document.getElementById('profitChart');
+  const canvas = document.getElementById("profitChart");
   if(!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  if(profitChartInstance) { profitChartInstance.destroy(); }
+  const ctx = canvas.getContext("2d");
 
-  const filter = document.getElementById('chartPeriodFilter');
-  const selectedPeriod = filter ? filter.value : '6';
+  if(profitChartInstance){
+    profitChartInstance.destroy();
+  }
+
+  const filter = document.getElementById("chartPeriodFilter");
+  const selectedPeriod = filter ? filter.value : "6";
   const orders = currentOrders || [];
-
   const now = new Date();
   const months = [];
 
-  if(selectedPeriod === 'all'){
-    let earliestDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    orders.forEach(order => {
+  if(selectedPeriod === "all"){
+    let earliestDate = new Date(now.getFullYear(),now.getMonth(),1);
+
+    orders.forEach(order=>{
       const date = getOrderDate(order);
+
       if(date && date < earliestDate){
-        earliestDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        earliestDate = new Date(date.getFullYear(),date.getMonth(),1);
       }
     });
-    let date = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), 1);
+
+    let date = new Date(earliestDate.getFullYear(),earliestDate.getMonth(),1);
+
     while(date <= now){
       months.push(new Date(date));
-      date.setMonth(date.getMonth() + 1);
+      date.setMonth(date.getMonth()+1);
     }
-  } else if(selectedPeriod === 'this') {
-    months.push(new Date(now.getFullYear(), now.getMonth(), 1));
-  } else if(selectedPeriod === 'previous') {
-    months.push(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-  } else {
-    const count = Number(selectedPeriod) || 6;
-    for(let i = count - 1; i >= 0; i--){
-      months.push(new Date(now.getFullYear(), now.getMonth() - i, 1));
+  }else if(selectedPeriod === "this"){
+    months.push(new Date(now.getFullYear(),now.getMonth(),1));
+  }else if(selectedPeriod === "previous"){
+    months.push(new Date(now.getFullYear(),now.getMonth()-1,1));
+  }else{
+    const count = Number(selectedPeriod)||6;
+
+    for(let i=count-1;i>=0;i--){
+      months.push(new Date(now.getFullYear(),now.getMonth()-i,1));
     }
   }
 
@@ -1143,79 +1539,128 @@ function renderChart(){
   const ownerProfitData = [];
   const resellerProfitData = [];
 
-  months.forEach(month => {
+  months.forEach(month=>{
     const year = month.getFullYear();
     const monthNumber = month.getMonth();
 
-    labels.push(month.toLocaleString('en-US', {month: 'short'}) + ' ' + year);
+    labels.push(month.toLocaleString("en-US",{month:"short"})+" "+year);
 
     let ownerTotal = 0;
     let resellerTotal = 0;
 
-    orders.forEach(order => {
+    orders.forEach(order=>{
       const orderDate = getOrderDate(order);
-      if(orderDate && orderDate.getFullYear() === year && orderDate.getMonth() === monthNumber){
-        ownerTotal += Number(order.owner_profit || 0);
-        resellerTotal += Number(order.reseller_profit || 0);
+
+      if(
+        orderDate &&
+        orderDate.getFullYear()===year &&
+        orderDate.getMonth()===monthNumber
+      ){
+        ownerTotal += Number(order.owner_profit||0);
+        resellerTotal += Number(order.reseller_profit||0);
       }
     });
 
     ownerProfitData.push(ownerTotal);
     resellerProfitData.push(resellerTotal);
-    totalProfitData.push(ownerTotal + resellerTotal);
+    totalProfitData.push(ownerTotal+resellerTotal);
   });
 
-  profitChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Total Profit', data: totalProfitData, backgroundColor: '#d4af37', borderRadius: 4 },
-        { label: 'Owner', data: ownerProfitData, backgroundColor: '#0ea5e9', borderRadius: 4 },
-        { label: 'Resellers', data: resellerProfitData, backgroundColor: '#a855f7', borderRadius: 4 }
+  profitChartInstance = new Chart(ctx,{
+    type:"bar",
+
+    data:{
+      labels:labels,
+      datasets:[
+        {
+          label:"Total Profit",
+          data:totalProfitData,
+          backgroundColor:"#d4af37",
+          borderRadius:4
+        },
+        {
+          label:"Owner",
+          data:ownerProfitData,
+          backgroundColor:"#0ea5e9",
+          borderRadius:4
+        },
+        {
+          label:"Resellers",
+          data:resellerProfitData,
+          backgroundColor:"#a855f7",
+          borderRadius:4
+        }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { color: '#9e9785', font: { size: 10 } } }
+
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+
+      plugins:{
+        legend:{
+          labels:{
+            color:"#9e9785",
+            font:{size:10}
+          }
+        }
       },
-      scales: {
-        x: { ticks: { color: '#9e9785' }, grid: { display: false } },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            color: '#9e9785',
-            callback: function(value) { return 'Rs. ' + value.toLocaleString(); }
+
+      scales:{
+        x:{
+          ticks:{color:"#9e9785"},
+          grid:{display:false}
+        },
+
+        y:{
+          beginAtZero:true,
+
+          ticks:{
+            color:"#9e9785",
+            callback:function(value){
+              return "Rs. "+value.toLocaleString();
+            }
           },
-          grid: { color: 'rgba(212,175,55,0.08)' }
+
+          grid:{
+            color:"rgba(212,175,55,0.08)"
+          }
         }
       }
     }
   });
 
   if(filter && !filter.dataset.listenerAttached){
-    filter.addEventListener('change', renderChart);
-    filter.dataset.listenerAttached = 'true';
+    filter.addEventListener("change",renderChart);
+    filter.dataset.listenerAttached = "true";
   }
 }
 
 // RENDER TABLES & SNAPSHOTS
 function renderTables(){
   const now = new Date();
+
   const thisMonthStart = new Date(now.getFullYear(),now.getMonth(),1);
   const lastMonthStart = new Date(now.getFullYear(),now.getMonth()-1,1);
 
-  const ownerTotal = currentOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
+  const ownerTotal = currentOrders.reduce(
+    (sum,o)=>sum+Number(o.owner_profit||0),0
+  );
+
   const ownerThisMonth = currentOrders.reduce((sum,o)=>{
     const date = getOrderDate(o);
-    return date && date >= thisMonthStart && date <= now ? sum+Number(o.owner_profit||0) : sum;
+
+    return date && date>=thisMonthStart && date<=now
+      ? sum+Number(o.owner_profit||0)
+      : sum;
   },0);
 
   const ownerLastMonth = currentOrders.reduce((sum,o)=>{
     const date = getOrderDate(o);
-    return date && date >= lastMonthStart && date < thisMonthStart ? sum+Number(o.owner_profit||0) : sum;
+
+    return date && date>=lastMonthStart && date<thisMonthStart
+      ? sum+Number(o.owner_profit||0)
+      : sum;
   },0);
 
   document.getElementById("ownerTotalProfit").textContent = money(ownerTotal);
@@ -1227,17 +1672,20 @@ function renderTables(){
 
   function renderOwnerProfitHistory(){
     const selected = ownerFilter ? ownerFilter.value : "6";
-    const filteredOrders = currentOrders.filter(o => {
+
+    const filteredOrders = currentOrders.filter(o=>{
       const date = getOrderDate(o);
-      return isDateInPeriod(date, selected);
+      return isDateInPeriod(date,selected);
     });
 
     document.getElementById("ownerTable").innerHTML = filteredOrders.length
       ? filteredOrders.map(o=>{
-          const resellerName = currentResellers.find(r=>r.id===o.reseller_id)?.name || "Owner";
+          const resellerName =
+            currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name||"Owner";
+
           return `
             <tr>
-              <td>${safe(o.order_date || o.created_at)}</td>
+              <td>${safe(o.order_date||o.created_at)}</td>
               <td>${safe(o.customer_name)}</td>
               <td>${safe(o.product_name)}</td>
               <td>${safe(o.order_number)}</td>
@@ -1253,6 +1701,7 @@ function renderTables(){
     ownerFilter.addEventListener("change",renderOwnerProfitHistory);
     ownerFilter.dataset.listenerAttached = "true";
   }
+
   renderOwnerProfitHistory();
 
   // RESELLER SUMMARY
@@ -1260,35 +1709,50 @@ function renderTables(){
   const activeResellersEl = document.getElementById("activeResellers");
 
   if(totalResellersEl) totalResellersEl.textContent = currentResellers.length;
-  if(activeResellersEl) {
-    activeResellersEl.textContent = currentResellers.filter(r => (r.status || "Active").toLowerCase() === "active").length;
+
+  if(activeResellersEl){
+    activeResellersEl.textContent = currentResellers.filter(
+      r=>(r.status||"Active").toLowerCase()==="active"
+    ).length;
   }
 
   function renderResellerList(){
     const searchInput = document.getElementById("resellerSearch");
     const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
-    const filtered = currentResellers.filter(r =>
-      (r.name || "").toLowerCase().includes(searchText) ||
-      (r.city || "").toLowerCase().includes(searchText) ||
-      (r.phone || "").toLowerCase().includes(searchText)
+
+    const filtered = currentResellers.filter(r=>
+      (r.name||"").toLowerCase().includes(searchText) ||
+      (r.city||"").toLowerCase().includes(searchText) ||
+      (r.phone||"").toLowerCase().includes(searchText)
     );
 
     document.getElementById("resellerTable").innerHTML = filtered.length
       ? filtered.map((r,index)=>`
         <tr>
           <td>${index+1}</td>
-          <td><span onclick="openResellerProfile('${r.id}')" style="color:var(--gold);font-weight:bold;cursor:pointer;">${safe(r.name)}</span></td>
+          <td>
+            <span onclick="openResellerProfile('${r.id}')"
+              style="color:var(--gold);font-weight:bold;cursor:pointer;">
+              ${safe(r.name)}
+            </span>
+          </td>
           <td>${safe(r.city)}</td>
           <td>${safe(r.phone)}</td>
           <td>${safe(r.joining_date)}</td>
-          <td><span class="status ${(r.status||"Active").toLowerCase()==="active"?"approved":"pending"}">${safe(r.status||"Active")}</span></td>
+          <td>
+            <span class="status ${(r.status||"Active").toLowerCase()==="active"?"approved":"pending"}">
+              ${safe(r.status||"Active")}
+            </span>
+          </td>
         </tr>
       `).join("")
       : '<tr><td colspan="6" class="empty">No resellers found.</td></tr>';
   }
+
   renderResellerList();
 
   const resellerSearch = document.getElementById("resellerSearch");
+
   if(resellerSearch && !resellerSearch.dataset.listenerAttached){
     resellerSearch.addEventListener("input",renderResellerList);
     resellerSearch.dataset.listenerAttached = "true";
@@ -1298,13 +1762,26 @@ function renderTables(){
   function renderOrdersTable(){
     const searchInput = document.getElementById("orderSearch");
     const statusFilter = document.getElementById("orderStatusFilter");
-    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
-    const selectedStatus = statusFilter ? statusFilter.value.toLowerCase() : "all";
+
+    const searchText = searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
+
+    const selectedStatus = statusFilter
+      ? statusFilter.value.toLowerCase()
+      : "all";
 
     const totalOrders = currentOrders.length;
-    const totalSales = currentOrders.reduce((sum,o)=>sum+Number(o.total_price||0),0);
-    const approvedOrders = currentOrders.filter(o=>String(o.payment_status||"Pending").toLowerCase()==="approved").length;
-    const pendingOrders = totalOrders - approvedOrders;
+
+    const totalSales = currentOrders.reduce(
+      (sum,o)=>sum+Number(o.total_price||0),0
+    );
+
+    const approvedOrders = currentOrders.filter(
+      o=>String(o.payment_status||"Pending").toLowerCase()==="approved"
+    ).length;
+
+    const pendingOrders = totalOrders-approvedOrders;
 
     document.getElementById("ordersTotalCount").textContent = totalOrders;
     document.getElementById("ordersTotalSales").textContent = money(totalSales);
@@ -1312,11 +1789,22 @@ function renderTables(){
     document.getElementById("ordersApprovedCount").textContent = approvedOrders;
 
     const filteredOrders = currentOrders.filter(o=>{
-      const resellerName = currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner";
-      const searchableText = [o.order_number, o.customer_name, o.product_name, resellerName].join(" ").toLowerCase();
+      const resellerName =
+        currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name||"Owner";
+
+      const searchableText = [
+        o.order_number,
+        o.customer_name,
+        o.product_name,
+        resellerName
+      ].join(" ").toLowerCase();
+
       const matchesSearch = searchableText.includes(searchText);
       const orderStatus = String(o.payment_status||"Pending").toLowerCase();
-      const matchesStatus = selectedStatus === "all" || orderStatus === selectedStatus;
+
+      const matchesStatus =
+        selectedStatus==="all" || orderStatus===selectedStatus;
+
       return matchesSearch && matchesStatus;
     });
 
@@ -1324,41 +1812,63 @@ function renderTables(){
       ? filteredOrders.map(o=>`
         <tr>
           <td>${safe(o.order_number)}</td>
-          <td>${safe(o.order_date || o.created_at)}</td>
-          <td>${safe(currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name || "Owner")}</td>
+          <td>${safe(o.order_date||o.created_at)}</td>
+          <td>${safe(currentResellers.find(r=>String(r.id)===String(o.reseller_id))?.name||"Owner")}</td>
           <td>${safe(o.customer_name)}</td>
           <td>${safe(o.product_name)}</td>
           <td>${safe(o.quantity||1)}</td>
           <td>${money(o.total_price)}</td>
-          <td><span class="status ${String(o.payment_status||"Pending").toLowerCase()==="approved"?"approved":"pending"}">${safe(o.payment_status||"Pending")}</span></td>
+          <td>
+            <span class="status ${String(o.payment_status||"Pending").toLowerCase()==="approved"?"approved":"pending"}">
+              ${safe(o.payment_status||"Pending")}
+            </span>
+          </td>
           <td style="white-space:nowrap;">
             <button class="view-all" onclick="editOrder('${o.id}')">Edit</button>
             <button class="view-all" onclick="deleteOrder('${o.id}')" style="color:#ff6b6b;">Delete</button>
           </td>
         </tr>
       `).join("")
-      : '<tr><td colspan="8" class="empty">No matching orders found.</td></tr>';
+      : '<tr><td colspan="9" class="empty">No matching orders found.</td></tr>';
   }
+
   renderOrdersTable();
 
   const orderSearch = document.getElementById("orderSearch");
   const orderStatusFilter = document.getElementById("orderStatusFilter");
+
   if(orderSearch && !orderSearch.dataset.listenerAttached){
     orderSearch.addEventListener("input",renderOrdersTable);
     orderSearch.dataset.listenerAttached = "true";
   }
+
   if(orderStatusFilter && !orderStatusFilter.dataset.listenerAttached){
     orderStatusFilter.addEventListener("change",renderOrdersTable);
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-  // PAYMENTS & CUSTOMERS
+  // PAYMENTS
   document.getElementById("paymentsTable").innerHTML = currentPayments.length
-    ? currentPayments.map(p=>`<tr><td>${safe(p.order_id)}</td><td>${money(p.amount)}</td><td>${safe(p.status)}</td><td>${safe(p.approved_at || "—")}</td></tr>`).join("")
+    ? currentPayments.map(p=>`
+      <tr>
+        <td>${safe(p.order_id)}</td>
+        <td>${money(p.amount)}</td>
+        <td>${safe(p.status)}</td>
+        <td>${safe(p.approved_at||"—")}</td>
+      </tr>
+    `).join("")
     : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
 
+  // CUSTOMERS
   document.getElementById("customersTable").innerHTML = currentCustomers.length
-    ? currentCustomers.map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${safe(c.city)}</td><td>${safe(c.created_at)}</td></tr>`).join("")
+    ? currentCustomers.map(c=>`
+      <tr>
+        <td>${safe(c.name)}</td>
+        <td>${safe(c.phone)}</td>
+        <td>${safe(c.city)}</td>
+        <td>${safe(c.created_at)}</td>
+      </tr>
+    `).join("")
     : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
 }
 
@@ -1367,22 +1877,28 @@ function renderResellerProfileOrders(){
   if(!selectedResellerId) return;
 
   const filter = document.getElementById("resellerProfileFilter");
-  const selected = filter ? filter.value : "this";
+  const selected = filter ? filter.value : "6";
 
-  const orders = currentOrders.filter(o => {
-    if(String(o.reseller_id) !== String(selectedResellerId)){
-      return false;
-    }
+  const orders = currentOrders.filter(o=>{
+    if(String(o.reseller_id)!==String(selectedResellerId)) return false;
+
     const date = getOrderDate(o);
-    return isDateInPeriod(date, selected);
+    return isDateInPeriod(date,selected);
   });
 
-  const totalProfit = orders.reduce((sum, o) => sum + Number(o.reseller_profit || 0), 0);
-  const approvedPayment = orders.reduce((sum, o) => {
-    const status = String(o.payment_status || "").toLowerCase();
-    return (status === "approved" || status === "paid") ? sum + Number(o.reseller_profit || 0) : sum;
-  }, 0);
-  const pendingPayment = totalProfit - approvedPayment;
+  const totalProfit = orders.reduce(
+    (sum,o)=>sum+Number(o.reseller_profit||0),0
+  );
+
+  const approvedPayment = orders.reduce((sum,o)=>{
+    const status = String(o.payment_status||"").toLowerCase();
+
+    return status==="approved" || status==="paid"
+      ? sum+Number(o.reseller_profit||0)
+      : sum;
+  },0);
+
+  const pendingPayment = totalProfit-approvedPayment;
 
   document.getElementById("profileTotalOrders").textContent = orders.length;
   document.getElementById("profileTotalProfit").textContent = money(totalProfit);
@@ -1390,11 +1906,12 @@ function renderResellerProfileOrders(){
   document.getElementById("profilePendingPayment").textContent = money(pendingPayment);
 
   document.getElementById("resellerProfileOrders").innerHTML = orders.length
-    ? orders.map(o => {
+    ? orders.map(o=>{
         const date = getOrderDate(o);
         const displayDate = date ? date.toLocaleDateString("en-GB") : "—";
-        const statusVal = String(o.payment_status || "Pending");
-        const isPaid = statusVal.toLowerCase() === "approved" || statusVal.toLowerCase() === "paid";
+
+        const statusVal = String(o.payment_status||"Pending");
+        const isPaid = statusVal.toLowerCase()==="approved" || statusVal.toLowerCase()==="paid";
 
         return `
           <tr>
@@ -1402,7 +1919,9 @@ function renderResellerProfileOrders(){
             <td>${safe(o.product_name)}</td>
             <td>${displayDate}</td>
             <td style="color:var(--gold);font-weight:bold;">${money(o.reseller_profit)}</td>
-            <td><span class="status ${isPaid ? "paid" : "pending"}">${safe(statusVal)}</span></td>
+            <td>
+              <span class="status ${isPaid?"paid":"pending"}">${safe(statusVal)}</span>
+            </td>
           </tr>
         `;
       }).join("")
@@ -1410,41 +1929,55 @@ function renderResellerProfileOrders(){
 }
 
 const resellerProfileFilter = document.getElementById("resellerProfileFilter");
+
 if(resellerProfileFilter && !resellerProfileFilter.dataset.listenerAttached){
-  resellerProfileFilter.addEventListener("change", renderResellerProfileOrders);
+  resellerProfileFilter.addEventListener("change",renderResellerProfileOrders);
   resellerProfileFilter.dataset.listenerAttached = "true";
 }
 
 const backBtn = document.getElementById("backToResellersBtn");
+
 if(backBtn && !backBtn.dataset.listenerAttached){
-  backBtn.addEventListener("click", () => {
+  backBtn.addEventListener("click",()=>{
     document.getElementById("resellerProfile").style.display = "none";
-    document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("resellerProfile").scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
   });
+
   backBtn.dataset.listenerAttached = "true";
 }
 
 // OPEN RESELLER PROFILE
 function openResellerProfile(id){
   selectedResellerId = id;
-  const reseller = currentResellers.find(r => String(r.id) === String(id));
+
+  const reseller = currentResellers.find(r=>String(r.id)===String(id));
   if(!reseller) return;
 
-  document.getElementById("profileInitial").textContent = (reseller.name || "R").charAt(0).toUpperCase();
-  document.getElementById("profileName").textContent = reseller.name || "—";
-  document.getElementById("profilePhone").textContent = reseller.phone || "—";
-  document.getElementById("profileCity").textContent = reseller.city || "—";
-  document.getElementById("profileJoiningDate").textContent = reseller.joining_date || "—";
+  document.getElementById("profileInitial").textContent =
+    (reseller.name||"R").charAt(0).toUpperCase();
 
-  const status = reseller.status || "Active";
+  document.getElementById("profileName").textContent = reseller.name||"—";
+  document.getElementById("profilePhone").textContent = reseller.phone||"—";
+  document.getElementById("profileCity").textContent = reseller.city||"—";
+  document.getElementById("profileJoiningDate").textContent = reseller.joining_date||"—";
+
+  const status = reseller.status||"Active";
   const statusEl = document.getElementById("profileStatus");
+
   statusEl.textContent = status;
-  statusEl.className = "status " + (status.toLowerCase() === "active" ? "approved" : "pending");
+  statusEl.className = "status "+(status.toLowerCase()==="active"?"approved":"pending");
 
   document.getElementById("resellerProfile").style.display = "block";
+
   renderResellerProfileOrders();
 
-  document.getElementById("resellerProfile").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("resellerProfile").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
 }
 
 // SNAPSHOT DROPDOWN
@@ -1453,45 +1986,71 @@ function populateResellerSnapshotDropdown(){
   if(!select) return;
 
   select.innerHTML =
-    '<option value="">Select Reseller</option>' +
-    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
+    '<option value="">Select Reseller</option>'+
+    currentResellers.map(r=>
+      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
+    ).join("");
 }
 
 const snapshotSelect = document.getElementById("snapshotResellerSelect");
+
 if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
-  snapshotSelect.addEventListener("change", e => {
+  snapshotSelect.addEventListener("change",e=>{
     const id = e.target.value;
     const container = document.getElementById("resellerSnapshotContent");
 
     if(!id){
-      container.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:10px;">Choose a reseller above to view performance analytics.</div>';
+      container.innerHTML = `
+        <div style="font-size:12px;color:var(--muted);padding:10px;">
+          Choose a reseller above to view performance analytics.
+        </div>
+      `;
       return;
     }
 
-    const r = currentResellers.find(x => String(x.id) === String(id));
+    const r = currentResellers.find(x=>String(x.id)===String(id));
     if(!r) return;
 
-    const rOrders = currentOrders.filter(o => String(o.reseller_id) === String(id));
-    const profit = rOrders.reduce((s, o) => s + Number(o.reseller_profit || 0), 0);
-    const sales = rOrders.reduce((s, o) => s + Number(o.total_price || 0), 0);
+    const rOrders = currentOrders.filter(
+      o=>String(o.reseller_id)===String(id)
+    );
+
+    const profit = rOrders.reduce(
+      (s,o)=>s+Number(o.reseller_profit||0),0
+    );
+
+    const sales = rOrders.reduce(
+      (s,o)=>s+Number(o.total_price||0),0
+    );
 
     container.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
-        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">${safe((r.name || "R").charAt(0))}</div>
+        <div class="reseller-badge" style="width:36px;height:36px;font-size:15px;">
+          ${safe((r.name||"R").charAt(0))}
+        </div>
+
         <div style="text-align:left;">
-          <div style="font-weight:bold;color:var(--gold);font-size:14px;">${safe(r.name)}</div>
-          <div style="font-size:11px;color:var(--muted);">${safe(r.city)} &bull; ${safe(r.status || "Active")}</div>
+          <div style="font-weight:bold;color:var(--gold);font-size:14px;">
+            ${safe(r.name)}
+          </div>
+
+          <div style="font-size:11px;color:var(--muted);">
+            ${safe(r.city)} &bull; ${safe(r.status||"Active")}
+          </div>
         </div>
       </div>
+
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Orders</div>
           <div style="font-weight:bold;font-size:14px;color:var(--gold-light);">${rOrders.length}</div>
         </div>
+
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Sales</div>
           <div style="font-weight:bold;font-size:13px;color:var(--gold-light);">${money(sales)}</div>
         </div>
+
         <div style="background:#0b0b09;padding:8px;border-radius:8px;border:1px solid rgba(212,175,55,0.15)">
           <div style="font-size:10px;color:var(--muted);">Profit</div>
           <div style="font-weight:bold;font-size:13px;color:var(--gold);">${money(profit)}</div>
@@ -1499,42 +2058,56 @@ if(snapshotSelect && !snapshotSelect.dataset.listenerAttached){
       </div>
     `;
   });
+
   snapshotSelect.dataset.listenerAttached = "true";
 }
 
-// EDIT AND DELETE ORDERS
-window.editOrder = async function(orderId) {
-  const order = currentOrders.find(o => String(o.id) === String(orderId));
-  if (!order) { alert("Order not found."); return; }
+// EDIT ORDER
+window.editOrder = async function(orderId){
+  const order = currentOrders.find(o=>String(o.id)===String(orderId));
+
+  if(!order){
+    alert("Order not found.");
+    return;
+  }
 
   populateOrderResellers();
   editingOrderId = order.id;
 
-  document.getElementById("orderReseller").value = order.reseller_id || "";
-  document.getElementById("newOrderNumber").value = order.order_number || "";
-  document.getElementById("newOrderCustomer").value = order.customer_name || "";
-  document.getElementById("newOrderProduct").value = order.product_name || "";
-  document.getElementById("newOrderQuantity").value = order.quantity || 1;
-  document.getElementById("newOrderPrice").value = order.total_price || 0;
-  document.getElementById("newOrderOwnerProfit").value = order.owner_profit || 0;
-  document.getElementById("newOrderResellerProfit").value = order.reseller_profit || 0;
-  document.getElementById("newOrderDate").value = order.order_date || "";
-  document.getElementById("newOrderStatus").value = order.payment_status || "Pending";
+  document.getElementById("orderReseller").value = order.reseller_id||"";
+  document.getElementById("newOrderNumber").value = order.order_number||"";
+  document.getElementById("newOrderCustomer").value = order.customer_name||"";
+  document.getElementById("newOrderProduct").value = order.product_name||"";
+  document.getElementById("newOrderQuantity").value = order.quantity||1;
+  document.getElementById("newOrderPrice").value = order.total_price||0;
+  document.getElementById("newOrderOwnerProfit").value = order.owner_profit||0;
+  document.getElementById("newOrderResellerProfit").value = order.reseller_profit||0;
+  document.getElementById("newOrderDate").value = order.order_date||"";
+  document.getElementById("newOrderStatus").value = order.payment_status||"Pending";
 
   document.getElementById("addOrderForm").style.display = "block";
   document.getElementById("saveOrderBtn").textContent = "Update Order";
-  document.getElementById("addOrderForm").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  document.getElementById("addOrderForm").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
 };
 
-window.deleteOrder = async function(orderId) {
-  if (!confirm("Are you sure you want to permanently delete this order?")) return;
-  try {
-    const { error } = await db.from("orders").delete().eq("id", orderId);
-    if (error) throw error;
+// DELETE ORDER
+window.deleteOrder = async function(orderId){
+  if(!confirm("Are you sure you want to permanently delete this order?")) return;
+
+  try{
+    const {error} = await db.from("orders").delete().eq("id",orderId);
+
+    if(error) throw error;
+
     alert("Order deleted successfully!");
     await loadBusinessData();
-  } catch (error) {
-    alert("Could not delete order: " + error.message);
+
+  }catch(error){
+    alert("Could not delete order: "+error.message);
   }
 };
 
@@ -1546,13 +2119,18 @@ const saveOrderBtn = document.getElementById("saveOrderBtn");
 function populateOrderResellers(){
   const select = document.getElementById("orderReseller");
   if(!select) return;
-  select.innerHTML = '<option value="">Select Reseller</option>' +
-    currentResellers.map(r => `<option value="${safe(r.id)}">${safe(r.name)}</option>`).join("");
+
+  select.innerHTML =
+    '<option value="">Select Reseller</option>'+
+    currentResellers.map(r=>
+      `<option value="${safe(r.id)}">${safe(r.name)}</option>`
+    ).join("");
 }
 
 if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
-  addOrderBtn.addEventListener("click", () => {
+  addOrderBtn.addEventListener("click",()=>{
     editingOrderId = null;
+
     document.getElementById("saveOrderBtn").textContent = "Save Order";
     document.getElementById("newOrderNumber").value = "";
     document.getElementById("newOrderCustomer").value = "";
@@ -1564,25 +2142,32 @@ if(addOrderBtn && addOrderForm && !addOrderBtn.dataset.listenerAttached){
     document.getElementById("newOrderResellerProfit").value = "";
     document.getElementById("newOrderDate").value = "";
     document.getElementById("newOrderStatus").value = "Pending";
-    document.getElementById("orderReseller").value = "";
 
     populateOrderResellers();
+
+    document.getElementById("orderReseller").value = "";
     addOrderForm.style.display = "block";
-    addOrderForm.scrollIntoView({behavior:"smooth", block:"start"});
+
+    addOrderForm.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
   });
+
   addOrderBtn.dataset.listenerAttached = "true";
 }
 
 if(cancelOrderBtn && addOrderForm && !cancelOrderBtn.dataset.listenerAttached){
-  cancelOrderBtn.addEventListener("click", () => {
+  cancelOrderBtn.addEventListener("click",()=>{
     addOrderForm.style.display = "none";
     editingOrderId = null;
   });
+
   cancelOrderBtn.dataset.listenerAttached = "true";
 }
 
 if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
-  saveOrderBtn.addEventListener("click", async () => {
+  saveOrderBtn.addEventListener("click",async()=>{
     const resellerId = document.getElementById("orderReseller").value;
     const orderNumber = document.getElementById("newOrderNumber").value.trim();
     const customerName = document.getElementById("newOrderCustomer").value.trim();
@@ -1595,7 +2180,14 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     const orderDate = document.getElementById("newOrderDate").value;
     const paymentStatus = document.getElementById("newOrderStatus").value;
 
-    if(!resellerId || !orderNumber || !customerName || !customerPhone || !productName || !orderDate){
+    if(
+      !resellerId ||
+      !orderNumber ||
+      !customerName ||
+      !customerPhone ||
+      !productName ||
+      !orderDate
+    ){
       alert("Please fill in all order details.");
       return;
     }
@@ -1603,46 +2195,58 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
     saveOrderBtn.disabled = true;
     saveOrderBtn.textContent = "Saving...";
 
-    try {
+    try{
       const orderData = {
-        reseller_id: resellerId,
-        order_number: orderNumber,
-        customer_name: customerName,
-        product_name: productName,
-        quantity: quantity,
-        total_price: totalPrice,
-        owner_profit: ownerProfit,
-        reseller_profit: resellerProfit,
-        order_date: orderDate,
-        payment_status: paymentStatus
+        reseller_id:resellerId,
+        order_number:orderNumber,
+        customer_name:customerName,
+        product_name:productName,
+        quantity:quantity,
+        total_price:totalPrice,
+        owner_profit:ownerProfit,
+        reseller_profit:resellerProfit,
+        order_date:orderDate,
+        payment_status:paymentStatus
       };
 
       let error;
-      if (editingOrderId) {
-        const res = await db.from("orders").update(orderData).eq("id", editingOrderId);
+
+      if(editingOrderId){
+        const res = await db.from("orders")
+          .update(orderData)
+          .eq("id",editingOrderId);
+
         error = res.error;
-      } else {
+      }else{
         const res = await db.from("orders").insert([orderData]);
         error = res.error;
       }
 
-      if (error) throw error;
+      if(error) throw error;
 
-      if (!editingOrderId) {
-        await db.from("customers").insert([{ name: customerName, phone: customerPhone }]);
+      if(!editingOrderId){
+        await db.from("customers").insert([{
+          name:customerName,
+          phone:customerPhone
+        }]);
       }
 
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
+
       editingOrderId = null;
       addOrderForm.style.display = "none";
+
       await loadBusinessData();
-    } catch(error) {
-      alert("Could not save order: " + (error.message || String(error)));
-    } finally {
+
+    }catch(error){
+      alert("Could not save order: "+(error.message||String(error)));
+
+    }finally{
       saveOrderBtn.disabled = false;
       saveOrderBtn.textContent = "Save Order";
     }
   });
+
   saveOrderBtn.dataset.listenerAttached = "true";
 }
 
@@ -1653,22 +2257,24 @@ const cancelResellerBtn = document.getElementById("cancelResellerBtn");
 const saveResellerBtn = document.getElementById("saveResellerBtn");
 
 if(addResellerBtn && addResellerForm && !addResellerBtn.dataset.listenerAttached){
-  addResellerBtn.addEventListener("click", () => {
+  addResellerBtn.addEventListener("click",()=>{
     addResellerForm.style.display = "block";
     document.getElementById("newResellerName").focus();
   });
+
   addResellerBtn.dataset.listenerAttached = "true";
 }
 
 if(cancelResellerBtn && addResellerForm && !cancelResellerBtn.dataset.listenerAttached){
-  cancelResellerBtn.addEventListener("click", () => {
+  cancelResellerBtn.addEventListener("click",()=>{
     addResellerForm.style.display = "none";
   });
+
   cancelResellerBtn.dataset.listenerAttached = "true";
 }
 
 if(saveResellerBtn && !saveResellerBtn.dataset.listenerAttached){
-  saveResellerBtn.addEventListener("click", async () => {
+  saveResellerBtn.addEventListener("click",async()=>{
     const name = document.getElementById("newResellerName").value.trim();
     const city = document.getElementById("newResellerCity").value.trim();
     const phone = document.getElementById("newResellerPhone").value.trim();
@@ -1682,55 +2288,812 @@ if(saveResellerBtn && !saveResellerBtn.dataset.listenerAttached){
     saveResellerBtn.disabled = true;
     saveResellerBtn.textContent = "Saving...";
 
-    const {error} = await db.from("resellers").insert([{
-      name: name, city: city, phone: phone, joining_date: joiningDate, status: "Active"
-    }]);
+    try{
+      const {error} = await db.from("resellers").insert([{
+        name:name,
+        city:city,
+        phone:phone,
+        joining_date:joiningDate,
+        status:"Active"
+      }]);
 
-    saveResellerBtn.disabled = false;
-    saveResellerBtn.textContent = "Save Reseller";
+      if(error) throw error;
 
-    if(error){
-      alert("Could not save reseller: " + error.message);
-      return;
+      alert("Reseller added successfully!");
+
+      addResellerForm.style.display = "none";
+
+      document.getElementById("newResellerName").value = "";
+      document.getElementById("newResellerCity").value = "";
+      document.getElementById("newResellerPhone").value = "";
+      document.getElementById("newResellerJoiningDate").value = "";
+
+      await loadBusinessData();
+
+    }catch(error){
+      alert("Could not save reseller: "+error.message);
+
+    }finally{
+      saveResellerBtn.disabled = false;
+      saveResellerBtn.textContent = "Save Reseller";
     }
-
-    alert("Reseller added successfully!");
-    addResellerForm.style.display = "none";
-    document.getElementById("newResellerName").value = "";
-    document.getElementById("newResellerCity").value = "";
-    document.getElementById("newResellerPhone").value = "";
-    document.getElementById("newResellerJoiningDate").value = "";
-
-    await loadBusinessData();
   });
+
   saveResellerBtn.dataset.listenerAttached = "true";
 }
 
-// DOWNLOAD PNG REPORT
+// DOWNLOAD RESELLER PNG REPORT
 const downloadResellerReport = document.getElementById("downloadResellerReport");
-if (downloadResellerReport && !downloadResellerReport.dataset.listenerAttached) {
-  downloadResellerReport.addEventListener("click", async () => {
+
+if(downloadResellerReport && !downloadResellerReport.dataset.listenerAttached){
+  downloadResellerReport.addEventListener("click",async()=>{
     const profile = document.getElementById("resellerProfile");
-    if (!profile) return;
+    if(!profile) return;
+
     downloadResellerReport.disabled = true;
     downloadResellerReport.textContent = "Preparing...";
-    try {
-      const canvas = await window.html2canvas(profile, { backgroundColor: "#0b0b09", scale: 2, useCORS: true });
+
+    try{
+      const canvas = await window.html2canvas(profile,{
+        backgroundColor:"#0b0b09",
+        scale:2,
+        useCORS:true
+      });
+
       const link = document.createElement("a");
       link.download = "VEYORA-Reseller-Report.png";
       link.href = canvas.toDataURL("image/png");
+
       document.body.appendChild(link);
       link.click();
       link.remove();
-    } catch (error) {
-      alert("Download error: " + error.message);
-    } finally {
+
+    }catch(error){
+      alert("Download error: "+error.message);
+
+    }finally{
       downloadResellerReport.disabled = false;
       downloadResellerReport.textContent = "↓ Download PNG Report";
     }
   });
+
   downloadResellerReport.dataset.listenerAttached = "true";
 }
+
+/* =====================================================
+   VEYORA EXTRA FEATURES
+   1. REPORTS & ANALYTICS
+   2. MONTHLY HISTORY
+   3. PROFIT CONTROL
+   4. SETTINGS
+===================================================== */
+
+// COMMON CARD STYLE
+function extraCard(label,id){
+  return `
+    <div class="card">
+      <div class="card-label">${label}</div>
+      <div class="card-value" id="${id}">Rs. 0</div>
+    </div>
+  `;
+}
+
+// REPORTS & ANALYTICS
+function setupReportsSection(){
+  const section = document.getElementById("page-reports");
+  if(!section) return;
+
+  section.innerHTML = `
+    <p class="section-intro">Complete business performance and analytical reports.</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Reports & Analytics</h3>
+
+        <select id="reportsFilter" class="filter">
+          <option value="this">This Month</option>
+          <option value="previous">Previous Month</option>
+          <option value="3">Last 3 Months</option>
+          <option value="6" selected>Last 6 Months</option>
+          <option value="9">Last 9 Months</option>
+          <option value="all">Overall</option>
+        </select>
+      </div>
+
+      <div class="cards">
+        ${extraCard("Total Sales","reportSales")}
+        ${extraCard("Total Orders","reportOrders")}
+        ${extraCard("Owner Profit","reportOwnerProfit")}
+        ${extraCard("Reseller Profit","reportResellerProfit")}
+        ${extraCard("Approved Orders","reportApproved")}
+        ${extraCard("Pending Orders","reportPending")}
+      </div>
+
+      <div style="height:280px;position:relative;margin-top:25px;">
+        <canvas id="reportsChart"></canvas>
+      </div>
+
+      <div class="panel-head" style="margin-top:25px;">
+        <h3>Reseller Performance Report</h3>
+        <button class="view-all" id="exportReportsBtn">Download CSV</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Reseller</th>
+              <th>Orders</th>
+              <th>Sales</th>
+              <th>Reseller Profit</th>
+              <th>Owner Profit</th>
+            </tr>
+          </thead>
+          <tbody id="reportsResellerTable"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const filter = document.getElementById("reportsFilter");
+
+  if(filter){
+    filter.addEventListener("change",renderReports);
+  }
+
+  document.getElementById("exportReportsBtn").addEventListener("click",()=>{
+    const selected = filter ? filter.value : "all";
+
+    const orders = currentOrders.filter(o=>
+      isDateInPeriod(getOrderDate(o),selected)
+    );
+
+    const rows = [
+      ["Order Number","Date","Customer","Product","Sales","Owner Profit","Reseller Profit","Status"]
+    ];
+
+    orders.forEach(o=>{
+      rows.push([
+        o.order_number,
+        o.order_date||o.created_at,
+        o.customer_name,
+        o.product_name,
+        o.total_price,
+        o.owner_profit,
+        o.reseller_profit,
+        o.payment_status
+      ]);
+    });
+
+    downloadCSV(rows,"VEYORA-Business-Report.csv");
+  });
+}
+
+let reportsChartInstance = null;
+
+function renderReports(){
+  const filter = document.getElementById("reportsFilter");
+  if(!filter) return;
+
+  const selected = filter.value;
+
+  const orders = currentOrders.filter(o=>
+    isDateInPeriod(getOrderDate(o),selected)
+  );
+
+  const sales = orders.reduce((s,o)=>s+Number(o.total_price||0),0);
+  const ownerProfit = orders.reduce((s,o)=>s+Number(o.owner_profit||0),0);
+  const resellerProfit = orders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
+
+  const approved = orders.filter(o=>{
+    const status = String(o.payment_status||"").toLowerCase();
+    return status==="approved" || status==="paid";
+  }).length;
+
+  const pending = orders.length-approved;
+
+  document.getElementById("reportSales").textContent = money(sales);
+  document.getElementById("reportOrders").textContent = orders.length;
+  document.getElementById("reportOwnerProfit").textContent = money(ownerProfit);
+  document.getElementById("reportResellerProfit").textContent = money(resellerProfit);
+  document.getElementById("reportApproved").textContent = approved;
+  document.getElementById("reportPending").textContent = pending;
+
+  const resellerRows = currentResellers.map(r=>{
+    const resellerOrders = orders.filter(
+      o=>String(o.reseller_id)===String(r.id)
+    );
+
+    return {
+      name:r.name,
+      orders:resellerOrders.length,
+      sales:resellerOrders.reduce((s,o)=>s+Number(o.total_price||0),0),
+      resellerProfit:resellerOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0),
+      ownerProfit:resellerOrders.reduce((s,o)=>s+Number(o.owner_profit||0),0)
+    };
+  }).filter(r=>r.orders>0);
+
+  document.getElementById("reportsResellerTable").innerHTML = resellerRows.length
+    ? resellerRows.map(r=>`
+      <tr>
+        <td>${safe(r.name)}</td>
+        <td>${r.orders}</td>
+        <td>${money(r.sales)}</td>
+        <td style="color:var(--gold);">${money(r.resellerProfit)}</td>
+        <td>${money(r.ownerProfit)}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="5" class="empty">No reseller report data found.</td></tr>';
+
+  const canvas = document.getElementById("reportsChart");
+
+  if(canvas){
+    if(reportsChartInstance) reportsChartInstance.destroy();
+
+    const labels = ["Sales","Owner Profit","Reseller Profit"];
+
+    reportsChartInstance = new Chart(canvas.getContext("2d"),{
+      type:"bar",
+
+      data:{
+        labels:labels,
+        datasets:[{
+          label:"Amount (Rs.)",
+          data:[sales,ownerProfit,resellerProfit],
+          backgroundColor:["#d4af37","#0ea5e9","#a855f7"],
+          borderRadius:6
+        }]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+
+        plugins:{
+          legend:{
+            labels:{color:"#d4af37"}
+          }
+        },
+
+        scales:{
+          x:{
+            ticks:{color:"#c5b98e"},
+            grid:{display:false}
+          },
+          y:{
+            beginAtZero:true,
+            ticks:{
+              color:"#c5b98e",
+              callback:value=>"Rs. "+Number(value).toLocaleString()
+            },
+            grid:{color:"rgba(212,175,55,0.1)"}
+          }
+        }
+      }
+    });
+  }
+}
+
+// MONTHLY HISTORY
+function setupHistorySection(){
+  const section = document.getElementById("page-history");
+  if(!section) return;
+
+  section.innerHTML = `
+    <p class="section-intro">Complete month-by-month business history.</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Monthly Business History</h3>
+
+        <select id="historyFilter" class="filter">
+          <option value="3">Last 3 Months</option>
+          <option value="6" selected>Last 6 Months</option>
+          <option value="9">Last 9 Months</option>
+          <option value="all">Overall</option>
+        </select>
+      </div>
+
+      <div class="cards">
+        ${extraCard("Total Sales","historyTotalSales")}
+        ${extraCard("Owner Profit","historyOwnerProfit")}
+        ${extraCard("Reseller Profit","historyResellerProfit")}
+      </div>
+
+      <div class="table-wrap" style="margin-top:20px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Orders</th>
+              <th>Sales</th>
+              <th>Owner Profit</th>
+              <th>Reseller Profit</th>
+              <th>Total Profit</th>
+            </tr>
+          </thead>
+          <tbody id="historyTable"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("historyFilter").addEventListener("change",renderHistory);
+}
+
+function renderHistory(){
+  const filter = document.getElementById("historyFilter");
+  if(!filter) return;
+
+  const selected = filter.value;
+  const now = new Date();
+
+  let startMonth;
+
+  if(selected==="all"){
+    const dates = currentOrders.map(getOrderDate).filter(Boolean);
+
+    if(dates.length){
+      const earliest = dates.reduce((a,b)=>a<b?a:b);
+      startMonth = new Date(earliest.getFullYear(),earliest.getMonth(),1);
+    }else{
+      startMonth = new Date(now.getFullYear(),now.getMonth(),1);
+    }
+  }else{
+    startMonth = new Date(
+      now.getFullYear(),
+      now.getMonth()-Number(selected)+1,
+      1
+    );
+  }
+
+  const rows = [];
+
+  for(
+    let month=new Date(now.getFullYear(),now.getMonth(),1);
+    month>=startMonth;
+    month.setMonth(month.getMonth()-1)
+  ){
+    const year = month.getFullYear();
+    const monthNumber = month.getMonth();
+
+    const orders = currentOrders.filter(o=>{
+      const date = getOrderDate(o);
+
+      return date &&
+        date.getFullYear()===year &&
+        date.getMonth()===monthNumber;
+    });
+
+    const sales = orders.reduce((s,o)=>s+Number(o.total_price||0),0);
+    const owner = orders.reduce((s,o)=>s+Number(o.owner_profit||0),0);
+    const reseller = orders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
+
+    rows.push({
+      label:month.toLocaleDateString("en-US",{month:"long",year:"numeric"}),
+      count:orders.length,
+      sales:sales,
+      owner:owner,
+      reseller:reseller
+    });
+  }
+
+  const totalSales = rows.reduce((s,r)=>s+r.sales,0);
+  const totalOwner = rows.reduce((s,r)=>s+r.owner,0);
+  const totalReseller = rows.reduce((s,r)=>s+r.reseller,0);
+
+  document.getElementById("historyTotalSales").textContent = money(totalSales);
+  document.getElementById("historyOwnerProfit").textContent = money(totalOwner);
+  document.getElementById("historyResellerProfit").textContent = money(totalReseller);
+
+  document.getElementById("historyTable").innerHTML = rows.length
+    ? rows.map(r=>`
+      <tr>
+        <td>${r.label}</td>
+        <td>${r.count}</td>
+        <td>${money(r.sales)}</td>
+        <td style="color:var(--gold);">${money(r.owner)}</td>
+        <td>${money(r.reseller)}</td>
+        <td style="color:var(--gold);font-weight:bold;">${money(r.owner+r.reseller)}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="6" class="empty">No monthly records found.</td></tr>';
+}
+
+// PROFIT CONTROL
+function setupProfitControl(){
+  const section = document.getElementById("page-control");
+  if(!section) return;
+
+  section.innerHTML = `
+    <p class="section-intro">Review and update profit values for individual orders.</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Profit Control</h3>
+      </div>
+
+      <p style="color:var(--muted);font-size:12px;margin-bottom:15px;">
+        Select an existing order to view or update its owner and reseller profit.
+        Changes are saved to the existing orders table.
+      </p>
+
+      <label class="card-label">Select Order</label>
+      <select id="profitOrderSelect" class="filter" style="width:100%;margin:10px 0 20px;">
+        <option value="">Choose an order</option>
+      </select>
+
+      <div class="cards">
+        ${extraCard("Order Sales","controlSales")}
+        ${extraCard("Current Owner Profit","controlOwnerProfit")}
+        ${extraCard("Current Reseller Profit","controlResellerProfit")}
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px;">
+        <div>
+          <label class="card-label">Owner Profit (Rs.)</label>
+          <input type="number" min="0" id="controlOwnerInput" placeholder="Owner profit">
+        </div>
+
+        <div>
+          <label class="card-label">Reseller Profit (Rs.)</label>
+          <input type="number" min="0" id="controlResellerInput" placeholder="Reseller profit">
+        </div>
+      </div>
+
+      <button class="view-all" id="saveProfitControl" style="margin-top:18px;">
+        Save Profit Changes
+      </button>
+
+      <div id="profitControlMessage" style="margin-top:12px;color:var(--muted);font-size:13px;"></div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <div class="panel-head">
+        <h3>Profit History</h3>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Sales</th>
+              <th>Owner Profit</th>
+              <th>Reseller Profit</th>
+              <th>Total Profit</th>
+            </tr>
+          </thead>
+          <tbody id="profitControlHistory"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const select = document.getElementById("profitOrderSelect");
+
+  select.addEventListener("change",()=>{
+    const order = currentOrders.find(
+      o=>String(o.id)===String(select.value)
+    );
+
+    if(!order) return;
+
+    document.getElementById("controlSales").textContent = money(order.total_price);
+    document.getElementById("controlOwnerProfit").textContent = money(order.owner_profit);
+    document.getElementById("controlResellerProfit").textContent = money(order.reseller_profit);
+
+    document.getElementById("controlOwnerInput").value = Number(order.owner_profit||0);
+    document.getElementById("controlResellerInput").value = Number(order.reseller_profit||0);
+
+    document.getElementById("profitControlMessage").textContent =
+      "Selected order: "+(order.order_number||order.id);
+  });
+
+  document.getElementById("saveProfitControl").addEventListener("click",async()=>{
+    const orderId = select.value;
+
+    if(!orderId){
+      alert("Please select an order first.");
+      return;
+    }
+
+    const ownerProfit = Number(document.getElementById("controlOwnerInput").value);
+    const resellerProfit = Number(document.getElementById("controlResellerInput").value);
+
+    if(
+      !Number.isFinite(ownerProfit) ||
+      !Number.isFinite(resellerProfit) ||
+      ownerProfit<0 ||
+      resellerProfit<0
+    ){
+      alert("Enter valid profit amounts.");
+      return;
+    }
+
+    const button = document.getElementById("saveProfitControl");
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try{
+      const {error} = await db.from("orders")
+        .update({
+          owner_profit:ownerProfit,
+          reseller_profit:resellerProfit
+        })
+        .eq("id",orderId);
+
+      if(error) throw error;
+
+      document.getElementById("profitControlMessage").textContent =
+        "Profit values updated successfully.";
+
+      await loadBusinessData();
+
+      select.value = orderId;
+      select.dispatchEvent(new Event("change"));
+
+    }catch(error){
+      alert("Profit update failed: "+error.message);
+
+    }finally{
+      button.disabled = false;
+      button.textContent = "Save Profit Changes";
+    }
+  });
+}
+
+function renderProfitControl(){
+  const select = document.getElementById("profitOrderSelect");
+  if(!select) return;
+
+  const previousValue = select.value;
+
+  select.innerHTML =
+    '<option value="">Choose an order</option>'+
+    currentOrders.map(o=>`
+      <option value="${safe(o.id)}">
+        ${safe(o.order_number||o.id)} - ${safe(o.customer_name||"Customer")}
+      </option>
+    `).join("");
+
+  if(currentOrders.some(o=>String(o.id)===String(previousValue))){
+    select.value = previousValue;
+    select.dispatchEvent(new Event("change"));
+  }
+
+  const history = document.getElementById("profitControlHistory");
+
+  history.innerHTML = currentOrders.length
+    ? currentOrders.map(o=>`
+      <tr>
+        <td>${safe(o.order_number)}</td>
+        <td>${safe(o.customer_name)}</td>
+        <td>${money(o.total_price)}</td>
+        <td style="color:var(--gold);">${money(o.owner_profit)}</td>
+        <td>${money(o.reseller_profit)}</td>
+        <td style="font-weight:bold;">${money(Number(o.owner_profit||0)+Number(o.reseller_profit||0))}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="6" class="empty">No profit history available.</td></tr>';
+}
+
+// SETTINGS
+function setupSettings(){
+  const section = document.getElementById("page-settings");
+  if(!section) return;
+
+  section.innerHTML = `
+    <p class="section-intro">Manage your VEYORA business preferences and admin account.</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Business Settings</h3>
+      </div>
+
+      <label class="card-label">Business Name</label>
+      <input type="text" id="settingBusinessName" placeholder="VEYORA" style="width:100%;margin:8px 0 15px;">
+
+      <label class="card-label">WhatsApp Contact</label>
+      <input type="text" id="settingWhatsApp" placeholder="WhatsApp number" style="width:100%;margin:8px 0 15px;">
+
+      <label class="card-label">Currency</label>
+      <select id="settingCurrency" class="filter" style="width:100%;margin:8px 0 15px;">
+        <option value="Rs.">Pakistani Rupee (Rs.)</option>
+      </select>
+
+      <button class="view-all" id="saveBusinessSettings">Save Business Settings</button>
+
+      <p id="settingsMessage" style="color:var(--muted);font-size:12px;margin-top:12px;"></p>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <div class="panel-head">
+        <h3>Change Admin Password</h3>
+      </div>
+
+      <p style="color:var(--muted);font-size:12px;margin-bottom:12px;">
+        Enter a new password for your currently logged-in Supabase account.
+      </p>
+
+      <input type="password" id="settingNewPassword" placeholder="New password" style="width:100%;margin-bottom:12px;">
+
+      <input type="password" id="settingConfirmPassword" placeholder="Confirm new password" style="width:100%;margin-bottom:12px;">
+
+      <button class="view-all" id="updateAdminPassword">Update Password</button>
+
+      <p id="passwordSettingsMessage" style="color:var(--muted);font-size:12px;margin-top:12px;"></p>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <div class="panel-head">
+        <h3>Business Data Backup</h3>
+      </div>
+
+      <p style="color:var(--muted);font-size:12px;margin-bottom:15px;">
+        Download your currently loaded orders, resellers, customers and payments as a JSON backup.
+      </p>
+
+      <button class="view-all" id="downloadBusinessBackup">Download Full Backup</button>
+    </div>
+
+    <p style="color:var(--muted);font-size:11px;margin-top:15px;">
+      Business preferences are stored in this browser only. Password changes are handled by Supabase Authentication.
+    </p>
+  `;
+
+  // LOAD LOCAL SETTINGS
+  let savedSettings = {};
+
+  try{
+    savedSettings = JSON.parse(localStorage.getItem("veyoraBusinessSettings")||"{}");
+  }catch(error){
+    savedSettings = {};
+  }
+
+  document.getElementById("settingBusinessName").value =
+    savedSettings.businessName||"VEYORA";
+
+  document.getElementById("settingWhatsApp").value =
+    savedSettings.whatsapp||"";
+
+  document.getElementById("settingCurrency").value =
+    savedSettings.currency||"Rs.";
+
+  // SAVE SETTINGS
+  document.getElementById("saveBusinessSettings").addEventListener("click",()=>{
+    const settings = {
+      businessName:document.getElementById("settingBusinessName").value.trim(),
+      whatsapp:document.getElementById("settingWhatsApp").value.trim(),
+      currency:document.getElementById("settingCurrency").value
+    };
+
+    if(!settings.businessName){
+      alert("Please enter business name.");
+      return;
+    }
+
+    localStorage.setItem("veyoraBusinessSettings",JSON.stringify(settings));
+
+    document.getElementById("settingsMessage").textContent =
+      "Settings saved successfully in this browser.";
+  });
+
+  // CHANGE ADMIN PASSWORD
+  document.getElementById("updateAdminPassword").addEventListener("click",async()=>{
+    const password = document.getElementById("settingNewPassword").value;
+    const confirmPassword = document.getElementById("settingConfirmPassword").value;
+
+    if(password.length<6){
+      alert("Password must contain at least 6 characters.");
+      return;
+    }
+
+    if(password!==confirmPassword){
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const button = document.getElementById("updateAdminPassword");
+    button.disabled = true;
+    button.textContent = "Updating...";
+
+    try{
+      const {error} = await db.auth.updateUser({password:password});
+
+      if(error) throw error;
+
+      document.getElementById("passwordSettingsMessage").textContent =
+        "Admin password updated successfully.";
+
+      document.getElementById("settingNewPassword").value = "";
+      document.getElementById("settingConfirmPassword").value = "";
+
+    }catch(error){
+      document.getElementById("passwordSettingsMessage").textContent =
+        "Password update failed: "+error.message;
+
+    }finally{
+      button.disabled = false;
+      button.textContent = "Update Password";
+    }
+  });
+
+  // FULL BUSINESS BACKUP
+  document.getElementById("downloadBusinessBackup").addEventListener("click",()=>{
+    const backup = {
+      business:"VEYORA",
+      backup_date:new Date().toISOString(),
+      orders:currentOrders,
+      resellers:currentResellers,
+      customers:currentCustomers,
+      payments:currentPayments
+    };
+
+    const blob = new Blob(
+      [JSON.stringify(backup,null,2)],
+      {type:"application/json"}
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "VEYORA-Business-Backup.json";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+  });
+}
+
+// CSV DOWNLOAD HELPER
+function downloadCSV(rows,fileName){
+  const csv = rows.map(row=>
+    row.map(value=>{
+      const text = String(value??"").replace(/"/g,'""');
+      return '"'+text+'"';
+    }).join(",")
+  ).join("\n");
+
+  const blob = new Blob(
+    ["\uFEFF"+csv],
+    {type:"text/csv;charset=utf-8;"}
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = fileName;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+// INITIALIZE THE FOUR NEW SECTIONS
+setupReportsSection();
+setupHistorySection();
+setupProfitControl();
+setupSettings();
+
+// EXTEND EXISTING RENDER ALL WITHOUT REMOVING OLD FEATURES
+const originalRenderAll = renderAll;
+
+renderAll = function(){
+  originalRenderAll();
+
+  renderReports();
+  renderHistory();
+  renderProfitControl();
+};
+
 </script>
 </body>
 </html>
