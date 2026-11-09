@@ -2259,7 +2259,7 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
           amount:totalPrice,
           status:paymentStatus
         };
-        const paymentRes = await db.from("payments").upsert(paymentRecord,{onConflict:"order_id"});
+        const paymentRes = await db.from("payments").upsert(paymentRecord);
         if(paymentRes.error) throw paymentRes.error;
       }
 
