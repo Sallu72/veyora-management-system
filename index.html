@@ -1008,6 +1008,7 @@ function renderAll(){
   renderTables();
   renderChart();
   renderCustomersTable();
+  renderReports();
   populateResellerSnapshotDropdown();
   if(selectedResellerId) renderResellerProfileOrders();
 }
@@ -1340,7 +1341,243 @@ function renderChart(){
     filter.dataset.listenerAttached = 'true';
   }
 }
+// =====================================
+// VEYORA REPORTS & ANALYTICS
+// =====================================
 
+function renderReports(){
+
+  const filter = document.getElementById("reportsFilter");
+  if(!filter) return;
+
+  const selected = filter.value || "this";
+  const now = new Date();
+
+  // FILTER ORDERS
+  const filteredOrders = currentOrders.filter(order => {
+    return isDateInPeriod(getOrderDate(order), selected);
+  });
+
+  // SALES & PROFITS
+  const totalSales = filteredOrders.reduce(
+    (sum,o) => sum + Number(o.total_price || 0), 0
+  );
+
+  const totalOwnerProfit = filteredOrders.reduce(
+    (sum,o) => sum + Number(o.owner_profit || 0), 0
+  );
+
+  const totalResellerProfit = filteredOrders.reduce(
+    (sum,o) => sum + Number(o.reseller_profit || 0), 0
+  );
+
+  // APPROVED AND PENDING SALES
+  const approved = filteredOrders
+    .filter(o => ["approved","paid"].includes(
+      String(o.payment_status || "").toLowerCase()
+    ))
+    .reduce((sum,o) => sum + Number(o.total_price || 0), 0);
+
+  const pending = filteredOrders
+    .filter(o => !["approved","paid"].includes(
+      String(o.payment_status || "").toLowerCase()
+    ))
+    .reduce((sum,o) => sum + Number(o.total_price || 0), 0);
+
+  // UPDATE SUMMARY
+  document.getElementById("reportSales").textContent = money(totalSales);
+  document.getElementById("reportOrders").textContent = filteredOrders.length;
+  document.getElementById("reportOwnerProfit").textContent = money(totalOwnerProfit);
+  document.getElementById("reportResellerProfit").textContent = money(totalResellerProfit);
+  document.getElementById("reportApproved").textContent = money(approved);
+  document.getElementById("reportPending").textContent = money(pending);
+
+  // RESELLER PERFORMANCE
+  const resellerRows = currentResellers.map(r => {
+
+    const orders = filteredOrders.filter(o =>
+      String(o.reseller_id) === String(r.id)
+    );
+
+    const sales = orders.reduce(
+      (sum,o) => sum + Number(o.total_price || 0), 0
+    );
+
+    const resellerProfit = orders.reduce(
+      (sum,o) => sum + Number(o.reseller_profit || 0), 0
+    );
+
+    const ownerProfit = orders.reduce(
+      (sum,o) => sum + Number(o.owner_profit || 0), 0
+    );
+
+    return {
+      name: r.name,
+      orders: orders.length,
+      sales,
+      resellerProfit,
+      ownerProfit
+    };
+
+  }).sort((a,b) => b.sales - a.sales);
+
+  document.getElementById("reportsResellerTable").innerHTML =
+    resellerRows.length
+      ? resellerRows.map(r => `
+          <tr>
+            <td><b>${safe(r.name)}</b></td>
+            <td>${r.orders}</td>
+            <td>${money(r.sales)}</td>
+            <td style="color:var(--gold);">${money(r.resellerProfit)}</td>
+            <td>${money(r.ownerProfit)}</td>
+          </tr>
+        `).join("")
+      : '<tr><td colspan="5" class="empty">No reseller records found.</td></tr>';
+
+  // REPORTS CHART
+  const canvas = document.getElementById("reportsChart");
+  if(!canvas) return;
+
+  const months = [];
+
+  if(selected === "previous"){
+    months.push(new Date(now.getFullYear(), now.getMonth()-1, 1));
+  }
+  else if(selected === "this"){
+    months.push(new Date(now.getFullYear(), now.getMonth(), 1));
+  }
+  else if(selected === "all"){
+    const dated = currentOrders
+      .map(o => getOrderDate(o))
+      .filter(Boolean);
+
+    let earliest = dated.length
+      ? new Date(Math.min(...dated.map(d => d.getTime())))
+      : new Date(now.getFullYear(), now.getMonth(), 1);
+
+    let date = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
+
+    while(date <= now){
+      months.push(new Date(date));
+      date.setMonth(date.getMonth()+1);
+    }
+  }
+  else {
+    const count = Number(selected) || 3;
+
+    for(let i = count-1; i >= 0; i--){
+      months.push(
+        new Date(now.getFullYear(), now.getMonth()-i, 1)
+      );
+    }
+  }
+
+  const labels = [];
+  const salesData = [];
+  const ownerData = [];
+  const resellerData = [];
+
+  months.forEach(month => {
+
+    const monthOrders = filteredOrders.filter(o => {
+      const date = getOrderDate(o);
+
+      return date &&
+        date.getFullYear() === month.getFullYear() &&
+        date.getMonth() === month.getMonth();
+    });
+
+    labels.push(
+      month.toLocaleDateString("en-US", {
+        month:"short",
+        year:"numeric"
+      })
+    );
+
+    salesData.push(
+      monthOrders.reduce((s,o) => s + Number(o.total_price || 0), 0)
+    );
+
+    ownerData.push(
+      monthOrders.reduce((s,o) => s + Number(o.owner_profit || 0), 0)
+    );
+
+    resellerData.push(
+      monthOrders.reduce((s,o) => s + Number(o.reseller_profit || 0), 0)
+    );
+  });
+
+  if(reportsChartInstance){
+    reportsChartInstance.destroy();
+  }
+
+  reportsChartInstance = new Chart(canvas.getContext("2d"), {
+    type:"bar",
+
+    data:{
+      labels:labels,
+      datasets:[
+        {
+          label:"Total Sales",
+          data:salesData,
+          backgroundColor:"#d4af37",
+          borderRadius:5
+        },
+        {
+          label:"Owner Profit",
+          data:ownerData,
+          backgroundColor:"#0ea5e9",
+          borderRadius:5
+        },
+        {
+          label:"Reseller Profit",
+          data:resellerData,
+          backgroundColor:"#a855f7",
+          borderRadius:5
+        }
+      ]
+    },
+
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+
+      plugins:{
+        legend:{
+          labels:{
+            color:"#d4af37"
+          }
+        }
+      },
+
+      scales:{
+        x:{
+          ticks:{color:"#aaa"},
+          grid:{display:false}
+        },
+
+        y:{
+          beginAtZero:true,
+          ticks:{
+            color:"#aaa",
+            callback:value => "Rs. " + value.toLocaleString()
+          },
+          grid:{
+            color:"rgba(212,175,55,0.08)"
+          }
+        }
+      }
+    }
+  });
+}
+
+// REPORT FILTER LISTENER
+const reportsFilter = document.getElementById("reportsFilter");
+
+if(reportsFilter && !reportsFilter.dataset.listenerAttached){
+  reportsFilter.addEventListener("change", renderReports);
+  reportsFilter.dataset.listenerAttached = "true";
+}
 // RENDER TABLES & SNAPSHOTS
 function renderTables(){
   const now = new Date();
