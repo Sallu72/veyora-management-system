@@ -499,17 +499,9 @@ th{
   box-shadow:none;
 }
 
-.rank-1{
-  color:#FFD700;
-}
-
-.rank-2{
-  color:#C0C0C0;
-}
-
-.rank-3{
-  color:#CD7F32;
-}
+.rank-1{color:#FFD700;}
+.rank-2{color:#C0C0C0;}
+.rank-3{color:#CD7F32;}
 
 .top-reseller-avatar{
   width:53px;
@@ -527,38 +519,12 @@ th{
   box-shadow:0 0 10px rgba(212,175,55,.15);
 }
 
-.top-reseller-info{
-  min-width:0;
-}
-
-.top-reseller-name{
-  color:#fff;
-  font-size:14px;
-  font-weight:600;
-}
-
-.top-reseller-city{
-  color:#b9c7d5;
-  font-size:12px;
-  margin-top:3px;
-}
-
-.top-reseller-stats{
-  text-align:right;
-  flex-shrink:0;
-}
-
-.top-reseller-profit{
-  color:var(--gold);
-  font-size:17px;
-  font-weight:800;
-}
-
-.top-reseller-orders{
-  color:#eee;
-  font-size:12px;
-  margin-top:3px;
-}
+.top-reseller-info{min-width:0;}
+.top-reseller-name{color:#fff;font-size:14px;font-weight:600;}
+.top-reseller-city{color:#b9c7d5;font-size:12px;margin-top:3px;}
+.top-reseller-stats{text-align:right;flex-shrink:0;}
+.top-reseller-profit{color:var(--gold);font-size:17px;font-weight:800;}
+.top-reseller-orders{color:#eee;font-size:12px;margin-top:3px;}
 
 /* RESELLER SNAPSHOT */
 .snapshot-layout{
@@ -601,15 +567,8 @@ th{
   line-height:1;
 }
 
-.snapshot-wreath:before{
-  left:-2px;
-  transform:rotate(-48deg);
-}
-
-.snapshot-wreath:after{
-  right:-2px;
-  transform:scaleX(-1) rotate(-48deg);
-}
+.snapshot-wreath:before{left:-2px;transform:rotate(-48deg);}
+.snapshot-wreath:after{right:-2px;transform:scaleX(-1) rotate(-48deg);}
 
 .snapshot-avatar{
   width:53px;
@@ -627,19 +586,8 @@ th{
   z-index:1;
 }
 
-.snapshot-name{
-  color:#fff;
-  font-size:13px;
-  font-weight:bold;
-  margin-top:2px;
-}
-
-.snapshot-city{
-  color:#c5c5c5;
-  font-size:11px;
-  margin-top:2px;
-}
-
+.snapshot-name{color:#fff;font-size:13px;font-weight:bold;margin-top:2px;}
+.snapshot-city{color:#c5c5c5;font-size:11px;margin-top:2px;}
 .snapshot-active{
   background:linear-gradient(135deg,#ffd75e,#d49b16);
   color:#171008;
@@ -682,34 +630,14 @@ th{
   border-right:1px solid rgba(212,175,55,.2);
 }
 
-.snapshot-cell:last-child{
-  border-right:none;
-}
-
-.snapshot-cell div{
-  color:#e8e8e8;
-  font-size:12px;
-  margin-bottom:6px;
-}
-
-.snapshot-cell strong{
-  color:#ffd34e;
-  font-size:15px;
-  overflow-wrap:anywhere;
-}
-
-.snapshot-cell.paid-cell strong{
-  color:#16db70;
-}
-
-.snapshot-cell.pending-cell strong{
-  color:#ffad24;
-}
+.snapshot-cell:last-child{border-right:none;}
+.snapshot-cell div{color:#e8e8e8;font-size:12px;margin-bottom:6px;}
+.snapshot-cell strong{color:#ffd34e;font-size:15px;overflow-wrap:anywhere;}
+.snapshot-cell.paid-cell strong{color:#16db70;}
+.snapshot-cell.pending-cell strong{color:#ffad24;}
 
 @media(max-width:650px){
-  .snapshot-layout{
-    grid-template-columns:110px minmax(0,1fr);
-  }
+  .snapshot-layout{grid-template-columns:110px minmax(0,1fr);}
   .snapshot-cell div{font-size:10px}
   .snapshot-cell strong{font-size:11px}
 }
@@ -1268,7 +1196,8 @@ th{
           <table>
             <thead>
               <tr>
-                <th>Order</th>
+                <th>Order No.</th>
+                <th>Customer</th>
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Approval Date</th>
@@ -1933,35 +1862,53 @@ function renderTables(){
     orderStatusFilter.dataset.listenerAttached = "true";
   }
 
-  // PAYMENTS TABLE
+  // PAYMENTS TABLE (Fixed to show Order Number, Customer Name & Amount correctly)
   document.getElementById("paymentsTable").innerHTML = currentPayments.length
-    ? currentPayments.map(p=>`
-      <tr>
-        <td>${safe(p.order_id)}</td>
-        <td>${money(p.amount)}</td>
-        <td>${safe(p.status)}</td>
-        <td>${safe(p.approved_at||"—")}</td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="4" class="empty">No payments.</td></tr>';
+    ? currentPayments.map(p=>{
+        const matchedOrder = currentOrders.find(o => String(o.id) === String(p.order_id));
+        const orderNo = matchedOrder ? matchedOrder.order_number : (p.order_id || "—");
+        const custName = matchedOrder ? matchedOrder.customer_name : "—";
+        const amt = money(p.amount || (matchedOrder ? matchedOrder.total_price : 0));
+        const stat = p.status || (matchedOrder ? matchedOrder.payment_status : "Pending");
+        const isApproved = String(stat).toLowerCase() === "approved" || String(stat).toLowerCase() === "paid";
+        const appDate = p.approved_at ? String(p.approved_at).substring(0, 10) : "—";
 
-  // CUSTOMERS TABLE (Updated Header to Order Date & Only Date show)
-  document.getElementById("customersTable").innerHTML = currentCustomers.length
-    ? currentCustomers.map(c=>{
-        // Find matching order date for this customer if available
-        const matchingOrder = currentOrders.find(o => String(o.customer_name).toLowerCase() === String(c.name).toLowerCase());
+        return `
+          <tr>
+            <td>${safe(orderNo)}</td>
+            <td>${safe(custName)}</td>
+            <td>${amt}</td>
+            <td>
+              <span class="status ${isApproved ? "approved" : "pending"}">${safe(stat)}</span>
+            </td>
+            <td>${safe(appDate)}</td>
+          </tr>
+        `;
+      }).join("")
+    : '<tr><td colspan="5" class="empty">No payments recorded.</td></tr>';
+
+  // CUSTOMERS TABLE (Strictly filters out customers who no longer have active orders)
+  const activeCustomerOrders = currentOrders.map(o => String(o.customer_name || "").trim().toLowerCase());
+  const validCustomers = currentCustomers.filter(c => {
+    const cName = String(c.name || "").trim().toLowerCase();
+    return cName && activeCustomerOrders.includes(cName);
+  });
+
+  document.getElementById("customersTable").innerHTML = validCustomers.length
+    ? validCustomers.map(c=>{
+        const matchingOrder = currentOrders.find(o => String(o.customer_name || "").trim().toLowerCase() === String(c.name || "").trim().toLowerCase());
         const rawDate = matchingOrder ? (matchingOrder.order_date || matchingOrder.created_at) : c.created_at;
         const formattedDate = rawDate ? String(rawDate).substring(0, 10) : "—";
         return `
           <tr>
             <td>${safe(c.name)}</td>
-            <td>${safe(c.phone)}</td>
+            <td>${safe(c.phone || "—")}</td>
             <td>${safe(c.city || "—")}</td>
             <td>${safe(formattedDate)}</td>
           </tr>
         `;
       }).join("")
-    : '<tr><td colspan="4" class="empty">No customers.</td></tr>';
+    : '<tr><td colspan="4" class="empty">No active customers found.</td></tr>';
 }
 
 // RESELLER PROFILE ORDER HISTORY
