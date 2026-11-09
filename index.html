@@ -578,144 +578,201 @@ th{
   font-size:12px;
   margin-top:3px;
 }
-  /* PREMIUM RESELLER SNAPSHOT */
+  /* RESELLER SNAPSHOT - MATCH REFERENCE IMAGE */
 
-.snapshot-empty{
-  text-align:center;
-  padding:25px 10px;
-  color:var(--muted);
-  font-size:12px;
+.snapshot-layout{
+  display:grid;
+  grid-template-columns:155px minmax(0,1fr);
+  gap:10px;
+  align-items:stretch;
+  min-height:140px;
 }
 
-.snapshot-profile{
+.snapshot-left{
+  background:linear-gradient(145deg,#100e09,#050505);
+  border:1px solid rgba(212,175,55,.15);
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
   text-align:center;
-  padding:15px 10px 20px;
-  border-bottom:1px solid rgba(212,175,55,.2);
-  margin-bottom:15px;
 }
 
-.snapshot-avatar{
-  width:75px;
-  height:75px;
-  margin:0 auto 10px;
+.snapshot-wreath{
+  width:90px;
+  height:78px;
   display:flex;
   align-items:center;
   justify-content:center;
+  position:relative;
+  margin-bottom:3px;
+}
+
+.snapshot-wreath:before,
+.snapshot-wreath:after{
+  content:"❧";
+  position:absolute;
+  top:9px;
+  color:#d4af37;
+  font-size:54px;
+  line-height:1;
+}
+
+.snapshot-wreath:before{
+  left:-2px;
+  transform:rotate(-48deg);
+}
+
+.snapshot-wreath:after{
+  right:-2px;
+  transform:scaleX(-1) rotate(-48deg);
+}
+
+.snapshot-avatar{
+  width:53px;
+  height:53px;
+  border:2px solid #d4af37;
   border-radius:50%;
-  border:3px solid #d4af37;
-  background:radial-gradient(circle,#493714,#090806);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   color:#ffd700;
-  font-size:32px;
+  font-size:25px;
   font-weight:bold;
-  box-shadow:0 0 20px rgba(212,175,55,.25);
+  background:#080808;
+  box-shadow:0 0 12px rgba(212,175,55,.25);
+  z-index:1;
 }
 
 .snapshot-name{
-  color:var(--gold-light);
-  font-size:17px;
+  color:#fff;
+  font-size:13px;
   font-weight:bold;
+  margin-top:2px;
 }
 
-.snapshot-location{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
-.snapshot-status{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:9px;
-  padding:5px 13px;
-  border:1px solid rgba(46,204,113,.3);
-  border-radius:20px;
-  color:#55d98b;
-  background:rgba(46,204,113,.07);
+.snapshot-city{
+  color:#c5c5c5;
   font-size:11px;
+  margin-top:2px;
 }
 
-.snapshot-status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#2ecc71;
+.snapshot-active{
+  background:linear-gradient(135deg,#ffd75e,#d49b16);
+  color:#171008;
+  font-size:11px;
+  font-weight:bold;
+  padding:4px 15px;
+  border-radius:20px;
+  margin-top:5px;
 }
 
-.snapshot-stats{
+.snapshot-right{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-
-.snapshot-stat{
-  background:linear-gradient(145deg,#15130e,#090909);
-  border:1px solid rgba(212,175,55,.2);
-  border-radius:11px;
-  padding:13px 8px;
-  text-align:center;
+  grid-template-rows:1fr 1fr;
   min-width:0;
-  transition:.2s;
+  border:1px solid rgba(212,175,55,.2);
+  border-radius:12px;
+  overflow:hidden;
 }
 
-.snapshot-stat:hover{
-  border-color:var(--gold);
-  transform:translateY(-2px);
+.snapshot-top-stats,
+.snapshot-bottom-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
-.snapshot-stat-icon{
-  font-size:19px;
-  margin-bottom:5px;
+.snapshot-top-stats{
+  border-bottom:1px solid rgba(212,175,55,.3);
 }
 
-.snapshot-stat-label{
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:.6px;
+.snapshot-cell{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8px 3px;
+  background:rgba(12,12,12,.8);
+  min-width:0;
+  border-right:1px solid rgba(212,175,55,.2);
+}
+
+.snapshot-cell:last-child{
+  border-right:none;
+}
+
+.snapshot-cell div{
+  color:#e8e8e8;
+  font-size:12px;
   margin-bottom:6px;
 }
 
-.snapshot-stat-value{
-  color:var(--gold-light);
-  font-size:14px;
-  font-weight:bold;
+.snapshot-cell strong{
+  color:#ffd34e;
+  font-size:15px;
   overflow-wrap:anywhere;
 }
 
-.snapshot-stat-value.gold-value{
-  color:#ffd700;
+.snapshot-cell.paid-cell strong{
+  color:#16db70;
 }
 
-@media(max-width:500px){
-  .snapshot-stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+.snapshot-cell.pending-cell strong{
+  color:#ffad24;
+}
+
+.snapshot-view{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px;
+  background:#101010;
+}
+
+.snapshot-view button{
+  border:0;
+  border-radius:8px;
+  padding:9px 12px;
+  background:linear-gradient(135deg,#ffdc70,#d69e1d);
+  color:#171008;
+  font-weight:bold;
+  font-size:11px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.snapshot-view button:hover{
+  background:#ffe18a;
+}
+
+.snapshot-empty{
+  color:var(--muted);
+  text-align:center;
+  padding:35px 10px;
+  font-size:12px;
+}
+
+@media(max-width:650px){
+  .snapshot-layout{
+    grid-template-columns:110px minmax(0,1fr);
+  }
+
+  .snapshot-cell div{
+    font-size:10px;
+  }
+
+  .snapshot-cell strong{
+    font-size:11px;
+  }
+
+  .snapshot-view button{
+    font-size:9px;
+    padding:7px 5px;
   }
 }
-</style>
-</head>
-
-<body>
-
-<!-- OWNER LOGIN -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="brand">VEYORA</div>
-    <div class="brand-sub">BUSINESS MANAGEMENT</div>
-    <h2>Owner Login</h2>
-    <p>Secure access to your private business dashboard.</p>
-
-    <form id="loginForm">
-      <input id="email" type="email" placeholder="Owner email" required>
-      <input id="password" type="password" placeholder="Password" required>
-      <button class="gold-btn" style="width:100%;margin-top:12px">
-        Login to Dashboard
-      </button>
-    </form>
-
-    <div id="loginMessage" class="message"></div>
-  </div>
-</div>
-
 <!-- MAIN APP -->
 <div id="app" class="hidden">
 
