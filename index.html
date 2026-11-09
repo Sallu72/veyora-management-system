@@ -450,6 +450,119 @@ th{
   border-color:#d4af37;
   color:#d4af37;
 }
+  /* PREMIUM TOP 3 RESELLERS */
+
+.premium-top-reseller{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:63px;
+  padding:8px 12px;
+  border-bottom:1px solid rgba(212,175,55,.18);
+  background:linear-gradient(
+    90deg,
+    rgba(212,175,55,.035),
+    transparent
+  );
+  transition:.25s ease;
+}
+
+.premium-top-reseller:hover{
+  background:rgba(212,175,55,.09);
+}
+
+.top-rank-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+}
+
+.rank-medal{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:900;
+  border:2px solid;
+  box-shadow:0 0 12px rgba(212,175,55,.2);
+}
+
+.rank-medal span{
+  font-size:23px;
+}
+
+.rank-1{
+  color:#FFD700;
+  border-color:#FFD700;
+  background:radial-gradient(circle,#8b6815,#171008);
+  box-shadow:0 0 15px rgba(255,215,0,.35);
+}
+
+.rank-2{
+  color:#D5D5D5;
+  border-color:#C0C0C0;
+  background:radial-gradient(circle,#555,#111);
+}
+
+.rank-3{
+  color:#CD8B45;
+  border-color:#CD8B45;
+  background:radial-gradient(circle,#68401c,#130b06);
+}
+
+.top-reseller-avatar{
+  width:53px;
+  height:53px;
+  min-width:53px;
+  border:2px solid var(--gold);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold-light);
+  font-size:25px;
+  font-weight:bold;
+  background:#080808;
+  box-shadow:0 0 10px rgba(212,175,55,.15);
+}
+
+.top-reseller-info{
+  min-width:0;
+}
+
+.top-reseller-name{
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+}
+
+.top-reseller-city{
+  color:#b9c7d5;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.top-reseller-stats{
+  text-align:right;
+  flex-shrink:0;
+}
+
+.top-reseller-profit{
+  color:var(--gold);
+  font-size:17px;
+  font-weight:800;
+}
+
+.top-reseller-orders{
+  color:#eee;
+  font-size:12px;
+  margin-top:3px;
+}
 </style>
 </head>
 
@@ -1331,33 +1444,68 @@ function renderOverview(){
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
 
-  // Top 3 Resellers Ranking
-  const ranking = currentResellers.map(r=>{
-    const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
-    const profit = rOrders.reduce((s,o)=>s+Number(o.reseller_profit||0),0);
-    const rSales = rOrders.reduce((s,o)=>s+Number(o.total_price||0),0);
+ // TOP 3 RESELLERS RANKING - PREMIUM DESIGN
+const ranking = currentResellers.map(r=>{
+  const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
 
-    return {...r,profit,orderCount:rOrders.length,sales:rSales};
-  }).sort((a,b)=>b.profit-a.profit).slice(0,3);
+  const profit = rOrders.reduce(
+    (s,o)=>s+Number(o.reseller_profit||0),0
+  );
 
-  document.getElementById("topResellers").innerHTML = ranking.length
-    ? ranking.map((r,i)=>`
-      <div class="top-reseller-row">
-        <div style="display:flex;align-items:center;">
-          <div class="reseller-badge">${i+1}</div>
-          <div>
-            <div style="font-weight:bold;color:var(--gold-light);font-size:13px;">${safe(r.name)}</div>
-            <div style="font-size:11px;color:var(--muted);">${safe(r.city||"Pakistan")}</div>
+  const rSales = rOrders.reduce(
+    (s,o)=>s+Number(o.total_price||0),0
+  );
+
+  return {
+    ...r,
+    profit,
+    orderCount:rOrders.length,
+    sales:rSales
+  };
+
+}).sort((a,b)=>b.profit-a.profit).slice(0,3);
+
+document.getElementById("topResellers").innerHTML = ranking.length
+  ? ranking.map((r,i)=>`
+
+    <div class="top-reseller-row premium-top-reseller">
+
+      <div class="top-rank-left">
+
+        <div class="rank-medal rank-${i+1}">
+          <span>${i+1}</span>
+        </div>
+
+        <div class="top-reseller-avatar">
+          ${safe((r.name||"R").charAt(0).toUpperCase())}
+        </div>
+
+        <div class="top-reseller-info">
+          <div class="top-reseller-name">
+            ${safe(r.name)}
+          </div>
+
+          <div class="top-reseller-city">
+            ${safe(r.city||"Pakistan")}
           </div>
         </div>
 
-        <div style="text-align:right;">
-          <div style="color:var(--gold);font-weight:bold;font-size:13px;">${money(r.profit)}</div>
-          <div style="font-size:10px;color:var(--muted);">${r.orderCount} Orders</div>
+      </div>
+
+      <div class="top-reseller-stats">
+        <div class="top-reseller-profit">
+          ${money(r.profit)}
+        </div>
+
+        <div class="top-reseller-orders">
+          ${r.orderCount} Orders
         </div>
       </div>
-    `).join("")
-    : '<div class="empty">No reseller records yet.</div>';
+
+    </div>
+
+  `).join("")
+  : '<div class="empty">No reseller records yet.</div>';
 
   // Reseller Performance Table
   const perfRows = currentResellers.map(r=>{
