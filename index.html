@@ -1857,13 +1857,61 @@ document.getElementById("newOrderCity").value = order.customer_city || "";
   document.getElementById("addOrderForm").scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
+// DELETE ORDER AND CUSTOMER RECORD
 window.deleteOrder = async function(orderId) {
   if (!confirm("Are you sure you want to permanently delete this order?")) return;
+
   try {
-    const { error } = await db.from("orders").delete().eq("id", orderId);
-    if (error) throw error;
+    // Find selected order
+    const order = currentOrders.find(
+      o => String(o.id) === String(orderId)
+    );
+
+    if (!order) {
+      alert("Order not found.");
+      return;
+    }
+
+    const customerName = order.customer_name;
+    const customerPhone = order.customer_phone || order.phone;
+
+    // Delete order
+    const { error: orderError } = await db
+      .from("orders")
+      .delete()
+      .eq("id", orderId);
+
+    if (orderError) throw orderError;
+
+    // Check remaining orders of this customer
+    const { data: remainingOrders, error: checkError } = await db
+      .from("orders")
+      .select("id")
+      .eq("customer_name", customerName);
+
+    if (checkError) throw checkError;
+
+    // Delete customer only when no orders remain
+    if (!remainingOrders || remainingOrders.length === 0) {
+
+      let customerQuery = db
+        .from("customers")
+        .delete()
+        .eq("name", customerName);
+
+      if (customerPhone) {
+        customerQuery = customerQuery.eq("phone", customerPhone);
+      }
+
+      const { error: customerError } = await customerQuery;
+
+      if (customerError) throw customerError;
+    }
+
     alert("Order deleted successfully!");
+
     await loadBusinessData();
+
   } catch (error) {
     alert("Could not delete order: " + error.message);
   }
