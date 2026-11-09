@@ -492,8 +492,23 @@ th{
   box-shadow:0 0 12px rgba(212,175,55,.2);
 }
 
-.rank-medal span{
-  font-size:23px;
+.rank-medal{
+  font-size:27px;
+  border:none;
+  background:transparent;
+  box-shadow:none;
+}
+
+.rank-1{
+  color:#FFD700;
+}
+
+.rank-2{
+  color:#C0C0C0;
+}
+
+.rank-3{
+  color:#CD7F32;
 }
 
 .rank-1{
@@ -1473,7 +1488,7 @@ document.getElementById("topResellers").innerHTML = ranking.length
       <div class="top-rank-left">
 
         <div class="rank-medal rank-${i+1}">
-          <span>${i+1}</span>
+          <span>${i===0?"🏆":i===1?"🥈":"🥉"}</span>
         </div>
 
         <div class="top-reseller-avatar">
