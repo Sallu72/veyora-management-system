@@ -2407,11 +2407,22 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
 
       // Automatically add or update payment record
       if(savedOrder){
-        const paymentRecord = {
-          order_id:savedOrder.id,
-          amount:totalPrice,
-          status:paymentStatus
-        };
+        const existingPayment = currentPayments.find(
+  p => String(p.order_id) === String(savedOrder.id)
+);
+
+const isPaymentApproved = ["approved", "paid"].includes(
+  String(paymentStatus).toLowerCase()
+);
+
+const paymentRecord = {
+  order_id: savedOrder.id,
+  amount: totalPrice,
+  status: paymentStatus,
+  approved_at: isPaymentApproved
+    ? (existingPayment?.approved_at || new Date().toISOString())
+    : null
+};
         const paymentRes = await db.from("payments").upsert(paymentRecord,{onConflict:"order_id"});
         if(paymentRes.error) throw paymentRes.error;
       }
