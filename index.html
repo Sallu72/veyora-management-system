@@ -1459,6 +1459,7 @@ function isDateInPeriod(orderDate,filterValue){
   return true;
 }
 
+
 // RENDER DASHBOARD & METRICS
 function renderOverview(){
   const owner = currentOrders.reduce((sum,o)=>sum+Number(o.owner_profit||0),0);
@@ -1469,6 +1470,136 @@ function renderOverview(){
   document.getElementById("ownerProfit").textContent = money(owner);
   document.getElementById("resellerProfit").textContent = money(reseller);
   document.getElementById("totalSalesMain").textContent = money(sales);
+
+  // MONTHLY GROWTH ANALYSIS
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
+
+  const previousMonthDate = new Date(currentYear,currentMonth-1,1);
+  const previousYear = previousMonthDate.getFullYear();
+  const previousMonth = previousMonthDate.getMonth();
+
+  const previousMonthLastDay = new Date(
+    previousYear,
+    previousMonth+1,
+    0
+  ).getDate();
+
+  const previousEndDay = Math.min(currentDay,previousMonthLastDay);
+
+  const currentStartKey = currentYear*10000+(currentMonth+1)*100+1;
+  const currentEndKey = currentYear*10000+(currentMonth+1)*100+currentDay;
+
+  const previousStartKey = previousYear*10000+(previousMonth+1)*100+1;
+  const previousEndKey = previousYear*10000+(previousMonth+1)*100+previousEndDay;
+
+  const currentMonthOrders = [];
+  const previousMonthOrders = [];
+
+  currentOrders.forEach(order=>{
+    const rawDate = getOrderDate(order);
+    if(!rawDate) return;
+
+    const orderDate = rawDate instanceof Date
+      ? rawDate
+      : new Date(rawDate);
+
+    if(isNaN(orderDate.getTime())) return;
+
+    const dateKey =
+      orderDate.getFullYear()*10000+
+      (orderDate.getMonth()+1)*100+
+      orderDate.getDate();
+
+    if(dateKey>=currentStartKey && dateKey<=currentEndKey){
+      currentMonthOrders.push(order);
+    }
+
+    if(dateKey>=previousStartKey && dateKey<=previousEndKey){
+      previousMonthOrders.push(order);
+    }
+  });
+
+  const calculateGrowth = (current,previous)=>{
+    if(previous===0){
+      return current===0 ? 0 : null;
+    }
+
+    return ((current-previous)/Math.abs(previous))*100;
+  };
+
+  const currentMetrics = {
+    totalProfit: currentMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.owner_profit||0)+Number(o.reseller_profit||0),0
+    ),
+    ownerProfit: currentMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.owner_profit||0),0
+    ),
+    resellerProfit: currentMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.reseller_profit||0),0
+    ),
+    totalSales: currentMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.total_price||0),0
+    )
+  };
+
+  const previousMetrics = {
+    totalProfit: previousMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.owner_profit||0)+Number(o.reseller_profit||0),0
+    ),
+    ownerProfit: previousMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.owner_profit||0),0
+    ),
+    resellerProfit: previousMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.reseller_profit||0),0
+    ),
+    totalSales: previousMonthOrders.reduce(
+      (sum,o)=>sum+Number(o.total_price||0),0
+    )
+  };
+
+  const growthCards = [
+    {id:"totalProfit",key:"totalProfit"},
+    {id:"ownerProfit",key:"ownerProfit"},
+    {id:"resellerProfit",key:"resellerProfit"},
+    {id:"totalSalesMain",key:"totalSales"}
+  ];
+
+  growthCards.forEach(card=>{
+    const element = document.getElementById(card.id);
+    if(!element) return;
+
+    const growth = calculateGrowth(
+      currentMetrics[card.key],
+      previousMetrics[card.key]
+    );
+
+    let growthElement = document.getElementById(card.id+"Growth");
+
+    if(!growthElement){
+      growthElement = document.createElement("div");
+      growthElement.id = card.id+"Growth";
+      growthElement.style.cssText =
+        "display:block;margin-top:6px;font-size:11px;font-weight:600;";
+      element.insertAdjacentElement("afterend",growthElement);
+    }
+
+    if(growth===null){
+      growthElement.textContent = "NEW • No previous month data";
+      growthElement.style.color = "#D4AF37";
+    }else if(growth>0){
+      growthElement.textContent = "↑ "+growth.toFixed(1)+"% vs last month";
+      growthElement.style.color = "#22C55E";
+    }else if(growth<0){
+      growthElement.textContent = "↓ "+Math.abs(growth).toFixed(1)+"% vs last month";
+      growthElement.style.color = "#EF4444";
+    }else{
+      growthElement.textContent = "— 0.0% vs last month";
+      growthElement.style.color = "#999999";
+    }
+  });
 
   const ranking = currentResellers.map(r=>{
     const rOrders = currentOrders.filter(o=>o.reseller_id===r.id);
@@ -1612,6 +1743,7 @@ function renderOverview(){
     renderMonthlyRows();
   }
 }
+
 
 // RENDER PROFIT CHART
 function renderChart(){
