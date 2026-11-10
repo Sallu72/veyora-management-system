@@ -2418,11 +2418,18 @@ if(saveOrderBtn && !saveOrderBtn.dataset.listenerAttached){
 
       // Customer Sync Check (upsert/update customer info)
       const existingCustomer = currentCustomers.find(c => String(c.name).toLowerCase() === customerName.toLowerCase());
-      if(existingCustomer){
-        await db.from("customers").update({ phone: customerPhone }).eq("id", existingCustomer.id);
-      } else {
-        await db.from("customers").insert([{ name: customerName, phone: customerPhone }]);
-      }
+     if(existingCustomer){
+  await db.from("customers").update({
+    phone: customerPhone,
+    city: city
+  }).eq("id", existingCustomer.id);
+} else {
+  await db.from("customers").insert([{
+    name: customerName,
+    phone: customerPhone,
+    city: city
+  }]);
+}
 
       alert(editingOrderId ? "Order updated successfully!" : "Order saved successfully!");
       editingOrderId = null;
