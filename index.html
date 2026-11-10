@@ -1496,6 +1496,12 @@ function renderOverview(){
   const previousEndKey = previousYear*10000+(previousMonth+1)*100+previousEndDay;
 
   const currentMonthOrders = [];
+  console.log("ORDER DATE TEST:", currentOrders.map(o => ({
+  order: o.id,
+  order_date: o.order_date,
+  created_at: o.created_at,
+  parsed_date: getOrderDate(o)
+})));
   const previousMonthOrders = [];
 
   currentOrders.forEach(order=>{
