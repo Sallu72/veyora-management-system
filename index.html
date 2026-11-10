@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VEYORA | Business Management System</title>
- <link rel="icon" type="image/png" href="./favicon.png">
-  <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="./Veyora%20Gold%20Ibex%20Shopping%20Emblem.png">
+  <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#D4AF37">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -660,15 +660,24 @@ th{
     <form id="loginForm">
       <input id="email" type="email" placeholder="Owner email" required>
       <input id="password" type="password" placeholder="Password" required>
+
       <button class="gold-btn" style="width:100%;margin-top:12px">
         Login to Dashboard
       </button>
     </form>
 
     <div id="loginMessage" class="message"></div>
+
+    <button
+      id="installAppBtn"
+      class="gold-btn"
+      onclick="installVeyoraApp()"
+      style="display:none;width:100%;margin-top:18px;background:#0b0b09;color:#D4AF37;border:1px solid #D4AF37;">
+      ⬇ Install VEYORA App
+    </button>
+
   </div>
 </div>
-
 <!-- MAIN APP -->
 <div id="app" class="hidden">
 
@@ -2993,15 +3002,45 @@ renderAll = function(){
   renderHistory();
   renderProfitControl();
 };
-</script>
-  <script>
+<script>
+let deferredPrompt;
+
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("VEYORA App Ready"))
-      .catch(error => console.error("Service Worker Error:", error));
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./sw.js");
+      console.log("VEYORA App Ready");
+    } catch (error) {
+      console.error("Service Worker Error:", error);
+    }
   });
 }
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredPrompt = event;
+
+  let installBtn = document.getElementById("installAppBtn");
+
+  if (installBtn) {
+    installBtn.style.display = "block";
+  }
+});
+
+window.installVeyoraApp = async function () {
+  if (!deferredPrompt) {
+    alert("Install option is not available yet. Please use Chrome.");
+    return;
+  }
+
+  deferredPrompt.prompt();
+
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+
+  const installBtn = document.getElementById("installAppBtn");
+  if (installBtn) installBtn.style.display = "none";
+};
 </script>
 </body>
 </html>
