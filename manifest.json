@@ -3,13 +3,16 @@
   "short_name": "VEYORA",
   "description": "VEYORA Business Management System",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#080808",
   "theme_color": "#D4AF37",
- "icons": [
-  {
-    "src": "./Veyora%20Gold%20Ibex%20Shopping%20Emblem.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+  "icons": [
+    {
+      "src": "./Veyora%20Gold%20Ibex%20Shopping%20Emblem.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
